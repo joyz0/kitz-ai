@@ -1,0 +1,13 @@
+// 通道配置
+{
+  channels: {
+    whatsapp: {
+      enabled: true,
+      allowFrom: ["+1234567890", "+0987654321"]
+    },
+    telegram: {
+      enabled: false,
+      token: "${TELEGRAM_BOT_TOKEN}"
+    }
+  }
+}
