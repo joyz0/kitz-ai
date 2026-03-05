@@ -1,3 +1,8 @@
+---
+name: logger-design
+description: Provides a comprehensive logging and observability system with structured logging, subsystem isolation, sensitive information redaction, and diagnostic context. Enables effective monitoring, debugging, and performance tracking across the entire application.
+---
+
 # logger-design
 
 ## Description
