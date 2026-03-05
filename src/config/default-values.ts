@@ -1,5 +1,5 @@
 // 默认值应用功能
-import type { OpenClawConfig } from './types.js';
+import type { OpenClawConfig } from './zod-schema.ts';
 
 // 应用日志默认值
 export function applyLoggingDefaults(config: OpenClawConfig): OpenClawConfig {

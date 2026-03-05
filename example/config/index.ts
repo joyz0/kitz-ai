@@ -1,5 +1,9 @@
 // 配置系统使用示例
-import { loadConfig, writeConfigFile, OpenClawConfig } from '../../src/config';
+import {
+  loadConfig,
+  writeConfigFile,
+  OpenClawConfig,
+} from '../../src/config/index.js';
 
 // 示例 1: 加载配置
 async function exampleLoadConfig() {

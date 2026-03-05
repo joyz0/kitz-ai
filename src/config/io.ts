@@ -5,18 +5,18 @@ import os from 'node:os';
 import path from 'node:path';
 import JSON5 from 'json5';
 import { VERSION } from '../version.js';
-import { applyAllDefaults } from './default-values.js';
+import { applyAllDefaults } from './default-values.ts';
 import {
   applyConfigEnvVars,
   resolveConfigEnvVars,
-} from './env-substitution.js';
+} from './env-substitution.ts';
 import type {
   OpenClawConfig,
   ConfigFileSnapshot,
   ConfigValidationIssue,
   LegacyConfigIssue,
-} from './types.js';
-import { validateConfigObject } from './schema.js';
+} from './zod-schema.ts';
+import { validateConfigObjectRaw } from './validation.ts';
 
 // 配置文件审计日志文件名
 const CONFIG_AUDIT_LOG_FILENAME = 'config-audit.jsonl';
@@ -207,10 +207,10 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
       const resolvedIncludes = resolveConfigIncludes(parsed, configPath);
       const resolvedConfig = resolveConfigEnvVars(resolvedIncludes, deps.env);
 
-      const validated = validateConfigObject(resolvedConfig);
-      if (!validated.valid) {
+      const validated = validateConfigObjectRaw(resolvedConfig);
+      if (!validated.ok) {
         deps.logger.error(
-          `Invalid config at ${configPath}:\n${validated.errors.map((e) => `- ${e.path}: ${e.message}`).join('\n')}`,
+          `Invalid config at ${configPath}:\n${validated.issues.map((e) => `- ${e.path}: ${e.message}`).join('\n')}`,
         );
         return applyAllDefaults({});
       }
@@ -272,9 +272,9 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
         configPath,
       );
       const resolvedConfig = resolveConfigEnvVars(resolvedIncludes, deps.env);
-      const validated = validateConfigObject(resolvedConfig);
+      const validated = validateConfigObjectRaw(resolvedConfig);
 
-      if (!validated.valid) {
+      if (!validated.ok) {
         return {
           path: configPath,
           exists: true,
@@ -284,10 +284,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
           valid: false,
           config: resolvedConfig as OpenClawConfig,
           hash,
-          issues: validated.errors.map((e) => ({
-            path: e.path.join('.'),
-            message: e.message,
-          })),
+          issues: validated.issues,
           warnings: [],
           legacyIssues: [],
         };
@@ -332,10 +329,10 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
     const dir = path.dirname(configPath);
     await deps.fs.promises.mkdir(dir, { recursive: true, mode: 0o700 });
 
-    const validated = validateConfigObject(cfg);
-    if (!validated.valid) {
-      const issue = validated.errors[0];
-      const pathLabel = issue?.path.join('.') || '<root>';
+    const validated = validateConfigObjectRaw(cfg);
+    if (!validated.ok) {
+      const issue = validated.issues[0];
+      const pathLabel = issue?.path || '<root>';
       const issueMessage = issue?.message || 'invalid';
       throw new Error(
         `Config validation failed: ${pathLabel}: ${issueMessage}`,
