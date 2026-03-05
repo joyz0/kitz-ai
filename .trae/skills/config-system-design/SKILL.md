@@ -1,3 +1,8 @@
+---
+name: config-system-design
+description: Provides a comprehensive configuration system with JSON5 support, schema validation, environment variable substitution, and hot-reloading capabilities. Enables modular, secure, and maintainable configuration management for complex applications.
+---
+
 # config-system-design
 
 ## Description

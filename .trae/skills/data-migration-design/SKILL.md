@@ -1,3 +1,8 @@
+---
+name: data-migration-design
+description: Provides a comprehensive data migration system with versioned migrations, transaction support, rollback capabilities, and data consistency checking. Enables safe and reliable management of database schema changes and data transformations.
+---
+
 # data-migration-design
 
 ## Description

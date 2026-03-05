@@ -1,3 +1,8 @@
+---
+name: dependency-injection-design
+description: Provides a comprehensive dependency injection system with clear module boundaries, interface-based communication, and factory patterns. Enables testable, maintainable, and loosely coupled code architecture.
+---
+
 # dependency-injection-design
 
 ## Description

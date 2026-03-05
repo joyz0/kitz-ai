@@ -1,3 +1,8 @@
+---
+name: error-handling
+description: Provides a comprehensive error handling system with unified error types, intelligent error categorization, and automated recovery mechanisms. Enables consistent error management, monitoring, and recovery across the entire application.
+---
+
 # error-handling
 
 ## Description
