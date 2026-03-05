@@ -1,15 +1,23 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "allowImportingTsExtensions": true,
     "allowSyntheticDefaultImports": true,
+    "declaration": true,
     "esModuleInterop": true,
-    "strict": true,
-    "skipLibCheck": true,
+    "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
+    "lib": ["DOM", "DOM.Iterable", "ES2023", "ScriptHost"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": true,
+    "noEmitOnError": true,
+    "outDir": "dist",
     "resolveJsonModule": true,
-    "outDir": "./dist"
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "es2023",
+    "useDefineForClassFields": false
   },
-  "include": ["src/**/*", "example/**/*"]
+  "include": ["src/**/*", "ui/**/*", "extensions/**/*", "example/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

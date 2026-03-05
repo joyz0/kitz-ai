@@ -1,5 +1,5 @@
 // 默认值应用功能
-import type { OpenClawConfig } from './types';
+import type { OpenClawConfig } from './types.js';
 
 // 应用日志默认值
 export function applyLoggingDefaults(config: OpenClawConfig): OpenClawConfig {

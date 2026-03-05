@@ -8,12 +8,14 @@
     "build": "tsc",
     "dev:config": "tsx src/config/index.ts",
     "example:config": "tsx example/config/index.ts",
+    "example:logger": "tsx example/logger/index.ts",
     "debug:config": "tsx --inspect-brk example/config/index.ts",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "changelog:all": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
   "dependencies": {
     "json5": "^2.2.3",
+    "tslog": "^4.9.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {

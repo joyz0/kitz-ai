@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { OpenClawConfig } from './types';
+import type { OpenClawConfig } from './types.js';
 
 // 日志配置 Schema
 const LoggingSchema = z.object({

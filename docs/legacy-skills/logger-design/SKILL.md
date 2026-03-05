@@ -17,10 +17,17 @@ Provides a comprehensive logging and observability system with structured loggin
 ## Input
 
 - `log_config`: object (Logging configuration settings)
+  - `level`: string (Log level: silent, fatal, error, warn, info, debug, trace)
+  - `file`: string (Log file path)
+  - `maxFileBytes`: number (Maximum log file size in bytes)
+  - `consoleLevel`: string (Console log level)
+  - `consoleStyle`: string (Console output style: pretty, compact, json)
+  - `redactSensitive`: string (Sensitive data redaction mode: off, tools)
+  - `redactPatterns`: array (Custom redaction regex patterns)
 - `subsystem`: string (Subsystem name for log isolation)
 - `message`: string (Log message content)
 - `context`: object (Additional context for the log entry)
-- `level`: string (Log level: debug, info, warn, error, verbose)
+- `level`: string (Log level: debug, info, warn, error, trace)
 
 ## Output
 
@@ -52,12 +59,13 @@ Provides a comprehensive logging and observability system with structured loggin
 - **Sensitive Data Protection**: Automatic redaction of API keys, tokens, and personal information
 - **Diagnostic Context**: Rich context including request IDs, session information, and performance metrics
 - **Multiple Outputs**: Support for console, file, and remote logging targets
-- **Observability Integration**: Metrics collection and distributed tracing support
+- **Observability Integration**: Metrics collection and distributed tracing support via OpenTelemetry
+- **Log File Management**: Automatic log file rotation and cleanup based on date and size limits
 - **Performance Optimizations**: Asynchronous logging and batch processing
 
 ## Implementation References
 
-- **Logger Implementation**: See references/logger/implementation.md
+- **Logger Implementation**: See references/logger/implementation.md (uses tslog library)
 - **Redaction Rules**: See references/logger/redaction.md
 - **Observability Setup**: See references/logger/observability.md
 - **Configuration Examples**: See references/logger/configuration.md
