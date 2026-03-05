@@ -1,4 +1,4 @@
-# dependency-injection
+# dependency-injection-design
 
 ## Description
 

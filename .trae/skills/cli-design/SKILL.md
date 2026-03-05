@@ -1,6 +1,6 @@
 ---
-name: cli
-description: "This skill should be used when implementing a CLI system for OpenClaw, including command registration, context management, and pre-action hooks. Provides a structured approach to building a consistent and maintainable CLI."
+name: cli-design
+description: 'This skill should be used when implementing a CLI system for OpenClaw, including command registration, context management, and pre-action hooks. Provides a structured approach to building a consistent and maintainable CLI.'
 ---
 
 # CLI 系统 Skill
@@ -33,25 +33,21 @@ description: "This skill should be used when implementing a CLI system for OpenC
 ## Steps
 
 1. **Analyze Command Requirements**
-
    - Determine the command structure and subcommands
    - Identify required parameters and options
    - Define expected output format
 
 2. **Create Command Structure**
-
    - Create the command file in the appropriate directory
    - Implement the command registration function
    - Define command options and arguments
 
 3. **Implement Command Logic**
-
    - Write the core functionality of the command
    - Handle parameters and options
    - Implement error handling
 
 4. **Integrate with CLI System**
-
    - Register the command with the main program
    - Ensure proper context passing
    - Test the command integration
@@ -120,9 +116,9 @@ export function buildProgram(): Command {
 
   // 设置程序信息
   program
-    .name("openclaw")
+    .name('openclaw')
     .version(ctx.programVersion)
-    .description("OpenClaw AI 网关");
+    .description('OpenClaw AI 网关');
 
   // 注册 pre-action 钩子
   registerPreActionHooks(program, ctx);
@@ -146,11 +142,11 @@ export interface ProgramContext {
 
 // 通过 Command 的 store 传递上下文
 export function setProgramContext(program: any, ctx: ProgramContext): void {
-  program.store.set("context", ctx);
+  program.store.set('context', ctx);
 }
 
 export function getProgramContext(cmd: any): ProgramContext {
-  return cmd.store.get("context");
+  return cmd.store.get('context');
 }
 ```
 
@@ -158,11 +154,11 @@ export function getProgramContext(cmd: any): ProgramContext {
 
 ```typescript
 export function registerPreActionHooks(program: Command, ctx: any): void {
-  program.hook("preAction", (thisCommand, actionCommand) => {
+  program.hook('preAction', (thisCommand, actionCommand) => {
     const context = getProgramContext(thisCommand);
 
     // 诊断命令不需要加载配置
-    const diagnosticCommands = ["doctor", "health", "logs", "status"];
+    const diagnosticCommands = ['doctor', 'health', 'logs', 'status'];
     if (diagnosticCommands.includes(actionCommand.name())) {
       return;
     }
@@ -172,7 +168,7 @@ export function registerPreActionHooks(program: Command, ctx: any): void {
       const config = loadConfig();
       context.config = config;
     } catch (error) {
-      context.logger.error("Failed to load config", { error: error.message });
+      context.logger.error('Failed to load config', { error: error.message });
       process.exit(1);
     }
   });
@@ -215,7 +211,7 @@ See `references/core-implementation.ts` for complete implementation details.
 {
   cli: {
     output: {
-      format: "text", // text | json
+      format: 'text', // text | json
       color: true,
     },
     completion: {

@@ -1,4 +1,4 @@
-# media-processing
+# media-processing-design
 
 ## Description
 

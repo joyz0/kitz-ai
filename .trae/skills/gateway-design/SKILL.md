@@ -1,4 +1,4 @@
-# gateway
+# gateway-design
 
 ## Description
 
