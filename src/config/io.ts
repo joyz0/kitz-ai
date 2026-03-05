@@ -129,7 +129,7 @@ async function maintainConfigBackups(
 // 创建配置 IO 实例
 export function createConfigIO(overrides: ConfigIoDeps = {}) {
   const deps = normalizeDeps(overrides);
-  const configPath = resolveConfigPath(deps.env, deps.homedir);
+  const configPath = deps.configPath;
 
   // 解析 $include 指令
   function resolveConfigIncludes(config: unknown, basePath: string): unknown {
@@ -401,7 +401,7 @@ export function clearConfigCache(): void {
 }
 
 // 解析配置缓存时间
-function resolveConfigCacheMs(env: NodeJS.ProcessEnv): number {
+export function resolveConfigCacheMs(env: NodeJS.ProcessEnv): number {
   const raw = env.KITZ_CONFIG_CACHE_MS?.trim();
   if (raw === "" || raw === "0") {
     return 0;
@@ -417,7 +417,7 @@ function resolveConfigCacheMs(env: NodeJS.ProcessEnv): number {
 }
 
 // 是否使用配置缓存
-function shouldUseConfigCache(env: NodeJS.ProcessEnv): boolean {
+export function shouldUseConfigCache(env: NodeJS.ProcessEnv): boolean {
   if (env.KITZ_DISABLE_CONFIG_CACHE?.trim()) {
     return false;
   }

@@ -18,7 +18,11 @@ const FATAL_ERROR_CODES = new Set([
   "ERR_WORKER_INITIALIZATION_FAILED",
 ]);
 
-const CONFIG_ERROR_CODES = new Set(["INVALID_CONFIG", "MISSING_API_KEY", "MISSING_CREDENTIALS"]);
+const CONFIG_ERROR_CODES = new Set([
+  "INVALID_CONFIG",
+  "MISSING_API_KEY",
+  "MISSING_CREDENTIALS",
+]);
 
 // Network error codes that indicate transient failures (shouldn't crash the gateway)
 const TRANSIENT_NETWORK_CODES = new Set([
@@ -106,19 +110,20 @@ export function isAbortError(err: unknown): boolean {
     return true;
   }
   // Check for "This operation was aborted" message from Node's undici
-  const message = "message" in err && typeof err.message === "string" ? err.message : "";
+  const message =
+    "message" in err && typeof err.message === "string" ? err.message : "";
   if (message === "This operation was aborted") {
     return true;
   }
   return false;
 }
 
-function isFatalError(err: unknown): boolean {
+export function isFatalError(err: unknown): boolean {
   const code = extractErrorCodeWithCause(err);
   return code !== undefined && FATAL_ERROR_CODES.has(code);
 }
 
-function isConfigError(err: unknown): boolean {
+export function isConfigError(err: unknown): boolean {
   const code = extractErrorCodeWithCause(err);
   return code !== undefined && CONFIG_ERROR_CODES.has(code);
 }
@@ -154,7 +159,10 @@ export function isTransientNetworkError(err: unknown): boolean {
       return true;
     }
 
-    if (candidate instanceof TypeError && candidate.message === "fetch failed") {
+    if (
+      candidate instanceof TypeError &&
+      candidate.message === "fetch failed"
+    ) {
       return true;
     }
 
@@ -162,7 +170,8 @@ export function isTransientNetworkError(err: unknown): boolean {
       continue;
     }
     const rawMessage = (candidate as { message?: unknown }).message;
-    const message = typeof rawMessage === "string" ? rawMessage.toLowerCase().trim() : "";
+    const message =
+      typeof rawMessage === "string" ? rawMessage.toLowerCase().trim() : "";
     if (!message) {
       continue;
     }
@@ -172,7 +181,11 @@ export function isTransientNetworkError(err: unknown): boolean {
     if (message === "fetch failed") {
       return true;
     }
-    if (TRANSIENT_NETWORK_MESSAGE_SNIPPETS.some((snippet) => message.includes(snippet))) {
+    if (
+      TRANSIENT_NETWORK_MESSAGE_SNIPPETS.some((snippet) =>
+        message.includes(snippet)
+      )
+    ) {
       return true;
     }
   }
@@ -180,7 +193,9 @@ export function isTransientNetworkError(err: unknown): boolean {
   return false;
 }
 
-export function registerUnhandledRejectionHandler(handler: UnhandledRejectionHandler): () => void {
+export function registerUnhandledRejectionHandler(
+  handler: UnhandledRejectionHandler
+): () => void {
   handlers.add(handler);
   return () => {
     handlers.delete(handler);
@@ -196,7 +211,7 @@ export function isUnhandledRejectionHandled(reason: unknown): boolean {
     } catch (err) {
       console.error(
         "[kitz-ai] Unhandled rejection handler failed:",
-        err instanceof Error ? (err.stack ?? err.message) : err,
+        err instanceof Error ? err.stack ?? err.message : err
       );
     }
   }
@@ -212,18 +227,27 @@ export function installUnhandledRejectionHandler(): void {
     // AbortError is typically an intentional cancellation (e.g., during shutdown)
     // Log it but don't crash - these are expected during graceful shutdown
     if (isAbortError(reason)) {
-      console.warn("[kitz-ai] Suppressed AbortError:", formatUncaughtError(reason));
+      console.warn(
+        "[kitz-ai] Suppressed AbortError:",
+        formatUncaughtError(reason)
+      );
       return;
     }
 
     if (isFatalError(reason)) {
-      console.error("[kitz-ai] FATAL unhandled rejection:", formatUncaughtError(reason));
+      console.error(
+        "[kitz-ai] FATAL unhandled rejection:",
+        formatUncaughtError(reason)
+      );
       process.exit(1);
       return;
     }
 
     if (isConfigError(reason)) {
-      console.error("[kitz-ai] CONFIGURATION ERROR - requires fix:", formatUncaughtError(reason));
+      console.error(
+        "[kitz-ai] CONFIGURATION ERROR - requires fix:",
+        formatUncaughtError(reason)
+      );
       process.exit(1);
       return;
     }
@@ -231,12 +255,15 @@ export function installUnhandledRejectionHandler(): void {
     if (isTransientNetworkError(reason)) {
       console.warn(
         "[kitz-ai] Non-fatal unhandled rejection (continuing):",
-        formatUncaughtError(reason),
+        formatUncaughtError(reason)
       );
       return;
     }
 
-    console.error("[kitz-ai] Unhandled promise rejection:", formatUncaughtError(reason));
+    console.error(
+      "[kitz-ai] Unhandled promise rejection:",
+      formatUncaughtError(reason)
+    );
     process.exit(1);
   });
 }

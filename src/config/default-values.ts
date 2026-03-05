@@ -1,13 +1,13 @@
 // 默认值应用功能
-import type { OpenClawConfig } from './zod-schema.ts';
+import type { OpenClawConfig } from "./zod-schema.ts";
 
 // 应用日志默认值
 export function applyLoggingDefaults(config: OpenClawConfig): OpenClawConfig {
   const defaultLogging = {
-    level: 'info' as const,
-    consoleLevel: 'info' as const,
-    consoleStyle: 'pretty' as const,
-    redactSensitive: 'tools' as const,
+    level: "info" as const,
+    consoleLevel: "info" as const,
+    consoleStyle: "pretty" as const,
+    redactSensitive: "tools" as const,
   };
 
   return {
@@ -22,11 +22,11 @@ export function applyLoggingDefaults(config: OpenClawConfig): OpenClawConfig {
 // 应用会话默认值
 export function applySessionDefaults(config: OpenClawConfig): OpenClawConfig {
   const defaultSession = {
-    scope: 'per-sender' as const,
-    dmScope: 'main' as const,
+    scope: "per-sender" as const,
+    dmScope: "main" as const,
     idleMinutes: 120,
     reset: {
-      mode: 'idle' as const,
+      mode: "idle" as const,
       idleMinutes: 120,
     },
   };
@@ -48,8 +48,8 @@ export function applySessionDefaults(config: OpenClawConfig): OpenClawConfig {
 export function applyModelDefaults(config: OpenClawConfig): OpenClawConfig {
   const defaultModels = {
     defaults: {
-      primary: 'gpt-4o',
-      fallbacks: ['gpt-3.5-turbo'],
+      primary: "gpt-4o",
+      fallbacks: ["gpt-3.5-turbo"],
     },
   };
 
@@ -66,7 +66,26 @@ export function applyModelDefaults(config: OpenClawConfig): OpenClawConfig {
   };
 }
 
+// 应用元数据默认值
+export function applyMetaDefaults(config: OpenClawConfig): OpenClawConfig {
+  const defaultMeta = {
+    version: "1.0.0",
+    lastTouchedVersion: "1.0.0",
+    lastTouchedAt: new Date().toISOString(),
+  };
+
+  return {
+    ...config,
+    meta: {
+      ...defaultMeta,
+      ...config.meta,
+    },
+  };
+}
+
 // 应用所有默认值
 export function applyAllDefaults(config: OpenClawConfig): OpenClawConfig {
-  return applyModelDefaults(applySessionDefaults(applyLoggingDefaults(config)));
+  return applyMetaDefaults(
+    applyModelDefaults(applySessionDefaults(applyLoggingDefaults(config)))
+  );
 }

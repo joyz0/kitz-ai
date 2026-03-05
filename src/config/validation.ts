@@ -1,8 +1,8 @@
-import { OpenClawConfigSchema } from './zod-schema.js';
-import type { OpenClawConfig, ConfigValidationIssue } from './zod-schema.js';
+import { OpenClawConfigSchema } from "./zod-schema.js";
+import type { OpenClawConfig, ConfigValidationIssue } from "./zod-schema.js";
 
 export function validateConfigObjectRaw(
-  raw: unknown,
+  raw: unknown
 ):
   | { ok: true; config: OpenClawConfig }
   | { ok: false; issues: ConfigValidationIssue[] } {
@@ -11,7 +11,7 @@ export function validateConfigObjectRaw(
     return {
       ok: false,
       issues: validated.error.issues.map((issue) => ({
-        path: issue.path.join('.'),
+        path: issue.path.join("."),
         message: issue.message,
       })),
     };
@@ -49,16 +49,16 @@ export function validateConfigObjectWithPlugins(raw: unknown):
       !config.channels.whatsapp.allowFrom
     ) {
       warnings.push({
-        path: 'channels.whatsapp.allowFrom',
+        path: "channels.whatsapp.allowFrom",
         message:
-          'WhatsApp is enabled but allowFrom is not set. This may allow unwanted messages.',
+          "WhatsApp is enabled but allowFrom is not set. This may allow unwanted messages.",
       });
     }
 
     if (config.channels.telegram?.enabled && !config.channels.telegram.token) {
       issues.push({
-        path: 'channels.telegram.token',
-        message: 'Telegram is enabled but token is not set.',
+        path: "channels.telegram.token",
+        message: "Telegram is enabled but token is not set.",
       });
     }
   }
@@ -68,15 +68,23 @@ export function validateConfigObjectWithPlugins(raw: unknown):
     for (const [index, agent] of config.agents.list.entries()) {
       if (
         agent.identity?.avatar &&
-        !agent.identity.avatar.startsWith('http') &&
-        !agent.identity.avatar.startsWith('data:')
+        !agent.identity.avatar.startsWith("http") &&
+        !agent.identity.avatar.startsWith("data:")
       ) {
         warnings.push({
           path: `agents.list.${index}.identity.avatar`,
-          message: 'Avatar should be a URL or data URI.',
+          message: "Avatar should be a URL or data URI.",
         });
       }
     }
+  }
+
+  if (issues.length > 0) {
+    return {
+      ok: false,
+      issues,
+      warnings,
+    };
   }
 
   return {

@@ -13,6 +13,8 @@ export class MissingEnvVarError extends Error {
 
 // 检查字符串是否包含环境变量引用
 export function containsEnvVarReference(value: string): boolean {
+  // 重置正则表达式的lastIndex，避免状态影响
+  ENV_VAR_RE.lastIndex = 0;
   return ENV_VAR_RE.test(value);
 }
 

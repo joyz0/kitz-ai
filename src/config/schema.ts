@@ -1,7 +1,7 @@
-import { OpenClawConfigSchema } from './zod-schema.js';
-import type { OpenClawConfig } from './zod-schema.js';
-import { VERSION } from '../version.js';
-import { zodToJsonSchema } from 'zod-to-json-schema';
+import { OpenClawConfigSchema } from "./zod-schema.js";
+import type { OpenClawConfig } from "./zod-schema.js";
+import { VERSION } from "../version.js";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 // Schema 扩展元数据
 export type SchemaExtensionMetadata = {
@@ -46,8 +46,8 @@ type JsonSchemaObject = JsonSchemaNode & {
 /**
  * 克隆 Schema
  */
-function cloneSchema<T>(value: T): T {
-  if (typeof structuredClone === 'function') {
+export function cloneSchema<T>(value: T): T {
+  if (typeof structuredClone === "function") {
     return structuredClone(value);
   }
   return JSON.parse(JSON.stringify(value)) as T;
@@ -56,8 +56,8 @@ function cloneSchema<T>(value: T): T {
 /**
  * 转换为 Schema 对象
  */
-function asSchemaObject(value: unknown): JsonSchemaObject | null {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+export function asSchemaObject(value: unknown): JsonSchemaObject | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
     return null;
   }
   return value as JsonSchemaObject;
@@ -66,12 +66,12 @@ function asSchemaObject(value: unknown): JsonSchemaObject | null {
 /**
  * 检查是否为对象 Schema
  */
-function isObjectSchema(schema: JsonSchemaObject): boolean {
+export function isObjectSchema(schema: JsonSchemaObject): boolean {
   const type = schema.type;
-  if (type === 'object') {
+  if (type === "object") {
     return true;
   }
-  if (Array.isArray(type) && type.includes('object')) {
+  if (Array.isArray(type) && type.includes("object")) {
     return true;
   }
   return Boolean(schema.properties || schema.additionalProperties);
@@ -80,8 +80,14 @@ function isObjectSchema(schema: JsonSchemaObject): boolean {
 /**
  * 合并对象 Schema
  */
-function mergeObjectSchema(base: JsonSchemaObject, extension: JsonSchemaObject): JsonSchemaObject {
-  const mergedRequired = new Set<string>([...(base.required ?? []), ...(extension.required ?? [])]);
+export function mergeObjectSchema(
+  base: JsonSchemaObject,
+  extension: JsonSchemaObject
+): JsonSchemaObject {
+  const mergedRequired = new Set<string>([
+    ...(base.required ?? []),
+    ...(extension.required ?? []),
+  ]);
   const merged: JsonSchemaObject = {
     ...base,
     ...extension,
@@ -93,7 +99,8 @@ function mergeObjectSchema(base: JsonSchemaObject, extension: JsonSchemaObject):
   if (mergedRequired.size > 0) {
     merged.required = Array.from(mergedRequired);
   }
-  const additional = extension.additionalProperties ?? base.additionalProperties;
+  const additional =
+    extension.additionalProperties ?? base.additionalProperties;
   if (additional !== undefined) {
     merged.additionalProperties = additional;
   }
@@ -103,9 +110,9 @@ function mergeObjectSchema(base: JsonSchemaObject, extension: JsonSchemaObject):
 /**
  * 收集扩展提示键
  */
-function collectExtensionHintKeys(
+export function collectExtensionHintKeys(
   hints: ConfigUiHints,
-  extensions: SchemaExtensionMetadata[],
+  extensions: SchemaExtensionMetadata[]
 ): Set<string> {
   const prefixes = extensions
     .map((ext) => ext.id.trim())
@@ -114,15 +121,18 @@ function collectExtensionHintKeys(
 
   return new Set(
     Object.keys(hints).filter((key) =>
-      prefixes.some((prefix) => key === prefix || key.startsWith(`${prefix}.`)),
-    ),
+      prefixes.some((prefix) => key === prefix || key.startsWith(`${prefix}.`))
+    )
   );
 }
 
 /**
  * 应用插件提示
  */
-function applyExtensionHints(hints: ConfigUiHints, extensions: SchemaExtensionMetadata[]): ConfigUiHints {
+function applyExtensionHints(
+  hints: ConfigUiHints,
+  extensions: SchemaExtensionMetadata[]
+): ConfigUiHints {
   const next: ConfigUiHints = { ...hints };
   for (const extension of extensions) {
     const id = extension.id.trim();
@@ -151,7 +161,7 @@ function applyExtensionHints(hints: ConfigUiHints, extensions: SchemaExtensionMe
 
     const uiHints = extension.configUiHints ?? {};
     for (const [relPathRaw, hint] of Object.entries(uiHints)) {
-      const relPath = relPathRaw.trim().replace(/^\./, '');
+      const relPath = relPathRaw.trim().replace(/^\./, "");
       if (!relPath) {
         continue;
       }
@@ -168,7 +178,10 @@ function applyExtensionHints(hints: ConfigUiHints, extensions: SchemaExtensionMe
 /**
  * 应用插件 Schema
  */
-function applyExtensionSchemas(schema: JsonSchemaObject, extensions: SchemaExtensionMetadata[]): JsonSchemaObject {
+function applyExtensionSchemas(
+  schema: JsonSchemaObject,
+  extensions: SchemaExtensionMetadata[]
+): JsonSchemaObject {
   const next = cloneSchema(schema);
   const root = asSchemaObject(next);
   const pluginsNode = asSchemaObject(root?.properties?.plugins);
@@ -187,8 +200,9 @@ function applyExtensionSchemas(schema: JsonSchemaObject, extensions: SchemaExten
     }
     const entrySchema = entryBase
       ? cloneSchema(entryBase)
-      : ({ type: 'object' } as JsonSchemaObject);
-    const entryObject = asSchemaObject(entrySchema) ?? ({ type: 'object' } as JsonSchemaObject);
+      : ({ type: "object" } as JsonSchemaObject);
+    const entryObject =
+      asSchemaObject(entrySchema) ?? ({ type: "object" } as JsonSchemaObject);
     const baseConfigSchema = asSchemaObject(entryObject.properties?.config);
     const extensionSchema = asSchemaObject(extension.configSchema);
     const nextConfigSchema =
@@ -217,7 +231,9 @@ const MERGED_SCHEMA_CACHE_MAX = 64;
 /**
  * 构建合并 Schema 缓存键
  */
-function buildMergedSchemaCacheKey(extensions: SchemaExtensionMetadata[]): string {
+function buildMergedSchemaCacheKey(
+  extensions: SchemaExtensionMetadata[]
+): string {
   const sortedExtensions = extensions
     .map((ext) => ({
       id: ext.id,
@@ -251,7 +267,7 @@ function buildBaseSchema(): SchemaResponse {
     return cachedBase;
   }
   const schema = zodToJsonSchema(OpenClawConfigSchema, {
-    name: 'OpenClawConfig',
+    name: "OpenClawConfig",
   });
   const hints: ConfigUiHints = {};
   const next = {
@@ -281,7 +297,10 @@ export function buildConfigSchema(params?: {
     return cached;
   }
   const mergedHints = applyExtensionHints(base.uiHints, extensions);
-  const mergedSchema = applyExtensionSchemas(base.schema as JsonSchemaObject, extensions);
+  const mergedSchema = applyExtensionSchemas(
+    base.schema as JsonSchemaObject,
+    extensions
+  );
   const merged = {
     ...base,
     schema: mergedSchema,

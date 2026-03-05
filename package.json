@@ -11,7 +11,12 @@
     "example:logger": "tsx example/logger/index.ts",
     "debug:config": "tsx --inspect-brk example/config/index.ts",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-    "changelog:all": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
+    "changelog:all": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:fast": "vitest run --config vitest.unit.config.ts",
+    "test:typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "json5": "^2.2.3",
@@ -21,9 +26,11 @@
   },
   "devDependencies": {
     "@types/node": "^25.3.3",
+    "@vitest/coverage-v8": "^4.0.0",
     "conventional-changelog-cli": "^5.0.0",
     "tsx": "^4.7.1",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.2",
+    "vitest": "^4.0.0"
   },
   "pnpm": {
     "overrides": {

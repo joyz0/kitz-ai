@@ -64,8 +64,12 @@ function parsePattern(raw: string): RegExp | null {
 }
 
 function resolvePatterns(value?: string[]): RegExp[] {
-  const source = value?.length ? value : DEFAULT_REDACT_PATTERNS;
-  return source.map(parsePattern).filter((re): re is RegExp => Boolean(re));
+  if (value !== undefined) {
+    return value.map(parsePattern).filter((re): re is RegExp => Boolean(re));
+  }
+  return DEFAULT_REDACT_PATTERNS.map(parsePattern).filter((re): re is RegExp =>
+    Boolean(re)
+  );
 }
 
 function maskToken(token: string): string {
@@ -89,7 +93,10 @@ function redactMatch(match: string, groups: string[]): string {
   if (match.includes("PRIVATE KEY-----")) {
     return redactPemBlock(match);
   }
-  const token = groups.filter((value) => typeof value === "string" && value.length > 0).at(-1) ?? match;
+  const token =
+    groups
+      .filter((value) => typeof value === "string" && value.length > 0)
+      .at(-1) ?? match;
   const masked = maskToken(token);
   if (token === match) {
     return masked;
@@ -101,7 +108,7 @@ function redactText(text: string, patterns: RegExp[]): string {
   let next = text;
   for (const pattern of patterns) {
     next = next.replace(pattern, (...args: string[]) =>
-      redactMatch(args[0], args.slice(1, args.length - 2)),
+      redactMatch(args[0], args.slice(1, args.length - 2))
     );
   }
   return next;
@@ -115,7 +122,10 @@ function resolveConfigRedaction(): RedactOptions {
   };
 }
 
-export function redactSensitiveText(text: string, options?: RedactOptions): string {
+export function redactSensitiveText(
+  text: string,
+  options?: RedactOptions
+): string {
   if (!text) {
     return text;
   }
