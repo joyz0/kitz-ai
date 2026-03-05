@@ -1,5 +1,5 @@
-import { OpenClawConfigSchema } from './zod-schema.ts';
-import type { OpenClawConfig } from './zod-schema.ts';
+import { OpenClawConfigSchema } from './zod-schema.js';
+import type { OpenClawConfig } from './zod-schema.js';
 import { VERSION } from '../version.js';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 

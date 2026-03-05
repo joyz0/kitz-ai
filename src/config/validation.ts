@@ -1,5 +1,5 @@
-import { OpenClawConfigSchema } from './zod-schema.ts';
-import type { OpenClawConfig, ConfigValidationIssue } from './zod-schema.ts';
+import { OpenClawConfigSchema } from './zod-schema.js';
+import type { OpenClawConfig, ConfigValidationIssue } from './zod-schema.js';
 
 export function validateConfigObjectRaw(
   raw: unknown,

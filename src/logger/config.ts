@@ -1,7 +1,7 @@
 import type { LogLevel } from './levels.js';
 import type { RedactSensitiveMode } from './redact.js';
-import type { LoggingConfig } from '../config/zod-schema.ts';
-import { loadConfig } from '../config/index.ts';
+import type { LoggingConfig } from '../config/zod-schema.js';
+import { loadConfig } from '../config/index.js';
 
 export type LoggerSettings = LoggingConfig;
 
