@@ -53,7 +53,7 @@ describe('Config IO', () => {
     it('should handle invalid JSON5 gracefully', () => {
       fs.writeFileSync(testConfigPath, '{ invalid json');
 
-      const mockLogger = { error: vi.fn() };
+      const mockLogger = { error: vi.fn(), warn: vi.fn() };
       const io = createConfigIO({ configPath: testConfigPath, logger: mockLogger });
       const config = io.loadConfig();
 

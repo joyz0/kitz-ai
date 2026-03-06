@@ -25,7 +25,7 @@ describe('Config Env Substitution', () => {
         }
       };
 
-      const resolved = resolveConfigEnvVars(config, process.env);
+      const resolved = resolveConfigEnvVars(config, process.env) as typeof config;
       expect(resolved.test).toBe('test-value');
       expect(resolved.nested.value).toBe('prefix-test-value-suffix');
     });
@@ -35,7 +35,7 @@ describe('Config Env Substitution', () => {
         test: '${NON_EXISTENT_VAR}'
       };
 
-      const resolved = resolveConfigEnvVars(config, process.env);
+      const resolved = resolveConfigEnvVars(config, process.env) as typeof config;
       expect(resolved.test).toBe('${NON_EXISTENT_VAR}');
     });
 
@@ -50,7 +50,7 @@ describe('Config Env Substitution', () => {
         }
       };
 
-      const resolved = resolveConfigEnvVars(config, process.env);
+      const resolved = resolveConfigEnvVars(config, process.env) as typeof config;
       expect(resolved.array[0]).toBe('test-value');
       expect(resolved.array[1]).toBe('static');
       expect(resolved.nested.value).toBe('test-value');
@@ -65,7 +65,7 @@ describe('Config Env Substitution', () => {
         undefinedValue: undefined
       };
 
-      const resolved = resolveConfigEnvVars(config, process.env);
+      const resolved = resolveConfigEnvVars(config, process.env) as typeof config;
       expect(resolved.number).toBe(123);
       expect(resolved.boolean).toBe(true);
       expect(resolved.nullValue).toBe(null);

@@ -12,21 +12,26 @@ describe('Config Validation', () => {
 
       const result = validateConfigObjectRaw(validConfig);
       expect(result.ok).toBe(true);
-      expect(result.config).toBeDefined();
+      if (result.ok) {
+        expect(result.config).toBeDefined();
+      }
     });
 
     it('should handle empty config', () => {
       const result = validateConfigObjectRaw({});
       expect(result.ok).toBe(true);
-      expect(result.config).toBeDefined();
+      if (result.ok) {
+        expect(result.config).toBeDefined();
+      }
     });
 
     it('should handle invalid config', () => {
-      // @ts-expect-error - Intentionally providing invalid config
-      const result = validateConfigObjectRaw({ invalid: 'value' });
+      const result = validateConfigObjectRaw({ invalid: 'value' } as any);
       expect(result.ok).toBe(false);
-      expect(result.issues).toBeDefined();
-      expect(result.issues.length).toBeGreaterThan(0);
+      if (!result.ok) {
+        expect(result.issues).toBeDefined();
+        expect(result.issues.length).toBeGreaterThan(0);
+      }
     });
   });
 
@@ -40,8 +45,10 @@ describe('Config Validation', () => {
 
       const result = validateConfigObjectWithPlugins(validConfig);
       expect(result.ok).toBe(true);
-      expect(result.config).toBeDefined();
-      expect(result.warnings).toBeDefined();
+      if (result.ok) {
+        expect(result.config).toBeDefined();
+        expect(result.warnings).toBeDefined();
+      }
     });
 
     it('should return warnings for WhatsApp without allowFrom', () => {
@@ -58,7 +65,9 @@ describe('Config Validation', () => {
 
       const result = validateConfigObjectWithPlugins(configWithWhatsapp);
       expect(result.ok).toBe(true);
-      expect(result.warnings.length).toBeGreaterThan(0);
+      if (result.ok) {
+        expect(result.warnings.length).toBeGreaterThan(0);
+      }
     });
 
     it('should return issues for Telegram without token', () => {
@@ -75,7 +84,9 @@ describe('Config Validation', () => {
 
       const result = validateConfigObjectWithPlugins(configWithTelegram);
       expect(result.ok).toBe(false);
-      expect(result.issues.length).toBeGreaterThan(0);
+      if (!result.ok) {
+        expect(result.issues.length).toBeGreaterThan(0);
+      }
     });
 
     it('should return warnings for agent avatar with invalid format', () => {
@@ -97,7 +108,9 @@ describe('Config Validation', () => {
 
       const result = validateConfigObjectWithPlugins(configWithAgent);
       expect(result.ok).toBe(true);
-      expect(result.warnings.length).toBeGreaterThan(0);
+      if (result.ok) {
+        expect(result.warnings.length).toBeGreaterThan(0);
+      }
     });
   });
 });

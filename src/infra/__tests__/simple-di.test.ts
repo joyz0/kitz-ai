@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { createFactory, createDefaults, normalizeDependencies, Injectable, ExtractDeps } from '../simple-di.js';
+import {
+  createFactory,
+  createDefaults,
+  normalizeDependencies,
+  Injectable,
+  ExtractDeps,
+} from '../simple-di.js';
 
 describe('Simple DI', () => {
   describe('createDefaults', () => {
@@ -33,7 +39,7 @@ describe('Simple DI', () => {
       const defaults = { foo: 'bar', baz: 123 };
       const config = {
         defaults,
-        validate: (deps) => deps.baz > 100
+        validate: (deps: { foo: string; baz: number }) => deps.baz > 100,
       };
 
       const normalized = normalizeDependencies({}, config);
@@ -44,7 +50,7 @@ describe('Simple DI', () => {
       const defaults = { foo: 'bar', baz: 99 };
       const config = {
         defaults,
-        validate: (deps) => deps.baz > 100
+        validate: (deps: { foo: string; baz: number }) => deps.baz > 100,
       };
 
       expect(() => normalizeDependencies({}, config)).toThrow('依赖项验证失败');

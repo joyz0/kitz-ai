@@ -10,7 +10,7 @@ export const ALLOWED_LOG_LEVELS = [
 
 export type LogLevel = (typeof ALLOWED_LOG_LEVELS)[number];
 
-export function tryParseLogLevel(level?: string): LogLevel | undefined {
+export function tryParseLogLevel(level?: string | null): LogLevel | undefined {
   if (typeof level !== "string") {
     return undefined;
   }
@@ -18,7 +18,7 @@ export function tryParseLogLevel(level?: string): LogLevel | undefined {
   return ALLOWED_LOG_LEVELS.includes(candidate as LogLevel) ? (candidate as LogLevel) : undefined;
 }
 
-export function normalizeLogLevel(level?: string, fallback: LogLevel = "info") {
+export function normalizeLogLevel(level?: string | null, fallback: LogLevel = "info") {
   return tryParseLogLevel(level) ?? fallback;
 }
 

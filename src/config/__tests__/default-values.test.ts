@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { applyAllDefaults } from '../default-values.js';
+import type { OpenClawConfig } from '../zod-schema.js';
 
 describe('Config Default Values', () => {
   describe('applyAllDefaults', () => {
@@ -10,27 +11,25 @@ describe('Config Default Values', () => {
     });
 
     it('should preserve existing values', () => {
-      const testConfig = {
-        test: 'value',
+      const testConfig: OpenClawConfig = {
         meta: {
           version: '1.0.0'
         }
       };
 
       const config = applyAllDefaults(testConfig);
-      expect(config.test).toBe('value');
-      expect(config.meta.version).toBe('1.0.0');
+      expect(config.meta?.version).toBe('1.0.0');
     });
 
     it('should apply defaults to nested objects', () => {
-      const testConfig = {
-        nested: {
-          existing: 'value'
+      const testConfig: OpenClawConfig = {
+        logging: {
+          level: 'debug'
         }
       };
 
       const config = applyAllDefaults(testConfig);
-      expect(config.nested.existing).toBe('value');
+      expect(config.logging?.level).toBe('debug');
       // Additional tests for nested defaults can be added here
     });
   });
