@@ -1,38 +1,38 @@
 // 配置文件 IO 操作
-import crypto from "node:crypto";
-import fs from "node:fs";
-import os from "node:os";
-import path from "node:path";
-import JSON5 from "json5";
-import { VERSION } from "../version.js";
-import { applyAllDefaults } from "./default-values.js";
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import JSON5 from 'json5';
+import { VERSION } from '../version.js';
+import { applyAllDefaults } from './default-values.js';
 import {
   applyConfigEnvVars,
   resolveConfigEnvVars,
-} from "./env-substitution.js";
+} from './env-substitution.js';
 import type {
   OpenClawConfig,
   ConfigFileSnapshot,
   ConfigValidationIssue,
   LegacyConfigIssue,
-} from "./zod-schema.js";
-import { validateConfigObjectRaw } from "./validation.js";
+} from './zod-schema.js';
+import { validateConfigObjectRaw } from './validation.js';
 
 // 配置文件审计日志文件名
-const CONFIG_AUDIT_LOG_FILENAME = "config-audit.jsonl";
+const CONFIG_AUDIT_LOG_FILENAME = 'config-audit.jsonl';
 
 // 哈希配置原始内容
 function hashConfigRaw(raw: string | null): string {
   return crypto
-    .createHash("sha256")
-    .update(raw ?? "")
-    .digest("hex");
+    .createHash('sha256')
+    .update(raw ?? '')
+    .digest('hex');
 }
 
 // 解析 JSON5 配置文件
 export function parseConfigJson5(
   raw: string,
-  json5: { parse: (value: string) => unknown } = JSON5
+  json5: { parse: (value: string) => unknown } = JSON5,
 ): { ok: true; parsed: unknown } | { ok: false; error: string } {
   try {
     return { ok: true, parsed: json5.parse(raw) };
@@ -55,19 +55,20 @@ export type ConfigIoDeps = {
   env?: NodeJS.ProcessEnv;
   homedir?: () => string;
   configPath?: string;
-  logger?: Pick<typeof console, "error" | "warn">;
+  logger?: Pick<typeof console, 'error' | 'warn'>;
 };
 
 // 规范化依赖
 function normalizeDeps(overrides: ConfigIoDeps = {}): Required<ConfigIoDeps> {
+  const env = overrides.env ?? process.env;
+  const homedir = overrides.homedir ?? os.homedir;
+
   return {
     fs: overrides.fs ?? fs,
     json5: overrides.json5 ?? JSON5,
-    env: overrides.env ?? process.env,
-    homedir: overrides.homedir ?? os.homedir,
-    configPath:
-      overrides.configPath ??
-      path.join(os.homedir(), ".kitz-ai", "config.json5"),
+    env,
+    homedir,
+    configPath: overrides.configPath ?? resolveConfigPath(env, homedir),
     logger: overrides.logger ?? console,
   };
 }
@@ -75,23 +76,13 @@ function normalizeDeps(overrides: ConfigIoDeps = {}): Required<ConfigIoDeps> {
 // 解析配置路径
 function resolveConfigPath(
   env: NodeJS.ProcessEnv,
-  homedir: () => string
+  homedir: () => string,
 ): string {
   if (env.KITZ_CONFIG_PATH) {
     return env.KITZ_CONFIG_PATH;
   }
-  // 检查当前目录是否有 example/config/config.json5
-  const exampleConfigPath = path.join(
-    process.cwd(),
-    "example",
-    "config",
-    "config.json5"
-  );
-  if (fs.existsSync(exampleConfigPath)) {
-    return exampleConfigPath;
-  }
   // 默认配置路径
-  return path.join(homedir(), ".kitz-ai", "config.json5");
+  return path.join(homedir(), '.kitz', 'config.json5');
 }
 
 // 戳记配置版本
@@ -110,7 +101,7 @@ function stampConfigVersion(cfg: OpenClawConfig): OpenClawConfig {
 // 维护配置备份
 async function maintainConfigBackups(
   configPath: string,
-  fsPromises: typeof fs.promises
+  fsPromises: typeof fs.promises,
 ): Promise<void> {
   const backupPath = `${configPath}.bak`;
   if (
@@ -133,7 +124,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
 
   // 解析 $include 指令
   function resolveConfigIncludes(config: unknown, basePath: string): unknown {
-    if (config === null || typeof config !== "object") {
+    if (config === null || typeof config !== 'object') {
       return config;
     }
 
@@ -142,40 +133,40 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
     }
 
     const configObj = config as Record<string, unknown>;
-    const includes = configObj["$include"];
+    const includes = configObj['$include'];
 
     if (includes) {
       const includePaths = Array.isArray(includes) ? includes : [includes];
       const baseDir = path.dirname(basePath);
 
       for (const includePath of includePaths) {
-        if (typeof includePath !== "string") continue;
+        if (typeof includePath !== 'string') continue;
 
         const resolvedPath = path.resolve(baseDir, includePath);
         if (deps.fs.existsSync(resolvedPath)) {
           try {
-            const includeRaw = deps.fs.readFileSync(resolvedPath, "utf-8");
+            const includeRaw = deps.fs.readFileSync(resolvedPath, 'utf-8');
             const includeParsed = deps.json5.parse(includeRaw);
             const resolvedInclude = resolveConfigIncludes(
               includeParsed,
-              resolvedPath
+              resolvedPath,
             );
 
             // 合并包含的配置
             if (
               resolvedInclude !== null &&
-              typeof resolvedInclude === "object" &&
+              typeof resolvedInclude === 'object' &&
               !Array.isArray(resolvedInclude)
             ) {
               Object.assign(
                 configObj,
-                resolvedInclude as Record<string, unknown>
+                resolvedInclude as Record<string, unknown>,
               );
             }
           } catch (err) {
             deps.logger.error(
               `Failed to include config file ${resolvedPath}:`,
-              err
+              err,
             );
           }
         } else {
@@ -184,7 +175,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
       }
 
       // 移除 $include 字段
-      delete configObj["$include"];
+      delete configObj['$include'];
     }
 
     // 递归处理其他字段
@@ -202,7 +193,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
         return applyAllDefaults({});
       }
 
-      const raw = deps.fs.readFileSync(configPath, "utf-8");
+      const raw = deps.fs.readFileSync(configPath, 'utf-8');
       const parsed = deps.json5.parse(raw);
       const resolvedIncludes = resolveConfigIncludes(parsed, configPath);
       const resolvedConfig = resolveConfigEnvVars(resolvedIncludes, deps.env);
@@ -212,7 +203,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
         deps.logger.error(
           `Invalid config at ${configPath}:\n${validated.issues
             .map((e) => `- ${e.path}: ${e.message}`)
-            .join("\n")}`
+            .join('\n')}`,
         );
         return applyAllDefaults({});
       }
@@ -247,7 +238,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
     }
 
     try {
-      const raw = deps.fs.readFileSync(configPath, "utf-8");
+      const raw = deps.fs.readFileSync(configPath, 'utf-8');
       const hash = hashConfigRaw(raw);
       const parsedRes = parseConfigJson5(raw, deps.json5);
 
@@ -262,7 +253,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
           config: {},
           hash,
           issues: [
-            { path: "", message: `JSON5 parse failed: ${parsedRes.error}` },
+            { path: '', message: `JSON5 parse failed: ${parsedRes.error}` },
           ],
           warnings: [],
           legacyIssues: [],
@@ -271,7 +262,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
 
       const resolvedIncludes = resolveConfigIncludes(
         parsedRes.parsed,
-        configPath
+        configPath,
       );
       const resolvedConfig = resolveConfigEnvVars(resolvedIncludes, deps.env);
       const validated = validateConfigObjectRaw(resolvedConfig);
@@ -316,7 +307,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
         valid: false,
         config: {},
         hash: hashConfigRaw(null),
-        issues: [{ path: "", message: `read failed: ${String(err)}` }],
+        issues: [{ path: '', message: `read failed: ${String(err)}` }],
         warnings: [],
         legacyIssues: [],
       };
@@ -326,7 +317,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
   // 写入配置文件
   async function writeConfigFile(
     cfg: OpenClawConfig,
-    options: ConfigWriteOptions = {}
+    options: ConfigWriteOptions = {},
   ) {
     const dir = path.dirname(configPath);
     await deps.fs.promises.mkdir(dir, { recursive: true, mode: 0o700 });
@@ -334,26 +325,26 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
     const validated = validateConfigObjectRaw(cfg);
     if (!validated.ok) {
       const issue = validated.issues[0];
-      const pathLabel = issue?.path || "<root>";
-      const issueMessage = issue?.message || "invalid";
+      const pathLabel = issue?.path || '<root>';
+      const issueMessage = issue?.message || 'invalid';
       throw new Error(
-        `Config validation failed: ${pathLabel}: ${issueMessage}`
+        `Config validation failed: ${pathLabel}: ${issueMessage}`,
       );
     }
 
     const stampedOutputConfig = stampConfigVersion(validated.config);
     const json = JSON.stringify(stampedOutputConfig, null, 2)
       .trimEnd()
-      .concat("\n");
+      .concat('\n');
 
     const tmp = path.join(
       dir,
-      `${path.basename(configPath)}.${process.pid}.${crypto.randomUUID()}.tmp`
+      `${path.basename(configPath)}.${process.pid}.${crypto.randomUUID()}.tmp`,
     );
 
     try {
       await deps.fs.promises.writeFile(tmp, json, {
-        encoding: "utf-8",
+        encoding: 'utf-8',
         mode: 0o600,
       });
 
@@ -365,7 +356,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
         await deps.fs.promises.rename(tmp, configPath);
       } catch (err) {
         const code = (err as { code?: string }).code;
-        if (code === "EPERM" || code === "EEXIST") {
+        if (code === 'EPERM' || code === 'EEXIST') {
           await deps.fs.promises.copyFile(tmp, configPath);
           await deps.fs.promises.chmod(configPath, 0o600).catch(() => {});
           await deps.fs.promises.unlink(tmp).catch(() => {});
@@ -403,7 +394,7 @@ export function clearConfigCache(): void {
 // 解析配置缓存时间
 export function resolveConfigCacheMs(env: NodeJS.ProcessEnv): number {
   const raw = env.KITZ_CONFIG_CACHE_MS?.trim();
-  if (raw === "" || raw === "0") {
+  if (raw === '' || raw === '0') {
     return 0;
   }
   if (!raw) {
@@ -461,7 +452,7 @@ export async function readConfigFileSnapshot(): Promise<ConfigFileSnapshot> {
 // 写入配置文件
 export async function writeConfigFile(
   cfg: OpenClawConfig,
-  options: ConfigWriteOptions = {}
+  options: ConfigWriteOptions = {},
 ): Promise<void> {
   const io = createConfigIO();
   await io.writeConfigFile(cfg, options);
