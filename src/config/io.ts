@@ -81,6 +81,12 @@ function resolveConfigPath(
   if (env.KITZ_CONFIG_PATH) {
     return env.KITZ_CONFIG_PATH;
   }
+  // 检查当前项目目录是否存在 .kitz 目录
+  const currentDir = process.cwd();
+  const projectConfigPath = path.join(currentDir, '.kitz', 'config.json5');
+  if (fs.existsSync(projectConfigPath)) {
+    return projectConfigPath;
+  }
   // 默认配置路径
   return path.join(homedir(), '.kitz', 'config.json5');
 }
