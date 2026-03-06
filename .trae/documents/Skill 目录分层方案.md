@@ -2,26 +2,24 @@
 
 ## 分析现有结构
 
-目前 .trae/skills 目录包含14个 skill，按功能可分为：
-
 ### 基础设施类
+
 - config-system-design
 - logger-design
-- error-handling
-- dependency-injection-design
-- type-safety-design
-- memory-management-design
+- memory-management-design（docs/legacy-skills/memory-management-design）
 
 ### 功能模块类
-- cli-design
-- gateway-design
-- session-design
-- plugin-system-design
-- data-migration-design
-- retry-fault-tolerance-design
-- media-processing-design
+
+- cli-design（docs/skills/cli-design）
+- gateway-design（docs/skills/gateway-design）
+- session-design（docs/skills/session-design）
+- plugin-system-design（docs/skills/plugin-system-design）
+- data-migration-design（docs/skills/data-migration-design）
+- retry-fault-tolerance-design（docs/skills/retry-fault-tolerance-design）
+- media-processing-design（docs/skills/media-processing-design）
 
 ### 安全类
+
 - security-design
 
 ## 分层建议
@@ -33,9 +31,6 @@ skills/
 ├── 1-core/                  # 核心基础设施层
 │   ├── config-system-design/
 │   ├── logger-design/
-│   ├── error-handling/
-│   ├── dependency-injection-design/
-│   ├── type-safety-design/
 │   └── memory-management-design/
 ├── 2-foundation/            # 基础功能层
 │   ├── security-design/
@@ -53,21 +48,25 @@ skills/
 ## 分层说明
 
 ### 1-core/（核心基础设施层）
+
 - 提供最基础的功能和服务
 - 其他层的依赖基础
 - 包括配置、日志、错误处理等核心组件
 
 ### 2-foundation/（基础功能层）
+
 - 基于核心层构建的基础功能
 - 提供安全、容错、插件等通用功能
 - 为服务层提供支持
 
 ### 3-services/（服务层）
+
 - 提供具体的服务实现
 - 面向特定功能域的服务
 - 包括 CLI、网关、会话管理等
 
 ### 4-domains/（领域层）
+
 - 针对特定业务领域的技能
 - 具有较强的领域特性
 - 如媒体处理等
@@ -86,5 +85,3 @@ skills/
 2. 移动现有技能到对应层级
 3. 更新相关引用和配置
 4. 验证结构完整性
-
-此分层方案将使技能体系更加清晰、有序，便于 AI 模型理解和使用。
