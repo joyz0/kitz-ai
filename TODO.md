@@ -18,29 +18,29 @@
   - [ ] 实现 agents/models/fallback.ts - 模型降级策略
 - [x] 实现agents/providers模块 - 模型提供商管理
   - [x] 实现 agents/providers/registry.ts - 提供商注册
-  - [ ] 实现 agents/providers/openai.ts - OpenAI集成
-  - [ ] 实现 agents/providers/gemini.ts - Gemini集成
-  - [ ] 实现 agents/providers/compat.ts - 提供商兼容性处理
-- [ ] 实现agents/sessions模块 - 会话管理
-  - [ ] 实现 agents/sessions/key.ts - 会话键管理
-  - [ ] 实现 agents/sessions/storage.ts - 会话存储
-  - [ ] 实现 agents/sessions/maintenance.ts - 会话维护
-  - [ ] 实现 agents/sessions/compaction.ts - 会话压缩
-- [ ] 实现agents/tools模块 - 工具系统
-  - [ ] 实现 agents/tools/registry.ts - 工具注册
-  - [ ] 实现 agents/tools/executor.ts - 工具执行
-  - [ ] 实现 agents/tools/result.ts - 结果处理
+  - [x] 实现 agents/providers/openai.ts - OpenAI集成
+  - [x] 实现 agents/providers/gemini.ts - Gemini集成
+  - [x] 实现 agents/providers/compat.ts - 提供商兼容性处理
+- [x] 实现agents/sessions模块 - 会话管理
+  - [x] 实现 agents/sessions/key.ts - 会话键管理
+  - [x] 实现 agents/sessions/storage.ts - 会话存储
+  - [x] 实现 agents/sessions/maintenance.ts - 会话维护
+  - [x] 实现 agents/sessions/compaction.ts - 会话压缩
+- [x] 实现agents/tools模块 - 工具系统
+  - [x] 实现 agents/tools/registry.ts - 工具注册
+  - [x] 实现 agents/tools/executor.ts - 工具执行
+  - [x] 实现 agents/tools/result.ts - 结果处理
 - [x] 实现agents/errors模块 - 错误处理和故障转移
   - [x] 实现 agents/errors/handler.ts - 错误处理
   - [ ] 实现 agents/errors/failover.ts - 故障转移
 
 ### 2. 网关实现
 
-- [ ] 实现gateway/server.ts - WebSocket服务器
-- [ ] 实现gateway/client.ts - WebSocket客户端
-- [ ] 实现gateway/protocol.ts - 通信协议
-- [ ] 实现gateway/auth.ts - 网关认证
-- [ ] 实现gateway/events.ts - 事件处理
+- [x] 实现gateway/server.ts - WebSocket服务器
+- [x] 实现gateway/client.ts - WebSocket客户端
+- [x] 实现gateway/protocol.ts - 通信协议
+- [x] 实现gateway/auth.ts - 网关认证
+- [x] 实现gateway/events.ts - 事件处理
 
 ### 3. 重试和容错机制
 
@@ -60,11 +60,11 @@
 
 ### 5. 命令行界面
 
-- [ ] 实现cli/program.ts - 命令行程序
-- [ ] 实现cli/commands.ts - 命令定义
-- [ ] 实现cli/help.ts - 帮助系统
-- [ ] 实现cli/args.ts - 参数解析
-- [ ] 实现cli/tui.ts - 文本用户界面
+- [x] 实现cli/program.ts - 命令行程序
+- [x] 实现cli/commands.ts - 命令定义
+- [x] 实现cli/help.ts - 帮助系统
+- [x] 实现cli/args.ts - 参数解析
+- [x] 实现cli/tui.ts - 文本用户界面
 
 ### 6. Web界面
 

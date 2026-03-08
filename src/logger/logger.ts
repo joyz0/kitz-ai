@@ -8,6 +8,8 @@ import type { LogLevel } from './levels.js';
 import { levelToMinLevel, normalizeLogLevel } from './levels.js';
 import { redactSensitiveText } from './redact.js';
 
+export type Logger = TsLogger<LogObj>;
+
 const DEFAULT_LOG_DIR = path.join(process.cwd(), 'logs');
 const DEFAULT_LOG_FILE = path.join(DEFAULT_LOG_DIR, 'app.log');
 const LOG_PREFIX = 'app';

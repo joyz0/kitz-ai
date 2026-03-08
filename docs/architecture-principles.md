@@ -2701,6 +2701,93 @@ pnpm test:docker:live-models
 pnpm test:docker:live-gateway
 ```
 
+#### 15.3.5 日志模块 Mock 模式
+
+为了避免在测试中生成日志文件，使用专门的 mock-logger 工具：
+
+```typescript
+// 测试文件开头导入 mock-logger（必须在所有其他导入之前）
+import { getMockLogger, resetMockLogger } from '../logger/mock-logger.js';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
+// 获取 mock logger 实例
+const mockLogger = getMockLogger();
+
+describe('SomeModule', () => {
+  beforeEach(() => {
+    // 重置所有 mock
+    vi.clearAllMocks();
+    resetMockLogger();
+  });
+
+  it('should do something', () => {
+    // 测试代码
+    expect(mockLogger.info).toHaveBeenCalledWith('Expected log message');
+  });
+});
+```
+
+**mock-logger.ts 文件内容：**
+
+```typescript
+// 注意：此文件必须在所有导入之前导入
+import { vi } from 'vitest';
+
+// 全局的 mock logger 对象
+const mockLogger = {
+  debug: vi.fn(),
+  info: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn(),
+  trace: vi.fn(),
+  fatal: vi.fn(),
+  getSubLogger: vi.fn(() => mockLogger)
+};
+
+// 模拟 logger 模块
+vi.mock('./logger.js', () => {
+  // 模拟 Logger 构造函数
+  const MockLogger = function(name: string) {
+    return mockLogger;
+  };
+  
+  return {
+    Logger: MockLogger,
+    getLogger: vi.fn(() => mockLogger),
+    getChildLogger: vi.fn(() => mockLogger),
+    registerLogTransport: vi.fn(),
+    resetLogger: vi.fn()
+  };
+});
+
+// 类型定义
+export type MockLogger = {
+  debug: any;
+  info: any;
+  warn: any;
+  error: any;
+  trace: any;
+  fatal: any;
+  getSubLogger: any;
+};
+
+// 获取模拟的 logger 实例
+export function getMockLogger(): MockLogger {
+  return mockLogger;
+}
+
+// 重置所有 logger 方法的调用记录
+export function resetMockLogger() {
+  mockLogger.debug.mockClear();
+  mockLogger.info.mockClear();
+  mockLogger.warn.mockClear();
+  mockLogger.error.mockClear();
+  mockLogger.trace.mockClear();
+  mockLogger.fatal.mockClear();
+  mockLogger.getSubLogger.mockClear();
+}
+```
+
 ### 15.4 最佳实践
 
 1. **测试命名**：描述行为而非函数（`should retry when fails`）

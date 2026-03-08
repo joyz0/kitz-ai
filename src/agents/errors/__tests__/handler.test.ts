@@ -6,14 +6,10 @@ import {
   createAgentError,
   AgentError,
 } from '../handler.js';
-import { getLogger } from '../../../logger/index.js';
+import { getMockLogger, resetMockLogger } from '../../../logger/mock-logger.js';
 
-// 模拟日志记录器
-const mockLogger = getLogger();
-
-// 模拟日志方法
-vi.spyOn(mockLogger, 'warn').mockImplementation(() => undefined);
-vi.spyOn(mockLogger, 'error').mockImplementation(() => undefined);
+// 获取模拟 logger 实例
+const mockLogger = getMockLogger();
 
 describe('ErrorHandler', () => {
   let errorHandler: ErrorHandler;
@@ -22,6 +18,7 @@ describe('ErrorHandler', () => {
     errorHandler = createErrorHandler(mockLogger);
     // 重置模拟
     vi.clearAllMocks();
+    resetMockLogger();
   });
 
   it('should create error handler successfully', () => {

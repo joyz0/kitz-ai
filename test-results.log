@@ -1,0 +1,1371 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90m/Users/pl/Codes/kitz/kitz-ai[39m
+
+[90mstderr[2m | src/gateway/__tests__/client.test.ts[2m > [22m[2mGatewayClient[2m > [22m[2mconnect[2m > [22m[2mshould handle connection error
+[22m[39m[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.
+
+ [31m❯[39m src/gateway/__tests__/client.test.ts [2m([22m[2m19 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[32m 38[2mms[22m[39m
+       [32m✓[39m should initialize with correct parameters[32m 3[2mms[22m[39m
+       [32m✓[39m should connect to server successfully[32m 2[2mms[22m[39m
+       [32m✓[39m should handle connection error[32m 7[2mms[22m[39m
+       [32m✓[39m should handle WebSocket error[32m 2[2mms[22m[39m
+[31m       [31m×[31m should send message when connected[39m[32m 5[2mms[22m[39m
+       [32m✓[39m should not send message when not connected[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle serialization error[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should register message handler[32m 1[2mms[22m[39m
+       [32m✓[39m should handle multiple handlers for same type[32m 1[2mms[22m[39m
+[31m       [31m×[31m should close WebSocket connection[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should handle null WebSocket[32m 0[2mms[22m[39m
+       [32m✓[39m should handle message successfully[32m 1[2mms[22m[39m
+       [32m✓[39m should handle parse error[32m 1[2mms[22m[39m
+       [32m✓[39m should handle handler error[32m 1[2mms[22m[39m
+[31m       [31m×[31m should attempt reconnect[39m[32m 4[2mms[22m[39m
+       [32m✓[39m should stop reconnecting after max attempts[32m 1[2mms[22m[39m
+[31m       [31m×[31m should return true when connected[39m[32m 2[2mms[22m[39m
+       [32m✓[39m should return false when not connected[32m 1[2mms[22m[39m
+       [32m✓[39m should return false when WebSocket is null[32m 0[2mms[22m[39m
+ [31m❯[39m src/gateway/__tests__/auth.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m7 failed[39m[2m)[22m[32m 74[2mms[22m[39m
+       [32m✓[39m should initialize with default token[32m 3[2mms[22m[39m
+       [32m✓[39m should return false when no token is provided[32m 2[2mms[22m[39m
+       [32m✓[39m should return false when invalid token is provided[32m 1[2mms[22m[39m
+       [32m✓[39m should return true when valid token is provided[32m 0[2mms[22m[39m
+[31m       [31m×[31m should return false when error occurs during authentication[39m[32m 28[2mms[22m[39m
+[31m       [31m×[31m should add a new token[39m[32m 13[2mms[22m[39m
+[31m       [31m×[31m should handle adding an existing token[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should remove an existing token[39m[32m 13[2mms[22m[39m
+[31m       [31m×[31m should handle removing a non-existent token[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should return true for valid token[39m[32m 7[2mms[22m[39m
+[31m       [31m×[31m should return false for invalid token[39m[32m 1[2mms[22m[39m
+cyan textUsage: kitz [options] [command]
+
+Kitz AI CLI - A command-line interface for Kitz AI gateway
+
+Options:
+  -V, --version    output the version number
+  -h, --help       display help for command
+
+Commands:
+  help [command]   显示帮助信息
+  version          显示版本信息
+  status           显示系统状态
+  start [options]  启动网关服务器
+  stop             停止网关服务器
+  interactive|i    启动交互式模式
+[90mstdout[2m | src/cli/__tests__/program.test.ts[2m > [22m[2mCLIProgram[2m > [22m[2mrun[2m > [22m[2mshould execute commands successfully
+[22m[39m[37m2026-03-08 10:19:57.413[39m[0m[0m	[31m[1mERROR[22m[39m[0m[0m	[37msrc/cli/program.ts:110[39m[0m[0m[1m[37m	app:{"name":"cli-program"}[39m[22m[0m[0m	{"name":"cli-program"} Error running CLI program
+
+[97m[101m[1m Error [22m[49m[39m[0m[0m process.exit unexpectedly called with "1"[0m[0m
+error stack:
+  • [33mstartModuleRunner.DEj0jb3e.js[39m[0m[0m	process.exit[0m[0m
+	[37mnode_modules/.pnpm/vitest@4.0.18_@types+node@25.3.3_tsx@4.21.0/node_modules/vitest/dist/chunks/startModuleRunner.DEj0jb3e.js:766[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command._exit[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:538[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command.help[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:2633[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command._parseCommand[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:1582[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command.parseAsync[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:1122[39m[0m[0m
+  • [33mprogram.ts[39m[0m[0m	CLIProgram.run[0m[0m
+	[37msrc/cli/program.ts:108[39m[0m[0m
+  • [33mprogram.test.ts[39m[0m[0m	[0m[0m
+	[37msrc/cli/__tests__/program.test.ts:75[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	[0m[0m
+	[37mnode_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:145[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	[0m[0m
+	[37mnode_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:915[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	[0m[0m
+	[37mnode_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:1243[39m[0m[0m[0m[0m
+
+Usage: kitz [options] [command]
+
+Kitz AI CLI - A command-line interface for Kitz AI gateway
+
+Options:
+  -V, --version    output the version number
+  -h, --help       display help for command
+
+Commands:
+  help [command]   显示帮助信息
+  version          显示版本信息
+  status           显示系统状态
+  start [options]  启动网关服务器
+  stop             停止网关服务器
+  interactive|i    启动交互式模式
+[90mstdout[2m | src/cli/__tests__/program.test.ts[2m > [22m[2mCLIProgram[2m > [22m[2mrun[2m > [22m[2mshould handle errors gracefully
+[22m[39m[37m2026-03-08 10:19:57.424[39m[0m[0m	[31m[1mERROR[22m[39m[0m[0m	[37msrc/cli/program.ts:110[39m[0m[0m[1m[37m	app:{"name":"cli-program"}[39m[22m[0m[0m	{"name":"cli-program"} Error running CLI program
+
+[97m[101m[1m Error [22m[49m[39m[0m[0m process.exit unexpectedly called with "1"[0m[0m
+error stack:
+  • [33mstartModuleRunner.DEj0jb3e.js[39m[0m[0m	process.exit[0m[0m
+	[37mnode_modules/.pnpm/vitest@4.0.18_@types+node@25.3.3_tsx@4.21.0/node_modules/vitest/dist/chunks/startModuleRunner.DEj0jb3e.js:766[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command._exit[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:538[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command.help[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:2633[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command._parseCommand[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:1582[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command.parseAsync[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:1122[39m[0m[0m
+  • [33mprogram.ts[39m[0m[0m	CLIProgram.run[0m[0m
+	[37msrc/cli/program.ts:108[39m[0m[0m
+  • [33mprogram.test.ts[39m[0m[0m	[0m[0m
+	[37msrc/cli/__tests__/program.test.ts:87[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	[0m[0m
+	[37mnode_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:145[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	[0m[0m
+	[37mnode_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:915[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	[0m[0m
+	[37mnode_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:1243[39m[0m[0m[0m[0m
+
+Usage: kitz [options] [command]
+
+Kitz AI CLI - A command-line interface for Kitz AI gateway
+
+Options:
+  -V, --version    output the version number
+  -h, --help       display help for command
+
+Commands:
+  help [command]   显示帮助信息
+  version          显示版本信息
+  status           显示系统状态
+  start [options]  启动网关服务器
+  stop             停止网关服务器
+  interactive|i    启动交互式模式
+ [31m❯[39m src/agents/sessions/__tests__/compaction.test.ts [2m([22m[2m9 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 44[2mms[22m[39m
+       [32m✓[39m should compact a session with too many messages[32m 4[2mms[22m[39m
+       [32m✓[39m should preserve system messages during compaction[32m 1[2mms[22m[39m
+[31m       [31m×[31m should not compact sessions with fewer messages than the limit[39m[32m 28[2mms[22m[39m
+       [32m✓[39m should compact old sessions more aggressively[32m 4[2mms[22m[39m
+       [32m✓[39m should compact sessions with very many messages more aggressively[32m 2[2mms[22m[39m
+       [32m✓[39m should calculate the size of a session[32m 1[2mms[22m[39m
+       [32m✓[39m should return true for sessions that need compaction[32m 1[2mms[22m[39m
+       [32m✓[39m should return false for sessions that do not need compaction[32m 0[2mms[22m[39m
+       [32m✓[39m should compact multiple sessions[32m 1[2mms[22m[39m
+[90mstdout[2m | src/cli/__tests__/program.test.ts[2m > [22m[2mCLIProgram[2m > [22m[2mstartInteractiveMode[2m > [22m[2mshould start interactive mode and handle commands
+[22m[39m[37m2026-03-08 10:19:57.434[39m[0m[0m	[31m[1mERROR[22m[39m[0m[0m	[37msrc/cli/program.ts:110[39m[0m[0m[1m[37m	app:{"name":"cli-program"}[39m[22m[0m[0m	{"name":"cli-program"} Error running CLI program
+
+[97m[101m[1m Error [22m[49m[39m[0m[0m process.exit unexpectedly called with "1"[0m[0m
+error stack:
+  • [33mstartModuleRunner.DEj0jb3e.js[39m[0m[0m	process.exit[0m[0m
+	[37mnode_modules/.pnpm/vitest@4.0.18_@types+node@25.3.3_tsx@4.21.0/node_modules/vitest/dist/chunks/startModuleRunner.DEj0jb3e.js:766[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command._exit[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:538[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command.help[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:2633[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command._parseCommand[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:1582[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command.parseAsync[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:1122[39m[0m[0m
+  • [33mprogram.ts[39m[0m[0m	CLIProgram.run[0m[0m
+	[37msrc/cli/program.ts:108[39m[0m[0m
+  • [33mprogram.ts[39m[0m[0m	CLIProgram.startInteractiveMode[0m[0m
+	[37msrc/cli/program.ts:150[39m[0m[0m
+  • [33mtask_queues[39m[0m[0m	processTicksAndRejections[0m[0m
+	[37mnode:internal/process/task_queues:95[39m[0m[0m
+  • [33mprogram.test.ts[39m[0m[0m	[0m[0m
+	[37msrc/cli/__tests__/program.test.ts:105[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	[0m[0m
+	[37mnode_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:915[39m[0m[0m[0m[0m
+
+Usage: kitz [options] [command]
+
+Kitz AI CLI - A command-line interface for Kitz AI gateway
+
+Options:
+  -V, --version    output the version number
+  -h, --help       display help for command
+
+Commands:
+  help [command]   显示帮助信息
+  version          显示版本信息
+  status           显示系统状态
+  start [options]  启动网关服务器
+  stop             停止网关服务器
+  interactive|i    启动交互式模式
+[90mstdout[2m | src/cli/__tests__/program.test.ts[2m > [22m[2mCLIProgram[2m > [22m[2mstartInteractiveMode[2m > [22m[2mshould handle errors in interactive mode
+[22m[39m[37m2026-03-08 10:19:57.475[39m[0m[0m	[31m[1mERROR[22m[39m[0m[0m	[37msrc/cli/program.ts:110[39m[0m[0m[1m[37m	app:{"name":"cli-program"}[39m[22m[0m[0m	{"name":"cli-program"} Error running CLI program
+
+[97m[101m[1m Error [22m[49m[39m[0m[0m process.exit unexpectedly called with "1"[0m[0m
+error stack:
+  • [33mstartModuleRunner.DEj0jb3e.js[39m[0m[0m	process.exit[0m[0m
+	[37mnode_modules/.pnpm/vitest@4.0.18_@types+node@25.3.3_tsx@4.21.0/node_modules/vitest/dist/chunks/startModuleRunner.DEj0jb3e.js:766[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command._exit[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:538[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command.help[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:2633[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command._parseCommand[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:1582[39m[0m[0m
+  • [33mcommand.js[39m[0m[0m	Command.parseAsync[0m[0m
+	[37mnode_modules/.pnpm/commander@14.0.3/node_modules/commander/lib/command.js:1122[39m[0m[0m
+  • [33mprogram.ts[39m[0m[0m	CLIProgram.run[0m[0m
+	[37msrc/cli/program.ts:108[39m[0m[0m
+  • [33mprogram.ts[39m[0m[0m	CLIProgram.startInteractiveMode[0m[0m
+	[37msrc/cli/program.ts:150[39m[0m[0m
+  • [33mtask_queues[39m[0m[0m	processTicksAndRejections[0m[0m
+	[37mnode:internal/process/task_queues:95[39m[0m[0m
+  • [33mprogram.test.ts[39m[0m[0m	[0m[0m
+	[37msrc/cli/__tests__/program.test.ts:150[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	[0m[0m
+	[37mnode_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:915[39m[0m[0m[0m[0m
+
+ [31m❯[39m src/cli/__tests__/program.test.ts [2m([22m[2m8 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 92[2mms[22m[39m
+       [32m✓[39m should initialize all dependencies[32m 7[2mms[22m[39m
+[31m       [31m×[31m should execute commands successfully[39m[32m 22[2mms[22m[39m
+[31m       [31m×[31m should handle errors gracefully[39m[32m 10[2mms[22m[39m
+[31m       [31m×[31m should start interactive mode and handle commands[39m[32m 21[2mms[22m[39m
+       [32m✓[39m should handle empty input[32m 11[2mms[22m[39m
+       [32m✓[39m should handle quit command[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle errors in interactive mode[39m[32m 14[2mms[22m[39m
+       [32m✓[39m should register a custom command[32m 3[2mms[22m[39m
+ [31m❯[39m src/agents/providers/__tests__/compat.test.ts [2m([22m[2m16 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 47[2mms[22m[39m
+     [32m✓[39m should create ProviderCompat instance[32m 2[2mms[22m[39m
+     [32m✓[39m should register compatibility layer[32m 0[2mms[22m[39m
+     [32m✓[39m should get compatibility layer[32m 1[2mms[22m[39m
+     [32m✓[39m should return undefined for non-existent compatibility layer[32m 0[2mms[22m[39m
+     [32m✓[39m should normalize request for OpenAI[32m 2[2mms[22m[39m
+[31m     [31m×[31m should normalize request for Gemini[39m[32m 26[2mms[22m[39m
+     [32m✓[39m should return default request for unknown provider[32m 2[2mms[22m[39m
+     [32m✓[39m should normalize response for OpenAI[32m 2[2mms[22m[39m
+     [32m✓[39m should normalize response for Gemini[32m 1[2mms[22m[39m
+     [32m✓[39m should return default response for unknown provider[32m 1[2mms[22m[39m
+     [32m✓[39m should map model names for OpenAI[32m 2[2mms[22m[39m
+     [32m✓[39m should map model names for Gemini[32m 0[2mms[22m[39m
+     [32m✓[39m should return original model name for unknown provider[32m 0[2mms[22m[39m
+[31m     [31m×[31m should perform cross provider call with successful provider[39m[32m 2[2mms[22m[39m
+[31m     [31m×[31m should return error when all providers fail[39m[32m 2[2mms[22m[39m
+[31m     [31m×[31m should get available providers[39m[32m 2[2mms[22m[39m
+ [31m❯[39m src/gateway/__tests__/server.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[32m 34[2mms[22m[39m
+       [32m✓[39m should initialize with correct parameters[32m 6[2mms[22m[39m
+       [32m✓[39m should set up event handlers[32m 4[2mms[22m[39m
+[31m       [31m×[31m should handle message successfully[39m[32m 13[2mms[22m[39m
+[31m       [31m×[31m should handle authentication failure[39m[32m 4[2mms[22m[39m
+[31m       [31m×[31m should handle message processing error[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should start the server[32m 1[2mms[22m[39m
+       [32m✓[39m should stop the server[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle connection close[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle connection error[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should handle server error[32m 1[2mms[22m[39m
+       [32m✓[39m should handle server listening[32m 1[2mms[22m[39m
+ [31m❯[39m src/agents/providers/__tests__/gemini.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 24[2mms[22m[39m
+     [32m✓[39m should create GeminiProvider instance[32m 2[2mms[22m[39m
+     [32m✓[39m should return provider name[32m 0[2mms[22m[39m
+     [32m✓[39m should generate text successfully[32m 4[2mms[22m[39m
+     [32m✓[39m should handle generate text error[32m 1[2mms[22m[39m
+     [32m✓[39m should handle generate text network error[32m 1[2mms[22m[39m
+[31m     [31m×[31m should embed text successfully[39m[32m 12[2mms[22m[39m
+     [32m✓[39m should handle embed text error[32m 1[2mms[22m[39m
+     [32m✓[39m should get models successfully[32m 1[2mms[22m[39m
+     [32m✓[39m should handle get models error[32m 1[2mms[22m[39m
+     [32m✓[39m should check availability successfully[32m 0[2mms[22m[39m
+     [32m✓[39m should handle availability check error[32m 0[2mms[22m[39m
+ [31m❯[39m src/gateway/__tests__/events.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 36[2mms[22m[39m
+       [32m✓[39m should initialize with default handlers[32m 4[2mms[22m[39m
+       [32m✓[39m should register a new event handler[32m 8[2mms[22m[39m
+[31m       [31m×[31m should override existing event handler[39m[32m 9[2mms[22m[39m
+       [32m✓[39m should handle event with registered handler[32m 1[2mms[22m[39m
+       [32m✓[39m should handle ping event[32m 1[2mms[22m[39m
+       [32m✓[39m should handle echo event[32m 0[2mms[22m[39m
+       [32m✓[39m should return error for unknown event type[32m 3[2mms[22m[39m
+       [32m✓[39m should return error when handler throws[32m 1[2mms[22m[39m
+       [32m✓[39m should return all registered event types[32m 1[2mms[22m[39m
+       [32m✓[39m should return empty array when no handlers are registered[32m 0[2mms[22m[39m
+       [32m✓[39m should remove existing event handler[32m 1[2mms[22m[39m
+       [32m✓[39m should handle removing non-existent handler[32m 3[2mms[22m[39m
+ [31m❯[39m src/agents/sessions/__tests__/storage.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 20[2mms[22m[39m
+       [32m✓[39m should store and retrieve a session[32m 2[2mms[22m[39m
+       [32m✓[39m should return undefined for non-existent session[32m 0[2mms[22m[39m
+       [32m✓[39m should update lastAccessed when retrieving a session[32m 1[2mms[22m[39m
+       [32m✓[39m should delete a session[32m 1[2mms[22m[39m
+       [32m✓[39m should return false when deleting non-existent session[32m 0[2mms[22m[39m
+[31m       [31m×[31m should update a session[39m[32m 9[2mms[22m[39m
+       [32m✓[39m should return undefined when updating non-existent session[32m 0[2mms[22m[39m
+       [32m✓[39m should add a message to a session[32m 2[2mms[22m[39m
+       [32m✓[39m should update the context of a session[32m 0[2mms[22m[39m
+       [32m✓[39m should return all sessions and count[32m 0[2mms[22m[39m
+       [32m✓[39m should remove expired sessions[32m 1[2mms[22m[39m
+       [32m✓[39m should remove idle sessions[32m 0[2mms[22m[39m
+[90mstdout[2m | src/logger/__tests__/logger.test.ts[2m > [22m[2mLogger[2m > [22m[2mregisterLogTransport[2m > [22m[2mshould register an external transport
+[22m[39m[37m2026-03-08 10:19:58.510[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:71[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	test message
+
+[90mstdout[2m | src/logger/__tests__/logger.test.ts[2m > [22m[2mLogger[2m > [22m[2mlog buffering[2m > [22m[2mshould buffer logs and write asynchronously
+[22m[39m[37m2026-03-08 10:19:58.525[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 0
+[37m2026-03-08 10:19:58.525[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 1
+[37m2026-03-08 10:19:58.535[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 2
+[37m2026-03-08 10:19:58.536[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 3
+[37m2026-03-08 10:19:58.536[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 4
+[37m2026-03-08 10:19:58.536[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 5
+[37m2026-03-08 10:19:58.538[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 6
+[37m2026-03-08 10:19:58.541[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 7
+[37m2026-03-08 10:19:58.541[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 8
+[37m2026-03-08 10:19:58.542[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 9
+[37m2026-03-08 10:19:58.542[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 10
+[37m2026-03-08 10:19:58.543[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 11
+[37m2026-03-08 10:19:58.543[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 12
+[37m2026-03-08 10:19:58.545[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 13
+[37m2026-03-08 10:19:58.545[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 14
+[37m2026-03-08 10:19:58.546[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 15
+[37m2026-03-08 10:19:58.546[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 16
+[37m2026-03-08 10:19:58.547[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 17
+[37m2026-03-08 10:19:58.547[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 18
+[37m2026-03-08 10:19:58.548[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 19
+[37m2026-03-08 10:19:58.548[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 20
+[37m2026-03-08 10:19:58.548[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 21
+[37m2026-03-08 10:19:58.549[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 22
+[37m2026-03-08 10:19:58.549[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 23
+[37m2026-03-08 10:19:58.549[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 24
+[37m2026-03-08 10:19:58.550[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 25
+[37m2026-03-08 10:19:58.550[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 26
+[37m2026-03-08 10:19:58.550[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 27
+[37m2026-03-08 10:19:58.551[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 28
+[37m2026-03-08 10:19:58.551[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 29
+[37m2026-03-08 10:19:58.551[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 30
+[37m2026-03-08 10:19:58.558[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 31
+[37m2026-03-08 10:19:58.558[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 32
+[37m2026-03-08 10:19:58.559[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 33
+[37m2026-03-08 10:19:58.559[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 34
+[37m2026-03-08 10:19:58.559[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 35
+[37m2026-03-08 10:19:58.559[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 36
+[37m2026-03-08 10:19:58.560[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 37
+[37m2026-03-08 10:19:58.564[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 38
+[37m2026-03-08 10:19:58.564[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 39
+[37m2026-03-08 10:19:58.564[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 40
+[37m2026-03-08 10:19:58.565[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 41
+[37m2026-03-08 10:19:58.565[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 42
+[37m2026-03-08 10:19:58.565[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 43
+[37m2026-03-08 10:19:58.565[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 44
+[37m2026-03-08 10:19:58.566[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 45
+[37m2026-03-08 10:19:58.567[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 46
+[37m2026-03-08 10:19:58.567[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 47
+[37m2026-03-08 10:19:58.567[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 48
+[37m2026-03-08 10:19:58.571[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 49
+[37m2026-03-08 10:19:58.573[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 50
+[37m2026-03-08 10:19:58.574[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 51
+[37m2026-03-08 10:19:58.579[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 52
+[37m2026-03-08 10:19:58.580[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 53
+[37m2026-03-08 10:19:58.581[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 54
+[37m2026-03-08 10:19:58.581[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 55
+[37m2026-03-08 10:19:58.581[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 56
+[37m2026-03-08 10:19:58.587[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 57
+[37m2026-03-08 10:19:58.590[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 58
+[37m2026-03-08 10:19:58.590[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 59
+[37m2026-03-08 10:19:58.591[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 60
+[37m2026-03-08 10:19:58.591[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 61
+[37m2026-03-08 10:19:58.591[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 62
+[37m2026-03-08 10:19:58.591[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 63
+[37m2026-03-08 10:19:58.592[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 64
+[37m2026-03-08 10:19:58.592[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 65
+[37m2026-03-08 10:19:58.592[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 66
+[37m2026-03-08 10:19:58.592[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 67
+[37m2026-03-08 10:19:58.593[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 68
+[37m2026-03-08 10:19:58.594[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 69
+[37m2026-03-08 10:19:58.595[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 70
+[37m2026-03-08 10:19:58.598[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 71
+[37m2026-03-08 10:19:58.598[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 72
+[37m2026-03-08 10:19:58.599[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 73
+[37m2026-03-08 10:19:58.599[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 74
+[37m2026-03-08 10:19:58.599[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 75
+[37m2026-03-08 10:19:58.599[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 76
+[37m2026-03-08 10:19:58.600[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 77
+[37m2026-03-08 10:19:58.600[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 78
+[37m2026-03-08 10:19:58.600[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 79
+[37m2026-03-08 10:19:58.602[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 80
+[37m2026-03-08 10:19:58.602[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 81
+[37m2026-03-08 10:19:58.603[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 82
+[37m2026-03-08 10:19:58.604[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 83
+[37m2026-03-08 10:19:58.604[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 84
+[37m2026-03-08 10:19:58.620[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 85
+[37m2026-03-08 10:19:58.621[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 86
+[37m2026-03-08 10:19:58.621[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 87
+[37m2026-03-08 10:19:58.621[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 88
+[37m2026-03-08 10:19:58.622[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 89
+[37m2026-03-08 10:19:58.622[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 90
+[37m2026-03-08 10:19:58.622[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 91
+[37m2026-03-08 10:19:58.623[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 92
+[37m2026-03-08 10:19:58.623[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 93
+[37m2026-03-08 10:19:58.623[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 94
+[37m2026-03-08 10:19:58.623[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 95
+[37m2026-03-08 10:19:58.624[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 96
+[37m2026-03-08 10:19:58.624[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 97
+[37m2026-03-08 10:19:58.628[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 98
+[37m2026-03-08 10:19:58.628[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:97[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 99
+
+[90mstderr[2m | src/infra/__tests__/unhandled-rejections.test.ts[2m > [22m[2mUnhandled Rejections[2m > [22m[2mregisterUnhandledRejectionHandler[2m > [22m[2mshould handle handler errors gracefully
+[22m[39m[kitz-ai] Unhandled rejection handler failed: Error: Handler error
+    at /Users/pl/Codes/kitz/kitz-ai/src/infra/__tests__/unhandled-rejections.test.ts:146:15
+    at Mock (file:///Users/pl/Codes/kitz/kitz-ai/node_modules/.pnpm/@vitest+spy@4.0.18/node_modules/@vitest/spy/dist/index.js:285:34)
+    at isUnhandledRejectionHandled (/Users/pl/Codes/kitz/kitz-ai/src/infra/unhandled-rejections.ts:208:11)
+    at /Users/pl/Codes/kitz/kitz-ai/src/infra/__tests__/unhandled-rejections.test.ts:151:14
+    at file:///Users/pl/Codes/kitz/kitz-ai/node_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:145:11
+    at file:///Users/pl/Codes/kitz/kitz-ai/node_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:915:26
+    at file:///Users/pl/Codes/kitz/kitz-ai/node_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///Users/pl/Codes/kitz/kitz-ai/node_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:1209:10)
+    at file:///Users/pl/Codes/kitz/kitz-ai/node_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:1653:37
+
+ [32m✓[39m src/infra/__tests__/unhandled-rejections.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [31m❯[39m src/agents/tools/__tests__/executor.test.ts [2m([22m[2m10 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 545[2mms[22m[39m
+[31m       [31m×[31m should execute a tool successfully[39m[32m 28[2mms[22m[39m
+       [32m✓[39m should return error for non-existent tool[32m 1[2mms[22m[39m
+       [32m✓[39m should return error for invalid parameters[32m 1[2mms[22m[39m
+       [32m✓[39m should return error when tool execution fails[32m 3[2mms[22m[39m
+       [32m✓[39m should execute multiple tools[32m 1[2mms[22m[39m
+       [32m✓[39m should execute tool with timeout[32m 0[2mms[22m[39m
+       [33m[2m✓[22m[39m should return error when tool execution times out [33m 506[2mms[22m[39m
+       [32m✓[39m should return tool info[32m 1[2mms[22m[39m
+       [32m✓[39m should return undefined for non-existent tool[32m 1[2mms[22m[39m
+       [32m✓[39m should return info for all tools[32m 1[2mms[22m[39m
+ [32m✓[39m src/retry/__tests__/backoff.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+[90mstdout[2m | src/logger/__tests__/logger.test.ts[2m > [22m[2mLogger[2m > [22m[2merror handling[2m > [22m[2mshould not throw errors when logging
+[22m[39m[37m2026-03-08 10:20:00.131[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:115[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log that should not throw
+
+[90mstdout[2m | src/logger/__tests__/logger.test.ts[2m > [22m[2mLogger[2m > [22m[2mlog redaction[2m > [22m[2mshould redact sensitive information in logs
+[22m[39m[37m2026-03-08 10:20:00.133[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:133[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log with sensitive data {
+  apiKey: [32m'sk-1234567890abcdef1234567890abcdef'[39m,
+  token: [32m'ghp_1234567890abcdef1234567890abcdef'[39m,
+  password: [32m'[***]'[39m,
+  message: [32m'Test message with apiKey=sk-1234567890abcdef1234567890abcdef'[39m 
+}
+
+[90mstdout[2m | src/logger/__tests__/logger.test.ts[2m > [22m[2mLogger[2m > [22m[2mlog redaction[2m > [22m[2mshould redact nested sensitive information
+[22m[39m[37m2026-03-08 10:20:00.236[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:161[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log with nested sensitive data {
+  user: 
+   {
+     name: [32m'John Doe'[39m,
+     credentials: 
+      {
+        password: [32m'[***]'[39m,
+        token: [32m'Bearer abcdef123456'[39m 
+      } 
+   } 
+}
+
+[90mstdout[2m | src/logger/__tests__/logger.test.ts[2m > [22m[2mLogger[2m > [22m[2mdifferent log levels[2m > [22m[2mshould log at different levels
+[22m[39m[37m2026-03-08 10:20:00.344[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:184[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Info message
+[37m2026-03-08 10:20:00.348[39m[0m[0m	[33m[1mWARN[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:185[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Warn message
+[37m2026-03-08 10:20:00.350[39m[0m[0m	[31m[1mERROR[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:186[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Error message
+
+[90mstdout[2m | src/logger/__tests__/logger.test.ts[2m > [22m[2mLogger[2m > [22m[2msilent mode[2m > [22m[2mshould not write to file in silent mode
+[22m[39m[37m2026-03-08 10:20:00.452[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:209[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	This should not be written to file
+
+[90mstderr[2m | src/config/__tests__/io.test.ts[2m > [22m[2mConfig IO[2m > [22m[2mloadConfig[2m > [22m[2mshould load config from file
+[22m[39mInvalid config at /Users/pl/Codes/kitz/kitz-ai/test-temp/config.json5:
+- : Unrecognized key(s) in object: 'test'
+
+[90mstderr[2m | src/config/__tests__/io.test.ts[2m > [22m[2mConfig IO[2m > [22m[2mloadConfig[2m > [22m[2mshould handle config file with arrays
+[22m[39mInvalid config at /Users/pl/Codes/kitz/kitz-ai/test-temp/config.json5:
+- : Unrecognized key(s) in object: 'someArray'
+
+[90mstderr[2m | src/config/__tests__/io.test.ts[2m > [22m[2mConfig IO[2m > [22m[2mresolveConfigIncludes[2m > [22m[2mshould handle nested include files
+[22m[39mInvalid config at /Users/pl/Codes/kitz/kitz-ai/test-temp/config.json5:
+- : Unrecognized key(s) in object: 'nestedKey'
+
+ [32m✓[39m src/config/__tests__/io.test.ts [2m([22m[2m38 tests[22m[2m)[22m[32m 169[2mms[22m[39m
+[90mstdout[2m | src/logger/__tests__/logger.test.ts[2m > [22m[2mLogger[2m > [22m[2mlog file size limit[2m > [22m[2mshould handle log file size limit
+[22m[39m[37m2026-03-08 10:20:01.458[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:237[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 0 with some extra content to make it longer
+[37m2026-03-08 10:20:01.459[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:237[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 1 with some extra content to make it longer
+[37m2026-03-08 10:20:01.459[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:237[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 2 with some extra content to make it longer
+[37m2026-03-08 10:20:01.459[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:237[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 3 with some extra content to make it longer
+[37m2026-03-08 10:20:01.460[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:237[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 4 with some extra content to make it longer
+[37m2026-03-08 10:20:01.460[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:237[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 5 with some extra content to make it longer
+[37m2026-03-08 10:20:01.460[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:237[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 6 with some extra content to make it longer
+[37m2026-03-08 10:20:01.461[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:237[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 7 with some extra content to make it longer
+[37m2026-03-08 10:20:01.461[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:237[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 8 with some extra content to make it longer
+[37m2026-03-08 10:20:01.461[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:237[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log 9 with some extra content to make it longer
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mconstructor[2m > [22m[2mshould initialize and register default commands
+[22m[39m[37m2026-03-08 10:20:01.496[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: help
+[37m2026-03-08 10:20:01.510[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: version
+[37m2026-03-08 10:20:01.511[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: status
+[37m2026-03-08 10:20:01.512[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: start
+[37m2026-03-08 10:20:01.513[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: stop
+[37m2026-03-08 10:20:01.514[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: qrcode
+[37m2026-03-08 10:20:01.515[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: code
+[37m2026-03-08 10:20:01.518[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: interactive
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mregisterCommand[2m > [22m[2mshould register a new command
+[22m[39m[37m2026-03-08 10:20:01.524[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: help
+[37m2026-03-08 10:20:01.525[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: version
+[37m2026-03-08 10:20:01.526[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: status
+[37m2026-03-08 10:20:01.526[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: start
+[37m2026-03-08 10:20:01.527[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: stop
+[37m2026-03-08 10:20:01.527[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: qrcode
+[37m2026-03-08 10:20:01.528[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: code
+[37m2026-03-08 10:20:01.528[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: interactive
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mregisterCommand[2m > [22m[2mshould register a new command
+[22m[39m[37m2026-03-08 10:20:01.534[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: test
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mregisterCommand[2m > [22m[2mshould register command aliases
+[22m[39m[37m2026-03-08 10:20:01.535[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: help
+[37m2026-03-08 10:20:01.536[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: version
+[37m2026-03-08 10:20:01.536[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: status
+[37m2026-03-08 10:20:01.537[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: start
+[37m2026-03-08 10:20:01.537[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: stop
+[37m2026-03-08 10:20:01.537[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: qrcode
+[37m2026-03-08 10:20:01.538[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: code
+[37m2026-03-08 10:20:01.538[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: interactive
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mregisterCommand[2m > [22m[2mshould register command aliases
+[22m[39m[37m2026-03-08 10:20:01.538[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: test
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mexecuteCommand[2m > [22m[2mshould execute a registered command
+[22m[39m[37m2026-03-08 10:20:01.539[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: help
+[37m2026-03-08 10:20:01.540[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: version
+[37m2026-03-08 10:20:01.541[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: status
+[37m2026-03-08 10:20:01.541[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: start
+[37m2026-03-08 10:20:01.541[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: stop
+[37m2026-03-08 10:20:01.541[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: qrcode
+[37m2026-03-08 10:20:01.542[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: code
+[37m2026-03-08 10:20:01.543[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: interactive
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mexecuteCommand[2m > [22m[2mshould execute a registered command
+[22m[39m[37m2026-03-08 10:20:01.543[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: test
+[37m2026-03-08 10:20:01.544[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37msrc/cli/commands.ts:170[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Executing command: test with args: [
+  [32m'arg1'[39m,
+  [32m'arg2'[39m 
+]
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mexecuteCommand[2m > [22m[2mshould handle non-existent command
+[22m[39m[37m2026-03-08 10:20:01.547[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: help
+[37m2026-03-08 10:20:01.547[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: version
+[37m2026-03-08 10:20:01.547[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: status
+[37m2026-03-08 10:20:01.548[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: start
+[37m2026-03-08 10:20:01.548[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: stop
+[37m2026-03-08 10:20:01.548[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: qrcode
+[37m2026-03-08 10:20:01.549[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: code
+[37m2026-03-08 10:20:01.552[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: interactive
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mexecuteCommand[2m > [22m[2mshould handle command execution errors
+[22m[39m[37m2026-03-08 10:20:01.566[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: help
+[37m2026-03-08 10:20:01.566[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: version
+[37m2026-03-08 10:20:01.567[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: status
+[37m2026-03-08 10:20:01.567[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: start
+[37m2026-03-08 10:20:01.567[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: stop
+[37m2026-03-08 10:20:01.568[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: qrcode
+[37m2026-03-08 10:20:01.568[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: code
+[37m2026-03-08 10:20:01.568[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: interactive
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mexecuteCommand[2m > [22m[2mshould handle command execution errors
+[22m[39m[37m2026-03-08 10:20:01.569[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: test
+[37m2026-03-08 10:20:01.569[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37msrc/cli/commands.ts:170[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Executing command: test with args: [
+
+]
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mexecuteCommand[2m > [22m[2mshould handle command execution errors
+[22m[39m[37m2026-03-08 10:20:01.570[39m[0m[0m	[31m[1mERROR[22m[39m[0m[0m	[37msrc/cli/commands.ts:173[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Error executing command test:
+
+[97m[101m[1m Error [22m[49m[39m[0m[0m Command error[0m[0m
+error stack:
+  • [33mcommands.test.ts[39m[0m[0m	[0m[0m
+	[37msrc/cli/__tests__/commands.test.ts:109[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	[0m[0m
+	[37mnode_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:145[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	[0m[0m
+	[37mnode_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:915[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	[0m[0m
+	[37mnode_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:1243[39m[0m[0m
+  • [33m<anonymous>[39m[0m[0m	new Promise[0m[0m
+	[37m[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	runWithTimeout[0m[0m
+	[37mnode_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:1209[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	[0m[0m
+	[37mnode_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:1653[39m[0m[0m
+  • [33mtraces.CCmnQaNT.js[39m[0m[0m	Traces.$[0m[0m
+	[37mnode_modules/.pnpm/vitest@4.0.18_@types+node@25.3.3_tsx@4.21.0/node_modules/vitest/dist/chunks/traces.CCmnQaNT.js:142[39m[0m[0m
+  • [33mtest.B8ej_ZHS.js[39m[0m[0m	trace[0m[0m
+	[37mnode_modules/.pnpm/vitest@4.0.18_@types+node@25.3.3_tsx@4.21.0/node_modules/vitest/dist/chunks/test.B8ej_ZHS.js:239[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	runTest[0m[0m
+	[37mnode_modules/.pnpm/@vitest+runner@4.0.18/node_modules/@vitest/runner/dist/index.js:1653[39m[0m[0m[0m[0m
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mshowHelp[2m > [22m[2mshould show help for all commands
+[22m[39m[37m2026-03-08 10:20:01.574[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: help
+[37m2026-03-08 10:20:01.582[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: version
+[37m2026-03-08 10:20:01.582[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: status
+[37m2026-03-08 10:20:01.583[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: start
+[37m2026-03-08 10:20:01.583[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: stop
+[37m2026-03-08 10:20:01.584[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: qrcode
+[37m2026-03-08 10:20:01.584[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: code
+[37m2026-03-08 10:20:01.584[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: interactive
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mshowHelp[2m > [22m[2mshould show help for a specific command
+[22m[39m[37m2026-03-08 10:20:01.586[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: help
+[37m2026-03-08 10:20:01.586[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: version
+[37m2026-03-08 10:20:01.587[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: status
+[37m2026-03-08 10:20:01.587[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: start
+[37m2026-03-08 10:20:01.587[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: stop
+[37m2026-03-08 10:20:01.588[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: qrcode
+[37m2026-03-08 10:20:01.588[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: code
+[37m2026-03-08 10:20:01.588[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: interactive
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mshowHelp[2m > [22m[2mshould show help for a specific command
+[22m[39m[37m2026-03-08 10:20:01.589[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: test
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mshowHelp[2m > [22m[2mshould handle non-existent command in showHelp
+[22m[39m[37m2026-03-08 10:20:01.590[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: help
+[37m2026-03-08 10:20:01.591[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: version
+[37m2026-03-08 10:20:01.591[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: status
+[37m2026-03-08 10:20:01.591[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: start
+[37m2026-03-08 10:20:01.591[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: stop
+[37m2026-03-08 10:20:01.592[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: qrcode
+[37m2026-03-08 10:20:01.592[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: code
+[37m2026-03-08 10:20:01.592[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: interactive
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mgetCommands[2m > [22m[2mshould return all registered commands
+[22m[39m[37m2026-03-08 10:20:01.594[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: help
+[37m2026-03-08 10:20:01.594[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: version
+[37m2026-03-08 10:20:01.594[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: status
+[37m2026-03-08 10:20:01.595[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: start
+[37m2026-03-08 10:20:01.595[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: stop
+[37m2026-03-08 10:20:01.595[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: qrcode
+[37m2026-03-08 10:20:01.596[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: code
+[37m2026-03-08 10:20:01.596[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: interactive
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mhasCommand[2m > [22m[2mshould return true for existing command
+[22m[39m[37m2026-03-08 10:20:01.597[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: help
+[37m2026-03-08 10:20:01.598[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: version
+[37m2026-03-08 10:20:01.598[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: status
+[37m2026-03-08 10:20:01.598[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: start
+[37m2026-03-08 10:20:01.599[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: stop
+[37m2026-03-08 10:20:01.599[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: qrcode
+[37m2026-03-08 10:20:01.599[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: code
+[37m2026-03-08 10:20:01.599[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: interactive
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mhasCommand[2m > [22m[2mshould return false for non-existent command
+[22m[39m[37m2026-03-08 10:20:01.600[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: help
+[37m2026-03-08 10:20:01.601[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: version
+[37m2026-03-08 10:20:01.601[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: status
+[37m2026-03-08 10:20:01.601[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: start
+[37m2026-03-08 10:20:01.602[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: stop
+[37m2026-03-08 10:20:01.602[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: qrcode
+[37m2026-03-08 10:20:01.602[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: code
+[37m2026-03-08 10:20:01.603[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: interactive
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mgetCommand[2m > [22m[2mshould return command for existing command
+[22m[39m[37m2026-03-08 10:20:01.604[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: help
+[37m2026-03-08 10:20:01.604[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: version
+[37m2026-03-08 10:20:01.605[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: status
+[37m2026-03-08 10:20:01.605[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: start
+[37m2026-03-08 10:20:01.606[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: stop
+[37m2026-03-08 10:20:01.606[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: qrcode
+[37m2026-03-08 10:20:01.607[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: code
+[37m2026-03-08 10:20:01.607[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: interactive
+
+[90mstdout[2m | src/cli/__tests__/commands.test.ts[2m > [22m[2mCommandManager[2m > [22m[2mgetCommand[2m > [22m[2mshould return undefined for non-existent command
+[22m[39m[37m2026-03-08 10:20:01.613[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: help
+[37m2026-03-08 10:20:01.613[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: version
+[37m2026-03-08 10:20:01.614[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: status
+[37m2026-03-08 10:20:01.614[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: start
+[37m2026-03-08 10:20:01.614[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: stop
+[37m2026-03-08 10:20:01.615[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: qrcode
+[37m2026-03-08 10:20:01.615[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: code
+[37m2026-03-08 10:20:01.616[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/cli/commands.ts:150[39m[0m[0m[1m[37m	app:{"name":"command-manager"}[39m[22m[0m[0m	{"name":"command-manager"} Registered command: interactive
+
+ [32m✓[39m src/cli/__tests__/commands.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 134[2mms[22m[39m
+ [32m✓[39m src/agents/tools/__tests__/registry.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/agents/core/__tests__/runtime.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/agents/tools/__tests__/result.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+(node:59452) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 end listeners added to [Socket]. Use emitter.setMaxListeners() to increase limit
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:59452) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 error listeners added to [Socket]. Use emitter.setMaxListeners() to increase limit
+(node:59452) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 data listeners added to [Socket]. Use emitter.setMaxListeners() to increase limit
+ [31m❯[39m src/cli/__tests__/tui.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 5062[2mms[22m[39m
+       [32m✓[39m should display info message[32m 9[2mms[22m[39m
+       [32m✓[39m should display success message[32m 1[2mms[22m[39m
+       [32m✓[39m should display error message[32m 1[2mms[22m[39m
+       [32m✓[39m should display multiple error messages[32m 1[2mms[22m[39m
+       [32m✓[39m should display warning message[32m 4[2mms[22m[39m
+[31m       [31m×[31m should display prompt and return input[39m[33m 5027[2mms[22m[39m
+[31m       [31m×[31m should display text prompt and return input[39m[32m 6[2mms[22m[39m
+[31m       [31m×[31m should display confirm prompt and return boolean[39m[32m 3[2mms[22m[39m
+       [32m✓[39m should display select prompt and return selected option[32m 1[2mms[22m[39m
+       [32m✓[39m should display password prompt and return input[32m 4[2mms[22m[39m
+       [32m✓[39m should display highlighted code[32m 1[2mms[22m[39m
+[31m       [31m×[31m should generate and display QR code[39m[32m 2[2mms[22m[39m
+[90mstdout[2m | src/logger/__tests__/logger.test.ts[2m > [22m[2mLogger[2m > [22m[2mlog file size limit[2m > [22m[2mshould handle log file size limit
+[22m[39m[37m2026-03-08 10:20:02.464[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:245[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Additional log after limit
+
+[90mstdout[2m | src/logger/__tests__/logger.test.ts[2m > [22m[2mLogger[2m > [22m[2mrolling log files[2m > [22m[2mshould use rolling log files with date suffix
+[22m[39m[37m2026-03-08 10:20:02.468[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:287[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log for rolling file
+
+ [32m✓[39m src/retry/__tests__/fault-tolerance.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 78[2mms[22m[39m
+ [32m✓[39m src/infra/__tests__/errors.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/agents/errors/__tests__/handler.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/gateway/__tests__/protocol.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+[90mstdout[2m | src/logger/__tests__/logger.test.ts[2m > [22m[2mLogger[2m > [22m[2mdifferent console styles[2m > [22m[2mshould support different console styles
+[22m[39m[37m2026-03-08 10:20:03.478[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:358[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log with JSON style
+[37m2026-03-08 10:20:03.479[39m[0m[0m	[34m[1mINFO[22m[39m[0m[0m	[37msrc/logger/__tests__/logger.test.ts:375[39m[0m[0m[1m[37m	app[39m[22m[0m[0m	Test log with compact style
+
+ [32m✓[39m src/logger/__tests__/logger.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 4991[2mms[22m[39m
+       [33m[2m✓[22m[39m should buffer logs and write asynchronously [33m 1606[2mms[22m[39m
+       [33m[2m✓[22m[39m should not write to file in silent mode [33m 1006[2mms[22m[39m
+       [33m[2m✓[22m[39m should handle log file size limit [33m 1009[2mms[22m[39m
+       [33m[2m✓[22m[39m should use rolling log files with date suffix [33m 1005[2mms[22m[39m
+ [32m✓[39m src/config/__tests__/env-substitution.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+[90mstdout[2m | src/agents/sessions/__tests__/key.test.ts[2m > [22m[2mSessionKeyManager[2m > [22m[2mserialize and deserialize[2m > [22m[2mshould throw error for invalid serialized data
+[22m[39m[37m2026-03-08 10:20:03.740[39m[0m[0m	[31m[1mERROR[22m[39m[0m[0m	[37msrc/agents/sessions/key.ts:91[39m[0m[0m[1m[37m	app:{"name":"session-key-manager"}[39m[22m[0m[0m	{"name":"session-key-manager"} Error deserializing session key
+
+[97m[101m[1m SyntaxError [22m[49m[39m[0m[0m Unexpected token 'i', "invalid json" is not valid JSON[0m[0m
+error stack:
+  • [33m<anonymous>[39m[0m[0m	JSON.parse[0m[0m
+	[37m[39m[0m[0m
+  • [33mkey.ts[39m[0m[0m	SessionKeyManager.deserialize[0m[0m
+	[37msrc/agents/sessions/key.ts:89[39m[0m[0m
+  • [33mkey.test.ts[39m[0m[0m	[0m[0m
+	[37msrc/agents/sessions/__tests__/key.test.ts:89[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	Proxy.assertThrows[0m[0m
+	[37mnode_modules/.pnpm/chai@6.2.2/node_modules/chai/index.js:2798[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	Proxy.methodWrapper[0m[0m
+	[37mnode_modules/.pnpm/chai@6.2.2/node_modules/chai/index.js:1700[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	Proxy.<anonymous>[0m[0m
+	[37mnode_modules/.pnpm/@vitest+expect@4.0.18/node_modules/@vitest/expect/dist/index.js:1149[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	Proxy.overwritingMethodWrapper[0m[0m
+	[37mnode_modules/.pnpm/chai@6.2.2/node_modules/chai/index.js:1750[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	Proxy.<anonymous>[0m[0m
+	[37mnode_modules/.pnpm/@vitest+expect@4.0.18/node_modules/@vitest/expect/dist/index.js:1485[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	Proxy.<anonymous>[0m[0m
+	[37mnode_modules/.pnpm/@vitest+expect@4.0.18/node_modules/@vitest/expect/dist/index.js:1090[39m[0m[0m
+  • [33mindex.js[39m[0m[0m	Proxy.methodWrapper[0m[0m
+	[37mnode_modules/.pnpm/chai@6.2.2/node_modules/chai/index.js:1700[39m[0m[0m[0m[0m
+
+ [32m✓[39m src/agents/sessions/__tests__/key.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m src/infra/__tests__/simple-di.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/config/__tests__/validation.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/config/__tests__/schema.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 148[2mms[22m[39m
+ [32m✓[39m src/agents/providers/__tests__/registry.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/agents/providers/__tests__/openai.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 81[2mms[22m[39m
+ [32m✓[39m src/security/__tests__/auth.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/logger/__tests__/redact.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/agents/models/__tests__/catalog.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/agents/sessions/__tests__/maintenance.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/config/__tests__/default-values.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/logger/__tests__/levels.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/logger/__tests__/config.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 34 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/cli/__tests__/program.test.ts[2m > [22mCLIProgram[2m > [22mrun[2m > [22mshould execute commands successfully
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called with arguments: [ 'status', [], {} ][90m
+
+Number of calls: [1m0[22m
+[31m[39m
+[36m [2m❯[22m src/cli/__tests__/program.test.ts:[2m76:57[22m[39m
+    [90m 74| [39m    [34mit[39m([32m'should execute commands successfully'[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m 75| [39m      [35mawait[39m cliProgram[33m.[39m[34mrun[39m([[32m'status'[39m])[33m;[39m
+    [90m 76| [39m      expect(mockCommandManagerInstance.executeCommand).toHaveBeenCall…
+    [90m   | [39m                                                        [31m^[39m
+    [90m 77| [39m        [32m'status'[39m[33m,[39m
+    [90m 78| [39m        [][33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/cli/__tests__/program.test.ts[2m > [22mCLIProgram[2m > [22mrun[2m > [22mshould handle errors gracefully
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called with arguments: [ 'An error occurred:', 'Test error' ][90m
+
+Received: 
+
+[1m  1st vi.fn() call:
+
+[22m[2m  [[22m
+[2m    "An error occurred:",[22m
+[32m-   "Test error",[90m
+[31m+   "process.exit unexpectedly called with \"1\"",[90m
+[2m  ][22m
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+[36m [2m❯[22m src/cli/__tests__/program.test.ts:[2m89:37[22m[39m
+    [90m 87| [39m      [35mawait[39m cliProgram[33m.[39m[34mrun[39m([[32m'status'[39m])[33m;[39m
+    [90m 88| [39m
+    [90m 89| [39m      [34mexpect[39m(mockTUIInstance[33m.[39merror)[33m.[39m[34mtoHaveBeenCalledWith[39m(
+    [90m   | [39m                                    [31m^[39m
+    [90m 90| [39m        [32m'An error occurred:'[39m[33m,[39m
+    [90m 91| [39m        [32m'Test error'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/cli/__tests__/program.test.ts[2m > [22mCLIProgram[2m > [22mstartInteractiveMode[2m > [22mshould start interactive mode and handle commands
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called with arguments: [ 'status', [], Any<Object> ][90m
+
+Number of calls: [1m0[22m
+[31m[39m
+[36m [2m❯[22m src/cli/__tests__/program.test.ts:[2m113:57[22m[39m
+    [90m111| [39m        [32m'Type help for available commands, exit to quit'[39m[33m,[39m
+    [90m112| [39m      )[33m;[39m
+    [90m113| [39m      expect(mockCommandManagerInstance.executeCommand).toHaveBeenCall…
+    [90m   | [39m                                                        [31m^[39m
+    [90m114| [39m        [32m'status'[39m[33m,[39m
+    [90m115| [39m        [][33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/cli/__tests__/program.test.ts[2m > [22mCLIProgram[2m > [22mstartInteractiveMode[2m > [22mshould handle errors in interactive mode
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called with arguments: [ 'Error:', 'Interactive error' ][90m
+
+Received: 
+
+[1m  1st vi.fn() call:
+
+[22m[2m  [[22m
+[32m-   "Error:",[90m
+[32m-   "Interactive error",[90m
+[31m+   "An error occurred:",[90m
+[31m+   "process.exit unexpectedly called with \"1\"",[90m
+[2m  ][22m
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+[36m [2m❯[22m src/cli/__tests__/program.test.ts:[2m152:37[22m[39m
+    [90m150| [39m      [35mawait[39m cliProgram[33m.[39m[34mstartInteractiveMode[39m()[33m;[39m
+    [90m151| [39m
+    [90m152| [39m      [34mexpect[39m(mockTUIInstance[33m.[39merror)[33m.[39m[34mtoHaveBeenCalledWith[39m(
+    [90m   | [39m                                    [31m^[39m
+    [90m153| [39m        [32m'Error:'[39m[33m,[39m
+    [90m154| [39m        [32m'Interactive error'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/cli/__tests__/tui.test.ts[2m > [22mTUI[2m > [22mprompt[2m > [22mshould display prompt and return input
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m src/cli/__tests__/tui.test.ts:[2m111:5[22m[39m
+    [90m109| [39m
+    [90m110| [39m  [34mdescribe[39m([32m'prompt'[39m[33m,[39m () [33m=>[39m {
+    [90m111| [39m    [34mit[39m([32m'should display prompt and return input'[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m112| [39m      [35mconst[39m mockInput [33m=[39m [32m'test input'[39m[33m;[39m
+    [90m113| [39m      [35mconst[39m readlineCreateInterfaceSpy [33m=[39m vi
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/cli/__tests__/tui.test.ts[2m > [22mTUI[2m > [22mtext[2m > [22mshould display text prompt and return input
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called with arguments: [ { message: 'Enter text:', …(1) } ][90m
+
+Received: 
+
+[1m  1st vi.fn() call:
+
+[22m[2m  [[22m
+[2m    {[22m
+[32m-     "default": "Default",[90m
+[2m      "message": "Enter text:",[22m
+[31m+     "placeholder": "Default",[90m
+[2m    },[22m
+[2m  ][22m
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+[36m [2m❯[22m src/cli/__tests__/tui.test.ts:[2m135:32[22m[39m
+    [90m133| [39m
+    [90m134| [39m      [34mexpect[39m(result)[33m.[39m[34mtoBe[39m(mockInput)[33m;[39m
+    [90m135| [39m      [34mexpect[39m(mockPrompts[33m.[39mtext)[33m.[39m[34mtoHaveBeenCalledWith[39m({
+    [90m   | [39m                               [31m^[39m
+    [90m136| [39m        message[33m:[39m [32m'Enter text:'[39m[33m,[39m
+    [90m137| [39m        [35mdefault[39m[33m:[39m [32m'Default'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/cli/__tests__/tui.test.ts[2m > [22mTUI[2m > [22mconfirm[2m > [22mshould display confirm prompt and return boolean
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called with arguments: [ { message: 'Are you sure?' } ][90m
+
+Received: 
+
+[1m  1st vi.fn() call:
+
+[22m[2m  [[22m
+[2m    {[22m
+[31m+     "initialValue": true,[90m
+[2m      "message": "Are you sure?",[22m
+[2m    },[22m
+[2m  ][22m
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+[36m [2m❯[22m src/cli/__tests__/tui.test.ts:[2m150:35[22m[39m
+    [90m148| [39m
+    [90m149| [39m      [34mexpect[39m(result)[33m.[39m[34mtoBe[39m(mockConfirm)[33m;[39m
+    [90m150| [39m      [34mexpect[39m(mockPrompts[33m.[39mconfirm)[33m.[39m[34mtoHaveBeenCalledWith[39m({
+    [90m   | [39m                                  [31m^[39m
+    [90m151| [39m        message[33m:[39m [32m'Are you sure?'[39m[33m,[39m
+    [90m152| [39m      })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/cli/__tests__/tui.test.ts[2m > [22mTUI[2m > [22mqrcode[2m > [22mshould generate and display QR code
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called with arguments: [ 'https://kitz.ai', Any<Function> ][90m
+
+Received: 
+
+[1m  1st vi.fn() call:
+
+[22m[2m  [[22m
+[2m    "https://kitz.ai",[22m
+[32m-   Any<Function>,[90m
+[31m+   {[90m
+[31m+     "small": true,[90m
+[31m+   },[90m
+[2m  ][22m
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+[36m [2m❯[22m src/cli/__tests__/tui.test.ts:[2m208:35[22m[39m
+    [90m206| [39m      [35mconst[39m testData [33m=[39m [32m'https://kitz.ai'[39m[33m;[39m
+    [90m207| [39m      tui[33m.[39m[34mqrcode[39m(testData)[33m;[39m
+    [90m208| [39m      [34mexpect[39m(mockQRCode[33m.[39mgenerate)[33m.[39m[34mtoHaveBeenCalledWith[39m(
+    [90m   | [39m                                  [31m^[39m
+    [90m209| [39m        testData[33m,[39m
+    [90m210| [39m        expect[33m.[39m[34many[39m([33mFunction[39m)[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/auth.test.ts[2m > [22mAuthManager[2m > [22mauthenticate[2m > [22mshould return false when error occurs during authentication
+[31m[1mPrettyFormatPluginError[22m: Test error[39m
+[36m [2m❯[22m Set.<anonymous> src/gateway/__tests__/auth.test.ts:[2m87:15[22m[39m
+    [90m 85| [39m      [35mconst[39m originalHas [33m=[39m [33mSet[39m[33m.[39mprototype[33m.[39mhas[33m;[39m
+    [90m 86| [39m      [33mSet[39m[33m.[39mprototype[33m.[39mhas [33m=[39m vi[33m.[39m[34mfn[39m()[33m.[39m[34mmockImplementation[39m(() [33m=>[39m {
+    [90m 87| [39m        [35mthrow[39m [35mnew[39m [33mError[39m([32m'Test error'[39m)[33m;[39m
+    [90m   | [39m              [31m^[39m
+    [90m 88| [39m      })[33m;[39m
+    [90m 89| [39m
+[90m [2m❯[22m testName node_modules/.pnpm/@vitest+pretty-format@4.0.18/node_modules/@vitest/pretty-format/dist/index.js:[2m188:22[22m[39m
+[90m [2m❯[22m Object.test$4 [as test] node_modules/.pnpm/@vitest+pretty-format@4.0.18/node_modules/@vitest/pretty-format/dist/index.js:[2m190:77[22m[39m
+[90m [2m❯[22m findPlugin node_modules/.pnpm/@vitest+pretty-format@4.0.18/node_modules/@vitest/pretty-format/dist/index.js:[2m885:15[22m[39m
+[90m [2m❯[22m format node_modules/.pnpm/@vitest+pretty-format@4.0.18/node_modules/@vitest/pretty-format/dist/index.js:[2m1000:19[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/auth.test.ts[2m > [22mAuthManager[2m > [22maddToken[2m > [22mshould add a new token
+[31m[1mError[22m: Test error[39m
+[36m [2m❯[22m Set.<anonymous> src/gateway/__tests__/auth.test.ts:[2m87:15[22m[39m
+    [90m 85| [39m      [35mconst[39m originalHas [33m=[39m [33mSet[39m[33m.[39mprototype[33m.[39mhas[33m;[39m
+    [90m 86| [39m      [33mSet[39m[33m.[39mprototype[33m.[39mhas [33m=[39m vi[33m.[39m[34mfn[39m()[33m.[39m[34mmockImplementation[39m(() [33m=>[39m {
+    [90m 87| [39m        [35mthrow[39m [35mnew[39m [33mError[39m([32m'Test error'[39m)[33m;[39m
+    [90m   | [39m              [31m^[39m
+    [90m 88| [39m      })[33m;[39m
+    [90m 89| [39m
+[90m [2m❯[22m AuthManager.isValidToken src/gateway/auth.ts:[2m59:29[22m[39m
+[90m [2m❯[22m src/gateway/__tests__/auth.test.ts:[2m108:26[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/auth.test.ts[2m > [22mAuthManager[2m > [22maddToken[2m > [22mshould handle adding an existing token
+[31m[1mError[22m: Test error[39m
+[36m [2m❯[22m Set.<anonymous> src/gateway/__tests__/auth.test.ts:[2m87:15[22m[39m
+    [90m 85| [39m      [35mconst[39m originalHas [33m=[39m [33mSet[39m[33m.[39mprototype[33m.[39mhas[33m;[39m
+    [90m 86| [39m      [33mSet[39m[33m.[39mprototype[33m.[39mhas [33m=[39m vi[33m.[39m[34mfn[39m()[33m.[39m[34mmockImplementation[39m(() [33m=>[39m {
+    [90m 87| [39m        [35mthrow[39m [35mnew[39m [33mError[39m([32m'Test error'[39m)[33m;[39m
+    [90m   | [39m              [31m^[39m
+    [90m 88| [39m      })[33m;[39m
+    [90m 89| [39m
+[90m [2m❯[22m AuthManager.isValidToken src/gateway/auth.ts:[2m59:29[22m[39m
+[90m [2m❯[22m src/gateway/__tests__/auth.test.ts:[2m118:26[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/auth.test.ts[2m > [22mAuthManager[2m > [22mremoveToken[2m > [22mshould remove an existing token
+[31m[1mError[22m: Test error[39m
+[36m [2m❯[22m Set.<anonymous> src/gateway/__tests__/auth.test.ts:[2m87:15[22m[39m
+    [90m 85| [39m      [35mconst[39m originalHas [33m=[39m [33mSet[39m[33m.[39mprototype[33m.[39mhas[33m;[39m
+    [90m 86| [39m      [33mSet[39m[33m.[39mprototype[33m.[39mhas [33m=[39m vi[33m.[39m[34mfn[39m()[33m.[39m[34mmockImplementation[39m(() [33m=>[39m {
+    [90m 87| [39m        [35mthrow[39m [35mnew[39m [33mError[39m([32m'Test error'[39m)[33m;[39m
+    [90m   | [39m              [31m^[39m
+    [90m 88| [39m      })[33m;[39m
+    [90m 89| [39m
+[90m [2m❯[22m AuthManager.isValidToken src/gateway/auth.ts:[2m59:29[22m[39m
+[90m [2m❯[22m src/gateway/__tests__/auth.test.ts:[2m130:26[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/auth.test.ts[2m > [22mAuthManager[2m > [22mremoveToken[2m > [22mshould handle removing a non-existent token
+[31m[1mError[22m: Test error[39m
+[36m [2m❯[22m Set.<anonymous> src/gateway/__tests__/auth.test.ts:[2m87:15[22m[39m
+    [90m 85| [39m      [35mconst[39m originalHas [33m=[39m [33mSet[39m[33m.[39mprototype[33m.[39mhas[33m;[39m
+    [90m 86| [39m      [33mSet[39m[33m.[39mprototype[33m.[39mhas [33m=[39m vi[33m.[39m[34mfn[39m()[33m.[39m[34mmockImplementation[39m(() [33m=>[39m {
+    [90m 87| [39m        [35mthrow[39m [35mnew[39m [33mError[39m([32m'Test error'[39m)[33m;[39m
+    [90m   | [39m              [31m^[39m
+    [90m 88| [39m      })[33m;[39m
+    [90m 89| [39m
+[90m [2m❯[22m AuthManager.isValidToken src/gateway/auth.ts:[2m59:29[22m[39m
+[90m [2m❯[22m src/gateway/__tests__/auth.test.ts:[2m140:26[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/auth.test.ts[2m > [22mAuthManager[2m > [22misValidToken[2m > [22mshould return true for valid token
+[31m[1mError[22m: Test error[39m
+[36m [2m❯[22m Set.<anonymous> src/gateway/__tests__/auth.test.ts:[2m87:15[22m[39m
+    [90m 85| [39m      [35mconst[39m originalHas [33m=[39m [33mSet[39m[33m.[39mprototype[33m.[39mhas[33m;[39m
+    [90m 86| [39m      [33mSet[39m[33m.[39mprototype[33m.[39mhas [33m=[39m vi[33m.[39m[34mfn[39m()[33m.[39m[34mmockImplementation[39m(() [33m=>[39m {
+    [90m 87| [39m        [35mthrow[39m [35mnew[39m [33mError[39m([32m'Test error'[39m)[33m;[39m
+    [90m   | [39m              [31m^[39m
+    [90m 88| [39m      })[33m;[39m
+    [90m 89| [39m
+[90m [2m❯[22m AuthManager.isValidToken src/gateway/auth.ts:[2m59:29[22m[39m
+[90m [2m❯[22m src/gateway/__tests__/auth.test.ts:[2m149:26[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/auth.test.ts[2m > [22mAuthManager[2m > [22misValidToken[2m > [22mshould return false for invalid token
+[31m[1mError[22m: Test error[39m
+[36m [2m❯[22m Set.<anonymous> src/gateway/__tests__/auth.test.ts:[2m87:15[22m[39m
+    [90m 85| [39m      [35mconst[39m originalHas [33m=[39m [33mSet[39m[33m.[39mprototype[33m.[39mhas[33m;[39m
+    [90m 86| [39m      [33mSet[39m[33m.[39mprototype[33m.[39mhas [33m=[39m vi[33m.[39m[34mfn[39m()[33m.[39m[34mmockImplementation[39m(() [33m=>[39m {
+    [90m 87| [39m        [35mthrow[39m [35mnew[39m [33mError[39m([32m'Test error'[39m)[33m;[39m
+    [90m   | [39m              [31m^[39m
+    [90m 88| [39m      })[33m;[39m
+    [90m 89| [39m
+[90m [2m❯[22m AuthManager.isValidToken src/gateway/auth.ts:[2m59:29[22m[39m
+[90m [2m❯[22m src/gateway/__tests__/auth.test.ts:[2m153:26[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/client.test.ts[2m > [22mGatewayClient[2m > [22msend[2m > [22mshould send message when connected
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called with arguments: [ { type: 'test', payload: { …(2) } } ][90m
+
+Number of calls: [1m0[22m
+[31m[39m
+[36m [2m❯[22m src/gateway/__tests__/client.test.ts:[2m128:46[22m[39m
+    [90m126| [39m      gatewayClient[33m.[39m[34msend[39m([32m'test'[39m[33m,[39m { data[33m:[39m [32m'test'[39m })[33m;[39m
+    [90m127| [39m
+    [90m128| [39m      [34mexpect[39m(mockProtocolInstance[33m.[39mserialize)[33m.[39m[34mtoHaveBeenCalledWith[39m({
+    [90m   | [39m                                             [31m^[39m
+    [90m129| [39m        type[33m:[39m [32m'test'[39m[33m,[39m
+    [90m130| [39m        payload[33m:[39m {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/client.test.ts[2m > [22mGatewayClient[2m > [22msend[2m > [22mshould handle serialization error
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called with arguments: [ 'Error sending message', Any<Error> ][90m
+
+Number of calls: [1m0[22m
+[31m[39m
+[36m [2m❯[22m src/gateway/__tests__/client.test.ts:[2m159:32[22m[39m
+    [90m157| [39m      gatewayClient[33m.[39m[34msend[39m([32m'test'[39m[33m,[39m { data[33m:[39m [32m'test'[39m })[33m;[39m
+    [90m158| [39m
+    [90m159| [39m      [34mexpect[39m(mockLogger[33m.[39merror)[33m.[39m[34mtoHaveBeenCalledWith[39m(
+    [90m   | [39m                               [31m^[39m
+    [90m160| [39m        [32m'Error sending message'[39m[33m,[39m
+    [90m161| [39m        expect[33m.[39m[34many[39m([33mError[39m)[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/client.test.ts[2m > [22mGatewayClient[2m > [22mdisconnect[2m > [22mshould close WebSocket connection
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called at least once[39m
+[36m [2m❯[22m src/gateway/__tests__/client.test.ts:[2m198:43[22m[39m
+    [90m196| [39m      gatewayClient[33m.[39m[34mdisconnect[39m()[33m;[39m
+    [90m197| [39m
+    [90m198| [39m      [34mexpect[39m(mockWebSocketInstance[33m.[39mclose)[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+    [90m   | [39m                                          [31m^[39m
+    [90m199| [39m    })[33m;[39m
+    [90m200| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/client.test.ts[2m > [22mGatewayClient[2m > [22mattemptReconnect[2m > [22mshould attempt reconnect
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called with arguments: [ Array(1) ][90m
+
+Received: 
+
+[1m  1st vi.fn() call:
+
+[22m[2m  [[22m
+[32m-   "Attempting to reconnect in 1000ms (2/5)",[90m
+[31m+   "Attempting to reconnect in 2000ms (2/5)",[90m
+[2m  ][22m
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+[36m [2m❯[22m src/gateway/__tests__/client.test.ts:[2m273:31[22m[39m
+    [90m271| [39m      (gatewayClient [35mas[39m any)[33m.[39m[34mattemptReconnect[39m()[33m;[39m
+    [90m272| [39m
+    [90m273| [39m      [34mexpect[39m(mockLogger[33m.[39minfo)[33m.[39m[34mtoHaveBeenCalledWith[39m(
+    [90m   | [39m                              [31m^[39m
+    [90m274| [39m        [32m'Attempting to reconnect in 1000ms (2/5)'[39m[33m,[39m
+    [90m275| [39m      )[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/client.test.ts[2m > [22mGatewayClient[2m > [22misConnected[2m > [22mshould return true when connected
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/gateway/__tests__/client.test.ts:[2m296:43[22m[39m
+    [90m294| [39m    [34mit[39m([32m'should return true when connected'[39m[33m,[39m () [33m=>[39m {
+    [90m295| [39m      mockWebSocketInstance[33m.[39mreadyState [33m=[39m [33mWebSocket[39m[33m.[39m[33mOPEN[39m[33m;[39m
+    [90m296| [39m      [34mexpect[39m(gatewayClient[33m.[39m[34misConnected[39m())[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                          [31m^[39m
+    [90m297| [39m    })[33m;[39m
+    [90m298| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/events.test.ts[2m > [22mEventManager[2m > [22mregisterHandler[2m > [22mshould override existing event handler
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called 2 times, but got 4 times[39m
+[36m [2m❯[22m src/gateway/__tests__/events.test.ts:[2m53:31[22m[39m
+    [90m 51| [39m
+    [90m 52| [39m      [34mexpect[39m(eventManager[33m.[39m[34mgetRegisteredEventTypes[39m())[33m.[39m[34mtoContain[39m([32m'test'[39m)[33m;[39m
+    [90m 53| [39m      [34mexpect[39m(mockLogger[33m.[39minfo)[33m.[39m[34mtoHaveBeenCalledTimes[39m([34m2[39m)[33m;[39m
+    [90m   | [39m                              [31m^[39m
+    [90m 54| [39m    })[33m;[39m
+    [90m 55| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/server.test.ts[2m > [22mGatewayServer[2m > [22mhandleMessage[2m > [22mshould handle message successfully
+[31m[1mTypeError[22m: wsMessageHandler is not a function[39m
+[36m [2m❯[22m src/gateway/__tests__/server.test.ts:[2m145:13[22m[39m
+    [90m143| [39m      [90m// Simulate message reception[39m
+    [90m144| [39m      [35mconst[39m messageBuffer [33m=[39m [33mBuffer[39m[33m.[39m[35mfrom[39m([32m'test message'[39m)[33m;[39m
+    [90m145| [39m      [35mawait[39m [34mwsMessageHandler[39m[33m![39m(messageBuffer)[33m;[39m
+    [90m   | [39m            [31m^[39m
+    [90m146| [39m
+    [90m147| [39m      expect(mockProtocolInstance.parse).toHaveBeenCalledWith('test me…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/server.test.ts[2m > [22mGatewayServer[2m > [22mhandleMessage[2m > [22mshould handle authentication failure
+[31m[1mTypeError[22m: wsMessageHandler is not a function[39m
+[36m [2m❯[22m src/gateway/__tests__/server.test.ts:[2m182:13[22m[39m
+    [90m180| [39m      [90m// Simulate message reception[39m
+    [90m181| [39m      [35mconst[39m messageBuffer [33m=[39m [33mBuffer[39m[33m.[39m[35mfrom[39m([32m'test message'[39m)[33m;[39m
+    [90m182| [39m      [35mawait[39m [34mwsMessageHandler[39m[33m![39m(messageBuffer)[33m;[39m
+    [90m   | [39m            [31m^[39m
+    [90m183| [39m
+    [90m184| [39m      [34mexpect[39m(mockAuthManagerInstance[33m.[39mauthenticate)[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/server.test.ts[2m > [22mGatewayServer[2m > [22mhandleMessage[2m > [22mshould handle message processing error
+[31m[1mTypeError[22m: wsMessageHandler is not a function[39m
+[36m [2m❯[22m src/gateway/__tests__/server.test.ts:[2m219:13[22m[39m
+    [90m217| [39m      [90m// Simulate message reception[39m
+    [90m218| [39m      [35mconst[39m messageBuffer [33m=[39m [33mBuffer[39m[33m.[39m[35mfrom[39m([32m'test message'[39m)[33m;[39m
+    [90m219| [39m      [35mawait[39m [34mwsMessageHandler[39m[33m![39m(messageBuffer)[33m;[39m
+    [90m   | [39m            [31m^[39m
+    [90m220| [39m
+    [90m221| [39m      [34mexpect[39m(mockLogger[33m.[39merror)[33m.[39m[34mtoHaveBeenCalledWith[39m(
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/server.test.ts[2m > [22mGatewayServer[2m > [22mconnection events[2m > [22mshould handle connection close
+[31m[1mTypeError[22m: closeHandler is not a function[39m
+[36m [2m❯[22m src/gateway/__tests__/server.test.ts:[2m273:7[22m[39m
+    [90m271| [39m
+    [90m272| [39m      [90m// Simulate close event[39m
+    [90m273| [39m      [34mcloseHandler[39m[33m![39m()[33m;[39m
+    [90m   | [39m      [31m^[39m
+    [90m274| [39m
+    [90m275| [39m      expect(mockLogger.info).toHaveBeenCalledWith('Connection closed'…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/gateway/__tests__/server.test.ts[2m > [22mGatewayServer[2m > [22mconnection events[2m > [22mshould handle connection error
+[31m[1mTypeError[22m: errorHandler is not a function[39m
+[36m [2m❯[22m src/gateway/__tests__/server.test.ts:[2m303:7[22m[39m
+    [90m301| [39m      [90m// Simulate error event[39m
+    [90m302| [39m      [35mconst[39m error [33m=[39m [35mnew[39m [33mError[39m([32m'Connection error'[39m)[33m;[39m
+    [90m303| [39m      [34merrorHandler[39m[33m![39m(error)[33m;[39m
+    [90m   | [39m      [31m^[39m
+    [90m304| [39m
+    [90m305| [39m      expect(mockLogger.error).toHaveBeenCalledWith('Connection error'…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/providers/__tests__/compat.test.ts[2m > [22mProviderCompat[2m > [22mshould normalize request for Gemini
+[31m[1mAssertionError[22m: expected { …(4) } to deeply equal { …(3) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -11,6 +11,7 @@[39m
+[2m    "generationConfig": {[22m
+[2m      "maxOutputTokens": 1000,[22m
+[2m      "temperature": 0.5,[22m
+[2m    },[22m
+[2m    "model": "gemini-pro",[22m
+[31m+   "temperature": 0.5,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/agents/providers/__tests__/compat.test.ts:[2m64:20[22m[39m
+    [90m 62| [39m    const result = providerCompat.normalizeRequest('gemini', prompt, o…
+    [90m 63| [39m
+    [90m 64| [39m    [34mexpect[39m(result)[33m.[39m[34mtoEqual[39m({
+    [90m   | [39m                   [31m^[39m
+    [90m 65| [39m      contents[33m:[39m [{
+    [90m 66| [39m        parts[33m:[39m [{ text[33m:[39m [32m'Hello'[39m }]
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[27/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/providers/__tests__/compat.test.ts[2m > [22mProviderCompat[2m > [22mshould perform cross provider call with successful provider
+[31m[1mAssertionError[22m: expected { success: true, …(2) } to deeply equal { success: true, …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[31m+   "metadata": {[39m
+[31m+     "provider": undefined,[39m
+[31m+   },[39m
+[2m    "success": true,[22m
+[32m-   "text": "Response from provider1",[39m
+[31m+   "text": "Mock response",[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/agents/providers/__tests__/compat.test.ts:[2m186:20[22m[39m
+    [90m184| [39m    )[33m;[39m
+    [90m185| [39m
+    [90m186| [39m    [34mexpect[39m(result)[33m.[39m[34mtoEqual[39m({
+    [90m   | [39m                   [31m^[39m
+    [90m187| [39m      success[33m:[39m [35mtrue[39m[33m,[39m
+    [90m188| [39m      text[33m:[39m [32m'Response from provider1'[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[28/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/providers/__tests__/compat.test.ts[2m > [22mProviderCompat[2m > [22mshould return error when all providers fail
+[31m[1mAssertionError[22m: expected { success: true, …(2) } to deeply equal { success: false, …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "error": "All providers failed",[39m
+[32m-   "success": false,[39m
+[31m+   "metadata": {[39m
+[31m+     "provider": undefined,[39m
+[31m+   },[39m
+[31m+   "success": true,[39m
+[31m+   "text": "Mock response",[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/agents/providers/__tests__/compat.test.ts:[2m212:20[22m[39m
+    [90m210| [39m    )[33m;[39m
+    [90m211| [39m
+    [90m212| [39m    [34mexpect[39m(result)[33m.[39m[34mtoEqual[39m({
+    [90m   | [39m                   [31m^[39m
+    [90m213| [39m      success[33m:[39m [35mfalse[39m[33m,[39m
+    [90m214| [39m      error[33m:[39m [32m'All providers failed'[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[29/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/providers/__tests__/compat.test.ts[2m > [22mProviderCompat[2m > [22mshould get available providers
+[31m[1mAssertionError[22m: expected [ …(2) ] to have a length of 1 but got 2[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 2[39m
+
+[36m [2m❯[22m src/agents/providers/__tests__/compat.test.ts:[2m233:20[22m[39m
+    [90m231| [39m    )[33m;[39m
+    [90m232| [39m
+    [90m233| [39m    [34mexpect[39m(result)[33m.[39m[34mtoHaveLength[39m([34m1[39m)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m234| [39m    [34mexpect[39m(result[[34m0[39m])[33m.[39m[34mtoBe[39m(mockProvider1)[33m;[39m
+    [90m235| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[30/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/providers/__tests__/gemini.test.ts[2m > [22mGeminiProvider[2m > [22mshould embed text successfully
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called with arguments: [ …(2) ][90m
+
+Received: 
+
+[1m  1st vi.fn() call:
+
+[22m[2m  [[22m
+[2m    "https://generativelanguage.googleapis.com/v1/models/embedding-001:embedContent?key=test-api-key",[22m
+[32m-   ObjectContaining {[90m
+[32m-     "body": "{\"model\":\"models/embedding-001\",\"content\":{\"parts\":[{\"text\":\"Hello\"}]}}",[90m
+[31m+   {[90m
+[31m+     "body": "{\"model\":\"embedding-001\",\"content\":{\"parts\":[{\"text\":\"Hello\"}]}}",[90m
+[2m      "headers": {[22m
+[2m        "Content-Type": "application/json",[22m
+[2m      },[22m
+[2m      "method": "POST",[22m
+[31m+     "signal": AbortSignal {[90m
+[31m+       Symbol(kEvents): Map {},[90m
+[31m+       Symbol(events.maxEventTargetListeners): 10,[90m
+[31m+       Symbol(events.maxEventTargetListenersWarned): false,[90m
+[31m+       Symbol(kHandlers): Map {},[90m
+[31m+       Symbol(kAborted): false,[90m
+[31m+       Symbol(kReason): undefined,[90m
+[31m+       Symbol(kComposite): false,[90m
+[31m+       Symbol(kTimeout): true,[90m
+[31m+     },[90m
+[2m    },[22m
+[2m  ][22m
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+[36m [2m❯[22m src/agents/providers/__tests__/gemini.test.ts:[2m144:26[22m[39m
+    [90m142| [39m      }[33m,[39m
+    [90m143| [39m    })[33m;[39m
+    [90m144| [39m    [34mexpect[39m(global[33m.[39mfetch)[33m.[39m[34mtoHaveBeenCalledWith[39m(
+    [90m   | [39m                         [31m^[39m
+    [90m145| [39m      'https://generativelanguage.googleapis.com/v1/models/embedding-0…
+    [90m146| [39m      expect[33m.[39m[34mobjectContaining[39m({
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[31/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/sessions/__tests__/compaction.test.ts[2m > [22mSessionCompaction[2m > [22mcompact[2m > [22mshould not compact sessions with fewer messages than the limit
+[31m[1mAssertionError[22m: expected true to be undefined[39m
+
+[32m- Expected:[39m 
+undefined
+
+[31m+ Received:[39m 
+true
+
+[36m [2m❯[22m src/agents/sessions/__tests__/compaction.test.ts:[2m87:44[22m[39m
+    [90m 85| [39m      const compacted = compaction.compact(session, { maxMessages: 50 …
+    [90m 86| [39m      [34mexpect[39m(compacted[33m.[39mmessages)[33m.[39m[34mtoHaveLength[39m([34m30[39m)[33m;[39m
+    [90m 87| [39m      [34mexpect[39m(compacted[33m.[39mmetadata[33m.[39mcompacted)[33m.[39m[34mtoBeUndefined[39m()[33m;[39m
+    [90m   | [39m                                           [31m^[39m
+    [90m 88| [39m    })[33m;[39m
+    [90m 89| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[32/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/sessions/__tests__/storage.test.ts[2m > [22mSessionStorage[2m > [22mupdate[2m > [22mshould update a session
+[31m[1mAssertionError[22m: expected 1772965198471 to be greater than 1772965198471[39m
+[36m [2m❯[22m src/agents/sessions/__tests__/storage.test.ts:[2m106:37[22m[39m
+    [90m104| [39m
+    [90m105| [39m      [34mexpect[39m(updated[33m?.[39mcontext)[33m.[39m[34mtoEqual[39m({ foo[33m:[39m [32m'updated'[39m })[33m;[39m
+    [90m106| [39m      expect(updated?.lastAccessed).toBeGreaterThan(session.lastAccess…
+    [90m   | [39m                                    [31m^[39m
+    [90m107| [39m    })[33m;[39m
+    [90m108| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[33/34]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/agents/tools/__tests__/executor.test.ts[2m > [22mToolExecutor[2m > [22mexecute[2m > [22mshould execute a tool successfully
+[31m[1mAssertionError[22m: expected 0 to be greater than 0[39m
+[36m [2m❯[22m src/agents/tools/__tests__/executor.test.ts:[2m40:36[22m[39m
+    [90m 38| [39m      [34mexpect[39m(result[33m.[39mresult)[33m.[39m[34mtoBe[39m([32m'Result: test'[39m)[33m;[39m
+    [90m 39| [39m      [34mexpect[39m(result[33m.[39mtoolName)[33m.[39m[34mtoBe[39m([32m'test-tool'[39m)[33m;[39m
+    [90m 40| [39m      [34mexpect[39m(result[33m.[39mexecutionTime)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m   | [39m                                   [31m^[39m
+    [90m 41| [39m    })[33m;[39m
+    [90m 42| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[34/34]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m11 failed[39m[22m[2m | [22m[1m[32m26 passed[39m[22m[90m (37)[39m
+[2m      Tests [22m [1m[31m34 failed[39m[22m[2m | [22m[1m[32m431 passed[39m[22m[90m (465)[39m
+[2m   Start at [22m 18:19:55
+[2m   Duration [22m 10.44s[2m (transform 1.48s, setup 0ms, import 6.35s, tests 11.96s, environment 8ms)[22m
+

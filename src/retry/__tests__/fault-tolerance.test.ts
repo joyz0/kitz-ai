@@ -5,15 +5,10 @@ import {
   RetryOptions,
   retry,
 } from '../fault-tolerance.js';
-import { getLogger } from '../../logger/index.js';
+import { getMockLogger, resetMockLogger } from '../../logger/mock-logger.js';
 
 // 模拟日志记录器
-const mockLogger = getLogger();
-
-// 模拟日志方法
-vi.spyOn(mockLogger, 'debug').mockImplementation(() => undefined);
-vi.spyOn(mockLogger, 'warn').mockImplementation(() => undefined);
-vi.spyOn(mockLogger, 'error').mockImplementation(() => undefined);
+const mockLogger = getMockLogger();
 
 // 模拟延迟函数
 vi.useFakeTimers();
@@ -25,6 +20,7 @@ describe('FaultToleranceHandler', () => {
     faultToleranceHandler = createFaultToleranceHandler(mockLogger);
     // 重置模拟
     vi.clearAllMocks();
+    resetMockLogger();
     vi.clearAllTimers();
   });
 

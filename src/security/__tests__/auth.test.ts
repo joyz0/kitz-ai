@@ -6,15 +6,10 @@ import {
   AuthResult,
   MemoryAuthProvider,
 } from '../auth.js';
-import { getLogger } from '../../logger/index.js';
+import { getMockLogger, resetMockLogger } from '../../logger/mock-logger.js';
 
 // 模拟日志记录器
-const mockLogger = getLogger();
-
-// 模拟日志方法
-vi.spyOn(mockLogger, 'info').mockImplementation(() => undefined);
-vi.spyOn(mockLogger, 'debug').mockImplementation(() => undefined);
-vi.spyOn(mockLogger, 'error').mockImplementation(() => undefined);
+const mockLogger = getMockLogger();
 
 describe('AuthManager', () => {
   let authManager: AuthManager;
@@ -23,6 +18,7 @@ describe('AuthManager', () => {
     authManager = createAuthManager(mockLogger);
     // 重置模拟
     vi.clearAllMocks();
+    resetMockLogger();
   });
 
   it('should create auth manager successfully', () => {

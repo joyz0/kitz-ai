@@ -1,23 +1,21 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Runtime, createRuntime } from '../runtime.js';
-import { getLogger } from '../../../logger/index.js';
+import { getMockLogger, resetMockLogger } from '../../../logger/mock-logger.js';
 import { OpenClawConfigSchema } from '../../../config/index.js';
 
 // 模拟配置
 const mockConfig = OpenClawConfigSchema.parse({});
 
-// 模拟日志记录器
-const mockLogger = getLogger();
-
-// 模拟日志方法
-vi.spyOn(mockLogger, 'info').mockImplementation(() => undefined);
-vi.spyOn(mockLogger, 'warn').mockImplementation(() => undefined);
-vi.spyOn(mockLogger, 'error').mockImplementation(() => undefined);
+// 获取模拟 logger 实例
+const mockLogger = getMockLogger();
 
 describe('Runtime', () => {
   let runtime: Runtime;
 
   beforeEach(() => {
+    // 重置所有 mock
+    vi.clearAllMocks();
+    resetMockLogger();
     runtime = createRuntime({ config: mockConfig, logger: mockLogger });
   });
 

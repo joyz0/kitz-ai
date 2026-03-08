@@ -2,7 +2,7 @@
 
 // 性能测试脚本
 
-import { getLogger } from '../src/logger/index.js';
+import { getLogger } from '../src/logger/logger.js';
 import { loadConfig } from '../src/config/io.js';
 
 console.log('开始性能测试...');
