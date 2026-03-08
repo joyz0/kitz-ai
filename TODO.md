@@ -16,6 +16,11 @@
   - [ ] 实现 agents/models/catalog.ts - 模型目录
   - [ ] 实现 agents/models/auth.ts - 模型认证
   - [ ] 实现 agents/models/fallback.ts - 模型降级策略
+- [ ] 实现agents/providers模块 - 模型提供商管理
+  - [ ] 实现 agents/providers/registry.ts - 提供商注册
+  - [ ] 实现 agents/providers/openai.ts - OpenAI集成
+  - [ ] 实现 agents/providers/gemini.ts - Gemini集成
+  - [ ] 实现 agents/providers/compat.ts - 提供商兼容性处理
 - [ ] 实现agents/sessions模块 - 会话管理
   - [ ] 实现 agents/sessions/key.ts - 会话键管理
   - [ ] 实现 agents/sessions/storage.ts - 会话存储
@@ -120,7 +125,7 @@
 ### 14. 定时任务系统
 
 - [ ] 实现cron/schedule.ts - 定时任务调度
-- [ ] 实现cron/parse.ts -  cron表达式解析
+- [ ] 实现cron/parse.ts - cron表达式解析
 - [ ] 实现cron/store.ts - 任务存储
 
 ### 15. 浏览器集成
@@ -144,6 +149,7 @@
 ## 预期成果
 
 实现一个完整的多渠道 AI 网关系统，具有以下特性：
+
 - 支持多种模型提供商
 - 多平台集成（Discord、Slack、Telegram等）
 - 强大的会话管理和上下文处理
@@ -167,6 +173,7 @@ src/
 ├── agents/              # 核心Agent模块
 │   ├── core/            # 核心运行时逻辑
 │   ├── models/          # 模型管理和认证
+│   ├── providers/       # 模型提供商管理
 │   ├── sessions/        # 会话管理
 │   ├── tools/           # 工具系统
 │   └── errors/          # 错误处理和故障转移
@@ -210,6 +217,7 @@ src/
 1. **核心Agent基础**
    - 实现 agents/core/runtime.ts - 核心运行时
    - 实现 agents/models/catalog.ts - 模型目录
+   - 实现 agents/providers/registry.ts - 提供商注册
    - 实现 agents/errors/handler.ts - 错误处理
    - 理由：构建核心基础，为其他模块提供支持
 
@@ -238,54 +246,60 @@ src/
    - 实现 agents/tools/executor.ts - 工具执行
    - 理由：实现工具调用能力
 
-7. **命令行界面**
+7. **模型提供商集成**
+   - 实现 agents/providers/openai.ts - OpenAI集成
+   - 实现 agents/providers/gemini.ts - Gemini集成
+   - 实现 agents/providers/compat.ts - 提供商兼容性处理
+   - 理由：支持多种模型提供商，增强系统的AI能力
+
+8. **命令行界面**
    - 实现 cli/program.ts - 命令行程序
    - 实现 cli/commands.ts - 命令定义
    - 理由：提供用户交互界面
 
 ### 第三阶段：扩展功能
 
-8. **多渠道集成**
+9. **多渠道集成**
    - 实现 channels/base.ts - 基础通道接口
    - 实现 channels/discord.ts - Discord集成
    - 实现 channels/slack.ts - Slack集成
    - 理由：扩展系统的通信能力
 
-9. **Web界面**
-   - 实现 web/server.ts - Web服务器
-   - 实现 web/api.ts - API接口
-   - 理由：提供Web访问能力
+10. **Web界面**
+    - 实现 web/server.ts - Web服务器
+    - 实现 web/api.ts - API接口
+    - 理由：提供Web访问能力
 
-10. **内存管理**
+11. **内存管理**
     - 实现 memory/store.ts - 记忆存储
     - 实现 memory/retrieval.ts - 记忆检索
     - 理由：增强系统的记忆能力
 
-11. **插件系统**
+12. **插件系统**
     - 实现 plugins/registry.ts - 插件注册
     - 实现 plugins/loader.ts - 插件加载
     - 理由：提供系统扩展能力
 
-12. **媒体处理**
+13. **媒体处理**
     - 实现 media/processor.ts - 媒体处理器
     - 理由：支持多媒体内容处理
 
 ### 第四阶段：高级功能
 
-13. **技能系统**
+14. **技能系统**
     - 实现 skills/loader.ts - 技能加载器
     - 实现示例技能
     - 理由：扩展系统功能
 
-14. **定时任务系统**
+15. **定时任务系统**
     - 实现 cron/schedule.ts - 定时任务调度
     - 理由：支持自动化任务
 
-15. **浏览器集成**
+16. **浏览器集成**
     - 实现 browser/client.ts - 浏览器客户端
     - 理由：提供网页访问能力
 
-16. **监控与日志**
+17. **监控与日志**
     - 实现 monitoring/metrics.ts - 性能指标
     - 实现 monitoring/alerting.ts - 告警系统
     - 理由：提高系统可观测性
