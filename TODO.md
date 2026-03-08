@@ -8,16 +8,16 @@
 
 ### 1. 核心Agent模块
 
-- [ ] 实现agents/core模块 - 核心运行时逻辑
-  - [ ] 实现 agents/core/runtime.ts - 运行时核心
+- [x] 实现agents/core模块 - 核心运行时逻辑
+  - [x] 实现 agents/core/runtime.ts - 运行时核心
   - [ ] 实现 agents/core/context.ts - 上下文管理
   - [ ] 实现 agents/core/lanes.ts - 并发处理
-- [ ] 实现agents/models模块 - 模型管理和认证
-  - [ ] 实现 agents/models/catalog.ts - 模型目录
+- [x] 实现agents/models模块 - 模型管理和认证
+  - [x] 实现 agents/models/catalog.ts - 模型目录
   - [ ] 实现 agents/models/auth.ts - 模型认证
   - [ ] 实现 agents/models/fallback.ts - 模型降级策略
-- [ ] 实现agents/providers模块 - 模型提供商管理
-  - [ ] 实现 agents/providers/registry.ts - 提供商注册
+- [x] 实现agents/providers模块 - 模型提供商管理
+  - [x] 实现 agents/providers/registry.ts - 提供商注册
   - [ ] 实现 agents/providers/openai.ts - OpenAI集成
   - [ ] 实现 agents/providers/gemini.ts - Gemini集成
   - [ ] 实现 agents/providers/compat.ts - 提供商兼容性处理
@@ -30,8 +30,8 @@
   - [ ] 实现 agents/tools/registry.ts - 工具注册
   - [ ] 实现 agents/tools/executor.ts - 工具执行
   - [ ] 实现 agents/tools/result.ts - 结果处理
-- [ ] 实现agents/errors模块 - 错误处理和故障转移
-  - [ ] 实现 agents/errors/handler.ts - 错误处理
+- [x] 实现agents/errors模块 - 错误处理和故障转移
+  - [x] 实现 agents/errors/handler.ts - 错误处理
   - [ ] 实现 agents/errors/failover.ts - 故障转移
 
 ### 2. 网关实现
@@ -44,8 +44,8 @@
 
 ### 3. 重试和容错机制
 
-- [ ] 实现retry/backoff.ts - 退避策略
-- [ ] 实现retry/fault-tolerance.ts - 容错处理
+- [x] 实现retry/backoff.ts - 退避策略
+- [x] 实现retry/fault-tolerance.ts - 容错处理
 - [ ] 实现retry/error-handling.ts - 错误处理
 
 ### 4. 多渠道集成
@@ -85,7 +85,7 @@
 
 ### 8. 安全模块
 
-- [ ] 实现security/auth.ts - 认证系统
+- [x] 实现security/auth.ts - 认证系统
 - [ ] 实现security/policy.ts - 安全策略
 - [ ] 实现security/permissions.ts - 权限管理
 - [ ] 实现security/audit.ts - 安全审计
