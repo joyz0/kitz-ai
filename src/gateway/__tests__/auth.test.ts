@@ -1,12 +1,12 @@
 // 先导入 mock-logger，确保在所有其他导入之前
-import { getMockLogger, resetMockLogger } from '../../logger/mock-logger.js';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { AuthManager } from '../auth.js';
-import { GatewayMessage } from '../protocol.js';
+import { getMockLogger, resetMockLogger } from "../../logger/mock-logger.js";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { AuthManager } from "../auth.js";
+import  type { GatewayMessage } from "../protocol.js";
 
 const mockLogger = getMockLogger();
 
-describe('AuthManager', () => {
+describe("AuthManager", () => {
   let authManager: AuthManager;
 
   beforeEach(() => {
@@ -22,46 +22,44 @@ describe('AuthManager', () => {
     vi.restoreAllMocks();
   });
 
-  describe('constructor', () => {
-    it('should initialize with default token', () => {
-      expect(authManager.isValidToken('default-token')).toBe(true);
+  describe("constructor", () => {
+    it("should initialize with default token", () => {
+      expect(authManager.isValidToken("default-token")).toBe(true);
     });
   });
 
-  describe('authenticate', () => {
-    it('should return false when no token is provided', async () => {
+  describe("authenticate", () => {
+    it("should return false when no token is provided", async () => {
       const message: GatewayMessage = {
-        type: 'test',
+        type: "test",
         payload: {},
       };
 
       const result = await authManager.authenticate(message);
 
       expect(result).toBe(false);
-      expect(mockLogger.warn).toHaveBeenCalledWith('No token provided');
+      expect(mockLogger.warn).toHaveBeenCalledWith("No token provided");
     });
 
-    it('should return false when invalid token is provided', async () => {
+    it("should return false when invalid token is provided", async () => {
       const message: GatewayMessage = {
-        type: 'test',
+        type: "test",
         payload: {
-          token: 'invalid-token',
+          token: "invalid-token",
         },
       };
 
       const result = await authManager.authenticate(message);
 
       expect(result).toBe(false);
-      expect(mockLogger.warn).toHaveBeenCalledWith(
-        'Invalid token provided',
-      );
+      expect(mockLogger.warn).toHaveBeenCalledWith("Invalid token provided");
     });
 
-    it('should return true when valid token is provided', async () => {
+    it("should return true when valid token is provided", async () => {
       const message: GatewayMessage = {
-        type: 'test',
+        type: "test",
         payload: {
-          token: 'default-token',
+          token: "default-token",
         },
       };
 
@@ -69,88 +67,94 @@ describe('AuthManager', () => {
 
       expect(result).toBe(true);
       expect(mockLogger.debug).toHaveBeenCalledWith(
-        'Authentication successful',
+        "Authentication successful"
       );
     });
 
-    it('should return false when error occurs during authentication', async () => {
+    it("should return false when error occurs during authentication", async () => {
       const message: GatewayMessage = {
-        type: 'test',
+        type: "test",
         payload: {
-          token: 'default-token',
+          token: "default-token",
         },
       };
 
-      // Mock the Set.has method to throw an error
-      const originalHas = Set.prototype.has;
-      Set.prototype.has = vi.fn().mockImplementation(() => {
-        throw new Error('Test error');
-      });
+      // 直接模拟 authManager 内部的 validTokens Set
+      // 而不是修改全局的 Set.prototype.has
+      const originalTokens = (authManager as any).validTokens;
+      try {
+        // 替换为一个会在 has 方法上抛出错误的对象
+        (authManager as any).validTokens = {
+          has: () => {
+            throw new Error("Test error");
+          },
+        };
 
-      const result = await authManager.authenticate(message);
+        const result = await authManager.authenticate(message);
 
-      expect(result).toBe(false);
-      expect(mockLogger.error).toHaveBeenCalledWith(
-        'Error during authentication',
-        expect.any(Error),
-      );
-
-      // Restore original method
-      Set.prototype.has = originalHas;
+        expect(result).toBe(false);
+        expect(mockLogger.error).toHaveBeenCalledWith(
+          "Error during authentication",
+          expect.any(Error)
+        );
+      } finally {
+        // 恢复原始的 validTokens Set
+        (authManager as any).validTokens = originalTokens;
+      }
     });
   });
 
-  describe('addToken', () => {
-    it('should add a new token', () => {
-      const newToken = 'new-token';
+  describe("addToken", () => {
+    it("should add a new token", () => {
+      const newToken = "new-token";
       authManager.addToken(newToken);
 
       expect(authManager.isValidToken(newToken)).toBe(true);
       expect(mockLogger.info).toHaveBeenCalledWith(
-        `Added new token: ${newToken}`,
+        `Added new token: ${newToken}`
       );
     });
 
-    it('should handle adding an existing token', () => {
-      const existingToken = 'default-token';
+    it("should handle adding an existing token", () => {
+      const existingToken = "default-token";
       authManager.addToken(existingToken);
 
       expect(authManager.isValidToken(existingToken)).toBe(true);
       expect(mockLogger.info).toHaveBeenCalledWith(
-        `Added new token: ${existingToken}`,
+        `Added new token: ${existingToken}`
       );
     });
   });
 
-  describe('removeToken', () => {
-    it('should remove an existing token', () => {
-      const tokenToRemove = 'default-token';
+  describe("removeToken", () => {
+    it("should remove an existing token", () => {
+      const tokenToRemove = "default-token";
       authManager.removeToken(tokenToRemove);
 
       expect(authManager.isValidToken(tokenToRemove)).toBe(false);
       expect(mockLogger.info).toHaveBeenCalledWith(
-        `Removed token: ${tokenToRemove}`,
+        `Removed token: ${tokenToRemove}`
       );
     });
 
-    it('should handle removing a non-existent token', () => {
-      const nonExistentToken = 'non-existent-token';
+    it("should handle removing a non-existent token", () => {
+      const nonExistentToken = "non-existent-token";
       authManager.removeToken(nonExistentToken);
 
       expect(authManager.isValidToken(nonExistentToken)).toBe(false);
       expect(mockLogger.info).toHaveBeenCalledWith(
-        `Removed token: ${nonExistentToken}`,
+        `Removed token: ${nonExistentToken}`
       );
     });
   });
 
-  describe('isValidToken', () => {
-    it('should return true for valid token', () => {
-      expect(authManager.isValidToken('default-token')).toBe(true);
+  describe("isValidToken", () => {
+    it("should return true for valid token", () => {
+      expect(authManager.isValidToken("default-token")).toBe(true);
     });
 
-    it('should return false for invalid token', () => {
-      expect(authManager.isValidToken('invalid-token')).toBe(false);
+    it("should return false for invalid token", () => {
+      expect(authManager.isValidToken("invalid-token")).toBe(false);
     });
   });
 });

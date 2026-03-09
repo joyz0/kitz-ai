@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 // 导入 mock-logger 以确保 logger 模块被正确模拟
 import { getMockLogger } from '../../../logger/mock-logger.js';
 import { SessionMaintenance } from '../maintenance.js';
-import { SessionStorage, SessionData } from '../storage.js';
+import { SessionStorage, type SessionData } from '../storage.js';
 import { SessionKeyManager } from '../key.js';
 
 // 获取 mock logger 实例（确保 mock 生效）

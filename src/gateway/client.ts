@@ -1,6 +1,6 @@
 import WebSocket from 'ws';
 import { getChildLogger } from '../logger/logger.js';
-import { Protocol, GatewayMessage } from './protocol.js';
+import { Protocol,  type GatewayMessage } from './protocol.js';
 
 type MessageHandler = (message: GatewayMessage) => void;
 

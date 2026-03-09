@@ -4,7 +4,7 @@ import {
   createDefaults,
   normalizeDependencies,
   Injectable,
-  ExtractDeps,
+  type ExtractDeps,
 } from '../simple-di.js';
 
 describe('Simple DI', () => {

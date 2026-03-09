@@ -1,9 +1,14 @@
+import type { ModelResponse } from './compat.js';
+
 // 定义提供商接口
 export interface Provider {
   id: string;
   name: string;
   models: string[];
   // 其他提供商属性
+  getName(): string;
+  generate(prompt: string, options: any): Promise<ModelResponse>;
+  isAvailable(): Promise<boolean>;
 }
 
 // 定义提供商注册表接口
@@ -57,11 +62,29 @@ const defaultProviders: Provider[] = [
     id: 'openai',
     name: 'OpenAI',
     models: ['openai-gpt-4', 'openai-gpt-3.5-turbo'],
+    getName() {
+      return this.name;
+    },
+    async generate(prompt: string, options: any) {
+      return { text: '', success: true };
+    },
+    async isAvailable() {
+      return true;
+    },
   },
   {
     id: 'google',
     name: 'Google',
     models: ['google-gemini-pro'],
+    getName() {
+      return this.name;
+    },
+    async generate(prompt: string, options: any) {
+      return { text: '', success: true };
+    },
+    async isAvailable() {
+      return true;
+    },
   },
 ];
 

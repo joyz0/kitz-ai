@@ -1,13 +1,13 @@
 // 先导入 mock-logger，确保在所有其他导入之前
-import { getMockLogger, resetMockLogger } from '../../logger/mock-logger.js';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { EventManager } from '../events.js';
-import { GatewayMessage } from '../protocol.js';
+import { getMockLogger, resetMockLogger } from "../../logger/mock-logger.js";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { EventManager } from "../events.js";
+import type { GatewayMessage } from "../protocol.js";
 
 // 获取 mock logger 实例
 const mockLogger = getMockLogger();
 
-describe('EventManager', () => {
+describe("EventManager", () => {
   let eventManager: EventManager;
 
   beforeEach(() => {
@@ -23,162 +23,152 @@ describe('EventManager', () => {
     vi.restoreAllMocks();
   });
 
-  describe('constructor', () => {
-    it('should initialize with default handlers', () => {
+  describe("constructor", () => {
+    it("should initialize with default handlers", () => {
       const registeredTypes = eventManager.getRegisteredEventTypes();
-      expect(registeredTypes).toContain('ping');
-      expect(registeredTypes).toContain('echo');
+      expect(registeredTypes).toContain("ping");
+      expect(registeredTypes).toContain("echo");
     });
   });
 
-  describe('registerHandler', () => {
-    it('should register a new event handler', () => {
-      const handler = vi.fn().mockResolvedValue({ result: 'test' });
-      eventManager.registerHandler('test', handler);
+  describe("registerHandler", () => {
+    it("should register a new event handler", () => {
+      const handler = vi.fn().mockResolvedValue({ result: "test" });
+      eventManager.registerHandler("test", handler);
 
-      expect(eventManager.getRegisteredEventTypes()).toContain('test');
-      expect(mockLogger.info).toHaveBeenCalledWith(
-        'Registered handler for event type: test',
-      );
+      expect(eventManager.getRegisteredEventTypes()).toContain("test");
+      expect(mockLogger.info).toHaveBeenCalledWith("Registered handler for event type: test");
     });
 
-    it('should override existing event handler', () => {
-      const originalHandler = vi.fn().mockResolvedValue({ result: 'original' });
-      const newHandler = vi.fn().mockResolvedValue({ result: 'new' });
+    it("should override existing event handler", () => {
+      const originalHandler = vi.fn().mockResolvedValue({ result: "original" });
+      const newHandler = vi.fn().mockResolvedValue({ result: "new" });
 
-      eventManager.registerHandler('test', originalHandler);
-      eventManager.registerHandler('test', newHandler);
+      eventManager.registerHandler("test", originalHandler);
+      eventManager.registerHandler("test", newHandler);
 
-      expect(eventManager.getRegisteredEventTypes()).toContain('test');
-      expect(mockLogger.info).toHaveBeenCalledTimes(2);
+      expect(eventManager.getRegisteredEventTypes()).toContain("test");
+      // 构造函数中注册了默认的 'ping' 和 'echo' 处理器，加上测试中注册的 'test' 处理器，共 3 次
+      expect(mockLogger.info).toHaveBeenCalledTimes(3);
     });
   });
 
-  describe('handleEvent', () => {
-    it('should handle event with registered handler', async () => {
-      const handler = vi.fn().mockResolvedValue({ result: 'test' });
-      eventManager.registerHandler('test', handler);
+  describe("handleEvent", () => {
+    it("should handle event with registered handler", async () => {
+      const handler = vi.fn().mockResolvedValue({ result: "test" });
+      eventManager.registerHandler("test", handler);
 
       const message: GatewayMessage = {
-        type: 'test',
-        payload: { data: 'test' },
+        type: "test",
+        payload: { data: "test" },
       };
 
       const response = await eventManager.handleEvent(message);
 
-      expect(handler).toHaveBeenCalledWith({ data: 'test' });
+      expect(handler).toHaveBeenCalledWith({ data: "test" });
       expect(response).toEqual({
-        type: 'test_response',
-        payload: { result: 'test' },
+        type: "test_response",
+        payload: { result: "test" },
       });
     });
 
-    it('should handle ping event', async () => {
+    it("should handle ping event", async () => {
       const message: GatewayMessage = {
-        type: 'ping',
+        type: "ping",
         payload: {},
       };
 
       const response = await eventManager.handleEvent(message);
 
       expect(response).toEqual({
-        type: 'ping_response',
-        payload: { message: 'pong' },
+        type: "ping_response",
+        payload: { message: "pong" },
       });
     });
 
-    it('should handle echo event', async () => {
+    it("should handle echo event", async () => {
       const message: GatewayMessage = {
-        type: 'echo',
-        payload: { message: 'test message' },
+        type: "echo",
+        payload: { message: "test message" },
       };
 
       const response = await eventManager.handleEvent(message);
 
       expect(response).toEqual({
-        type: 'echo_response',
-        payload: { message: 'test message' },
+        type: "echo_response",
+        payload: { message: "test message" },
       });
     });
 
-    it('should return error for unknown event type', async () => {
+    it("should return error for unknown event type", async () => {
       const message: GatewayMessage = {
-        type: 'unknown',
+        type: "unknown",
         payload: {},
       };
 
       const response = await eventManager.handleEvent(message);
 
-      expect(mockLogger.warn).toHaveBeenCalledWith(
-        'No handler found for event type: unknown',
-      );
+      expect(mockLogger.warn).toHaveBeenCalledWith("No handler found for event type: unknown");
       expect(response).toEqual({
-        type: 'error',
-        payload: { message: 'Unknown event type: unknown' },
+        type: "error",
+        payload: { message: "Unknown event type: unknown" },
       });
     });
 
-    it('should return error when handler throws', async () => {
-      const handler = vi.fn().mockRejectedValue(new Error('Handler error'));
-      eventManager.registerHandler('test', handler);
+    it("should return error when handler throws", async () => {
+      const handler = vi.fn().mockRejectedValue(new Error("Handler error"));
+      eventManager.registerHandler("test", handler);
 
       const message: GatewayMessage = {
-        type: 'test',
+        type: "test",
         payload: {},
       };
 
       const response = await eventManager.handleEvent(message);
 
-      expect(mockLogger.error).toHaveBeenCalledWith(
-        'Error handling event',
-        expect.any(Error),
-      );
+      expect(mockLogger.error).toHaveBeenCalledWith("Error handling event", expect.any(Error));
       expect(response).toEqual({
-        type: 'error',
-        payload: { message: 'Failed to handle event' },
+        type: "error",
+        payload: { message: "Failed to handle event" },
       });
     });
   });
 
-  describe('getRegisteredEventTypes', () => {
-    it('should return all registered event types', () => {
-      eventManager.registerHandler('test1', vi.fn());
-      eventManager.registerHandler('test2', vi.fn());
+  describe("getRegisteredEventTypes", () => {
+    it("should return all registered event types", () => {
+      eventManager.registerHandler("test1", vi.fn());
+      eventManager.registerHandler("test2", vi.fn());
 
       const registeredTypes = eventManager.getRegisteredEventTypes();
-      expect(registeredTypes).toContain('ping');
-      expect(registeredTypes).toContain('echo');
-      expect(registeredTypes).toContain('test1');
-      expect(registeredTypes).toContain('test2');
+      expect(registeredTypes).toContain("ping");
+      expect(registeredTypes).toContain("echo");
+      expect(registeredTypes).toContain("test1");
+      expect(registeredTypes).toContain("test2");
     });
 
-    it('should return empty array when no handlers are registered', () => {
+    it("should return empty array when no handlers are registered", () => {
       // Remove all handlers
-      eventManager.removeHandler('ping');
-      eventManager.removeHandler('echo');
+      eventManager.removeHandler("ping");
+      eventManager.removeHandler("echo");
 
       const registeredTypes = eventManager.getRegisteredEventTypes();
       expect(registeredTypes).toEqual([]);
     });
   });
 
-  describe('removeHandler', () => {
-    it('should remove existing event handler', () => {
-      eventManager.registerHandler('test', vi.fn());
-      expect(eventManager.getRegisteredEventTypes()).toContain('test');
+  describe("removeHandler", () => {
+    it("should remove existing event handler", () => {
+      eventManager.registerHandler("test", vi.fn());
+      expect(eventManager.getRegisteredEventTypes()).toContain("test");
 
-      eventManager.removeHandler('test');
-      expect(eventManager.getRegisteredEventTypes()).not.toContain('test');
-      expect(mockLogger.info).toHaveBeenCalledWith(
-        'Removed handler for event type: test',
-      );
+      eventManager.removeHandler("test");
+      expect(eventManager.getRegisteredEventTypes()).not.toContain("test");
+      expect(mockLogger.info).toHaveBeenCalledWith("Removed handler for event type: test");
     });
 
-    it('should handle removing non-existent handler', () => {
-      eventManager.removeHandler('non-existent');
-      expect(mockLogger.info).toHaveBeenCalledWith(
-        'Removed handler for event type: non-existent',
-      );
+    it("should handle removing non-existent handler", () => {
+      eventManager.removeHandler("non-existent");
+      expect(mockLogger.info).toHaveBeenCalledWith("Removed handler for event type: non-existent");
     });
   });
 });

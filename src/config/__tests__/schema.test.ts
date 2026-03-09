@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import {
   buildConfigSchema,
-  SchemaExtensionMetadata,
+  type SchemaExtensionMetadata,
   cloneSchema,
   asSchemaObject,
   isObjectSchema,
@@ -52,9 +52,7 @@ describe("Config Schema", () => {
       expect(schema).toBeDefined();
       expect(schema.schema).toBeDefined();
       expect(schema.uiHints["plugins.entries.test-plugin"]).toBeDefined();
-      expect(
-        schema.uiHints["plugins.entries.test-plugin.config.apiKey"]
-      ).toBeDefined();
+      expect(schema.uiHints["plugins.entries.test-plugin.config.apiKey"]).toBeDefined();
     });
 
     it("should use cache for repeated calls with same extensions", () => {
@@ -147,9 +145,7 @@ describe("Config Schema", () => {
       ];
 
       const schema = buildConfigSchema({ extensions });
-      expect(
-        schema.uiHints["plugins.entries.test-plugin.config.nested.property"]
-      ).toBeDefined();
+      expect(schema.uiHints["plugins.entries.test-plugin.config.nested.property"]).toBeDefined();
     });
 
     it("should handle extensions with relative configUiHints paths", () => {
@@ -167,9 +163,7 @@ describe("Config Schema", () => {
       ];
 
       const schema = buildConfigSchema({ extensions });
-      expect(
-        schema.uiHints["plugins.entries.test-plugin.config.relative.path"]
-      ).toBeDefined();
+      expect(schema.uiHints["plugins.entries.test-plugin.config.relative.path"]).toBeDefined();
     });
 
     it("should handle extensions with empty configUiHints paths", () => {
@@ -256,10 +250,7 @@ describe("Config Schema", () => {
       const extensionWithAdditional = {
         additionalProperties: true,
       };
-      const mergedWithAdditional = mergeObjectSchema(
-        baseWithAdditional,
-        extensionWithAdditional
-      );
+      const mergedWithAdditional = mergeObjectSchema(baseWithAdditional, extensionWithAdditional);
       expect(mergedWithAdditional.additionalProperties).toBe(true);
     });
 

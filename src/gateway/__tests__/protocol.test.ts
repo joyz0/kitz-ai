@@ -1,7 +1,7 @@
 // 先导入 mock-logger，确保在所有其他导入之前
 import { getMockLogger, resetMockLogger } from '../../logger/mock-logger.js';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { Protocol, GatewayMessage } from '../protocol.js';
+import { Protocol, type  GatewayMessage } from '../protocol.js';
 
 // 获取 mock logger 实例
 const mockLogger = getMockLogger();

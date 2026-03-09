@@ -1,15 +1,12 @@
-import { getChildLogger, type Logger } from '../../logger/logger.js';
-import { SessionStorage, SessionData } from './storage.js';
+import { getChildLogger, type Logger } from "../../logger/logger.js";
+import type { SessionStorage, SessionData } from "./storage.js";
 
 export class SessionMaintenance {
   private logger: Logger;
   private maintenanceInterval: NodeJS.Timeout | null = null;
 
-  constructor(
-    private storage: SessionStorage,
-    private maintenanceIntervalMs: number = 600000,
-  ) {
-    this.logger = getChildLogger({ name: 'session-maintenance' });
+  constructor(private storage: SessionStorage, private maintenanceIntervalMs: number = 600000) {
+    this.logger = getChildLogger({ name: "session-maintenance" });
   }
 
   /**
@@ -20,7 +17,7 @@ export class SessionMaintenance {
       this.performMaintenance();
     }, this.maintenanceIntervalMs);
 
-    this.logger.info('Session maintenance started');
+    this.logger.info("Session maintenance started");
   }
 
   /**
@@ -32,14 +29,14 @@ export class SessionMaintenance {
       this.maintenanceInterval = null;
     }
 
-    this.logger.info('Session maintenance stopped');
+    this.logger.info("Session maintenance stopped");
   }
 
   /**
    * 执行维护任务
    */
   public performMaintenance(): void {
-    this.logger.debug('Performing session maintenance');
+    this.logger.debug("Performing session maintenance");
 
     try {
       // 清理过期会话
@@ -52,10 +49,10 @@ export class SessionMaintenance {
       this.compactSessions();
 
       this.logger.info(
-        `Maintenance completed: ${expiredCount} expired, ${idleCount} idle sessions cleaned up`,
+        `Maintenance completed: ${expiredCount} expired, ${idleCount} idle sessions cleaned up`
       );
     } catch (error) {
-      this.logger.error('Error performing session maintenance', error);
+      this.logger.error("Error performing session maintenance", error);
     }
   }
 
@@ -118,7 +115,7 @@ export class SessionMaintenance {
    * 手动触发维护
    */
   public triggerMaintenance(): void {
-    this.logger.info('Manual maintenance triggered');
+    this.logger.info("Manual maintenance triggered");
     this.performMaintenance();
   }
 }

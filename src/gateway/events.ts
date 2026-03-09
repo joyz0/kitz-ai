@@ -1,10 +1,10 @@
-import { getChildLogger } from '../logger/logger.js';
-import { GatewayMessage } from './protocol.js';
+import { getChildLogger } from "../logger/logger.js";
+import type { GatewayMessage } from "./protocol.js";
 
 type EventHandler = (payload: any) => Promise<any>;
 
 export class EventManager {
-  private logger = getChildLogger({ name: 'gateway-events' });
+  private logger = getChildLogger({ name: "gateway-events" });
   private eventHandlers: Map<string, EventHandler>;
 
   constructor() {
@@ -16,11 +16,11 @@ export class EventManager {
    * 注册默认事件处理器
    */
   private registerDefaultHandlers(): void {
-    this.registerHandler('ping', async (payload) => {
-      return { message: 'pong' };
+    this.registerHandler("ping", async (payload) => {
+      return { message: "pong" };
     });
 
-    this.registerHandler('echo', async (payload) => {
+    this.registerHandler("echo", async (payload) => {
       return { message: payload.message };
     });
   }
@@ -36,7 +36,7 @@ export class EventManager {
         this.logger.info(`Registered handler for event type: ${eventType}`);
       }
     } catch (error) {
-      this.logger.error('Error registering event handler', error);
+      this.logger.error("Error registering event handler", error);
     }
   }
 
@@ -52,7 +52,7 @@ export class EventManager {
       if (!handler) {
         this.logger.warn(`No handler found for event type: ${type}`);
         return {
-          type: 'error',
+          type: "error",
           payload: { message: `Unknown event type: ${type}` },
         };
       }
@@ -64,10 +64,10 @@ export class EventManager {
         payload: result,
       };
     } catch (error) {
-      this.logger.error('Error handling event', error);
+      this.logger.error("Error handling event", error);
       return {
-        type: 'error',
-        payload: { message: 'Failed to handle event' },
+        type: "error",
+        payload: { message: "Failed to handle event" },
       };
     }
   }

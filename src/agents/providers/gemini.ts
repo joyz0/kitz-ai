@@ -1,5 +1,5 @@
 import { getChildLogger, type Logger } from '../../logger/logger.js';
-import { Provider } from './registry.js';
+import type { Provider } from './registry.js';
 import type { ModelResponse } from './compat.js';
 
 export interface GeminiConfig {

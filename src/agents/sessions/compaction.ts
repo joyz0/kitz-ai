@@ -1,5 +1,5 @@
 import { getChildLogger, type Logger } from '../../logger/logger.js';
-import { SessionData } from './storage.js';
+import type { SessionData } from './storage.js';
 
 export class SessionCompaction {
   private logger: Logger;

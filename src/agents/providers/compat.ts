@@ -1,5 +1,5 @@
-import { getChildLogger, type Logger } from '../../logger/logger.js';
-import { Provider } from './registry.js';
+import { getChildLogger, type Logger } from "../../logger/logger.js";
+import type { Provider } from "./registry.js";
 
 export interface ModelResponse {
   success: boolean;
@@ -20,7 +20,7 @@ export class ProviderCompat {
   private compatibilityLayers: Map<string, ProviderCompatibilityLayer>;
 
   constructor() {
-    this.logger = getChildLogger({ name: 'provider-compat' });
+    this.logger = getChildLogger({ name: "provider-compat" });
     this.compatibilityLayers = new Map<string, ProviderCompatibilityLayer>();
     this.registerDefaultLayers();
   }
@@ -30,11 +30,11 @@ export class ProviderCompat {
    */
   private registerDefaultLayers(): void {
     // OpenAI 兼容性层
-    this.registerCompatibilityLayer('openai', {
+    this.registerCompatibilityLayer("openai", {
       normalizeRequest: (prompt, options) => {
         return {
-          model: options.model || 'gpt-3.5-turbo',
-          messages: [{ role: 'user', content: prompt }],
+          model: options.model || "gpt-3.5-turbo",
+          messages: [{ role: "user", content: prompt }],
           temperature: options.temperature || 0.7,
           max_tokens: options.maxTokens || 1000,
           ...options,
@@ -43,7 +43,7 @@ export class ProviderCompat {
       normalizeResponse: (response) => {
         return {
           success: true,
-          text: response.choices[0]?.message?.content || '',
+          text: response.choices[0]?.message?.content || "",
           metadata: {
             model: response.model,
             usage: response.usage,
@@ -53,15 +53,15 @@ export class ProviderCompat {
       },
       getModelMapping: (model) => {
         const mappings: Record<string, string> = {
-          'gpt-3.5': 'gpt-3.5-turbo',
-          'gpt-4': 'gpt-4',
+          "gpt-3.5": "gpt-3.5-turbo",
+          "gpt-4": "gpt-4",
         };
         return mappings[model] || model;
       },
     });
 
     // Gemini 兼容性层
-    this.registerCompatibilityLayer('gemini', {
+    this.registerCompatibilityLayer("gemini", {
       normalizeRequest: (prompt, options) => {
         // 从 options 中移除 temperature，因为它已经在 generationConfig 中
         const { temperature, ...restOptions } = options;
@@ -82,7 +82,7 @@ export class ProviderCompat {
       normalizeResponse: (response) => {
         return {
           success: true,
-          text: response.candidates[0]?.content?.parts[0]?.text || '',
+          text: response.candidates[0]?.content?.parts[0]?.text || "",
           metadata: {
             model: response.model,
             finishReason: response.candidates[0]?.finishReason,
@@ -92,8 +92,8 @@ export class ProviderCompat {
       },
       getModelMapping: (model) => {
         const mappings: Record<string, string> = {
-          gemini: 'gemini-pro',
-          'gemini-embedding': 'embedding-001',
+          gemini: "gemini-pro",
+          "gemini-embedding": "embedding-001",
         };
         return mappings[model] || model;
       },
@@ -103,10 +103,7 @@ export class ProviderCompat {
   /**
    * 注册兼容性层
    */
-  public registerCompatibilityLayer(
-    provider: string,
-    layer: ProviderCompatibilityLayer,
-  ): void {
+  public registerCompatibilityLayer(provider: string, layer: ProviderCompatibilityLayer): void {
     this.compatibilityLayers.set(provider, layer);
     this.logger.info(`Registered compatibility layer for ${provider}`);
   }
@@ -114,9 +111,7 @@ export class ProviderCompat {
   /**
    * 获取兼容性层
    */
-  public getCompatibilityLayer(
-    provider: string,
-  ): ProviderCompatibilityLayer | undefined {
+  public getCompatibilityLayer(provider: string): ProviderCompatibilityLayer | undefined {
     return this.compatibilityLayers.get(provider);
   }
 
@@ -141,7 +136,7 @@ export class ProviderCompat {
     }
     return {
       success: true,
-      text: response.text || '',
+      text: response.text || "",
       metadata: response.metadata || {},
     };
   }
@@ -163,7 +158,7 @@ export class ProviderCompat {
   public async crossProviderCall(
     providers: Provider[],
     prompt: string,
-    options: any,
+    options: any
   ): Promise<ModelResponse> {
     for (const provider of providers) {
       try {
@@ -179,16 +174,14 @@ export class ProviderCompat {
 
     return {
       success: false,
-      error: 'All providers failed',
+      error: "All providers failed",
     };
   }
 
   /**
    * 获取可用的提供商
    */
-  public async getAvailableProviders(
-    providers: Provider[],
-  ): Promise<Provider[]> {
+  public async getAvailableProviders(providers: Provider[]): Promise<Provider[]> {
     const available: Provider[] = [];
 
     for (const provider of providers) {
@@ -198,10 +191,7 @@ export class ProviderCompat {
           available.push(provider);
         }
       } catch (error) {
-        this.logger.warn(
-          `Error checking availability for ${provider.getName()}:`,
-          error,
-        );
+        this.logger.warn(`Error checking availability for ${provider.getName()}:`, error);
       }
     }
 

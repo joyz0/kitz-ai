@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { ProviderRegistry, createProviderRegistry, Provider } from '../registry.js';
+import { type ProviderRegistry, createProviderRegistry, type Provider } from '../registry.js';
 
 // 测试提供商数据
 const testProviders: Provider[] = [
@@ -7,16 +7,43 @@ const testProviders: Provider[] = [
     id: 'openai',
     name: 'OpenAI',
     models: ['openai-gpt-4', 'openai-gpt-3.5-turbo', 'openai-text-embedding-3-small'],
+    getName() {
+      return this.name;
+    },
+    async generate(prompt: string, options: any) {
+      return { text: '', success: true };
+    },
+    async isAvailable() {
+      return true;
+    },
   },
   {
     id: 'google',
     name: 'Google',
     models: ['google-gemini-pro', 'google-gemini-ultra'],
+    getName() {
+      return this.name;
+    },
+    async generate(prompt: string, options: any) {
+      return { text: '', success: true };
+    },
+    async isAvailable() {
+      return true;
+    },
   },
   {
     id: 'anthropic',
     name: 'Anthropic',
     models: ['anthropic-claude-3-opus', 'anthropic-claude-3-sonnet'],
+    getName() {
+      return this.name;
+    },
+    async generate(prompt: string, options: any) {
+      return { text: '', success: true };
+    },
+    async isAvailable() {
+      return true;
+    },
   },
 ];
 
@@ -56,6 +83,15 @@ describe('ProviderRegistry', () => {
       id: 'meta',
       name: 'Meta',
       models: ['meta-llama-3-70b', 'meta-llama-3-8b'],
+      getName() {
+        return this.name;
+      },
+      async generate(prompt: string, options: any) {
+        return { text: '', success: true };
+      },
+      async isAvailable() {
+        return true;
+      },
     };
 
     registry.registerProvider(newProvider);
@@ -69,6 +105,15 @@ describe('ProviderRegistry', () => {
       id: 'openai',
       name: 'OpenAI (Updated)',
       models: ['openai-gpt-4', 'openai-gpt-3.5-turbo', 'openai-text-embedding-3-small', 'openai-gpt-4o'],
+      getName() {
+        return this.name;
+      },
+      async generate(prompt: string, options: any) {
+        return { text: '', success: true };
+      },
+      async isAvailable() {
+        return true;
+      },
     };
 
     registry.updateProvider(updatedProvider);
@@ -96,6 +141,15 @@ describe('ProviderRegistry', () => {
       id: 'openai',
       name: 'OpenAI (New)',
       models: ['openai-gpt-4'],
+      getName() {
+        return this.name;
+      },
+      async generate(prompt: string, options: any) {
+        return { text: '', success: true };
+      },
+      async isAvailable() {
+        return true;
+      },
     };
 
     registry.registerProvider(newProvider);

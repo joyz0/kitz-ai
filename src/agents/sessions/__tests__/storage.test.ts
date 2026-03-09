@@ -1,13 +1,13 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 // 导入 mock-logger 以确保 logger 模块被正确模拟
-import { getMockLogger } from '../../../logger/mock-logger.js';
-import { SessionStorage, SessionData } from '../storage.js';
-import { SessionKeyManager } from '../key.js';
+import { getMockLogger } from "../../../logger/mock-logger.js";
+import { SessionStorage, type SessionData } from "../storage.js";
+import { SessionKeyManager } from "../key.js";
 
 // 获取 mock logger 实例（确保 mock 生效）
 const mockLogger = getMockLogger();
 
-describe('SessionStorage', () => {
+describe("SessionStorage", () => {
   let storage: SessionStorage;
   let keyManager: SessionKeyManager;
 
@@ -20,17 +20,15 @@ describe('SessionStorage', () => {
     storage.close();
   });
 
-  describe('store and get', () => {
-    it('should store and retrieve a session', () => {
-      const key = keyManager.generate('user123', 'discord');
+  describe("store and get", () => {
+    it("should store and retrieve a session", () => {
+      const key = keyManager.generate("user123", "discord");
       const session: SessionData = {
         key,
-        context: { foo: 'bar' },
-        messages: [
-          { role: 'user', content: 'Hello', timestamp: Date.now() }
-        ],
-        metadata: { test: 'metadata' },
-        lastAccessed: Date.now()
+        context: { foo: "bar" },
+        messages: [{ role: "user", content: "Hello", timestamp: Date.now() }],
+        metadata: { test: "metadata" },
+        lastAccessed: Date.now(),
       };
 
       storage.store(session);
@@ -39,18 +37,18 @@ describe('SessionStorage', () => {
       expect(retrieved).toEqual(session);
     });
 
-    it('should return undefined for non-existent session', () => {
-      expect(storage.get('non-existent')).toBeUndefined();
+    it("should return undefined for non-existent session", () => {
+      expect(storage.get("non-existent")).toBeUndefined();
     });
 
-    it('should update lastAccessed when retrieving a session', () => {
-      const key = keyManager.generate('user123', 'discord');
+    it("should update lastAccessed when retrieving a session", () => {
+      const key = keyManager.generate("user123", "discord");
       const session: SessionData = {
         key,
         context: {},
         messages: [],
         metadata: {},
-        lastAccessed: Date.now() - 1000
+        lastAccessed: Date.now() - 1000,
       };
 
       storage.store(session);
@@ -61,15 +59,15 @@ describe('SessionStorage', () => {
     });
   });
 
-  describe('delete', () => {
-    it('should delete a session', () => {
-      const key = keyManager.generate('user123', 'discord');
+  describe("delete", () => {
+    it("should delete a session", () => {
+      const key = keyManager.generate("user123", "discord");
       const session: SessionData = {
         key,
         context: {},
         messages: [],
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       };
 
       storage.store(session);
@@ -80,87 +78,87 @@ describe('SessionStorage', () => {
       expect(retrieved).toBeUndefined();
     });
 
-    it('should return false when deleting non-existent session', () => {
-      expect(storage.delete('non-existent')).toBe(false);
+    it("should return false when deleting non-existent session", () => {
+      expect(storage.delete("non-existent")).toBe(false);
     });
   });
 
-  describe('update', () => {
-    it('should update a session', () => {
-      const key = keyManager.generate('user123', 'discord');
+  describe("update", () => {
+    it("should update a session", () => {
+      const key = keyManager.generate("user123", "discord");
       const session: SessionData = {
         key,
-        context: { foo: 'bar' },
+        context: { foo: "bar" },
         messages: [],
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       };
 
       storage.store(session);
       const updated = storage.update(key.id, (s) => ({
         ...s,
-        context: { foo: 'updated' }
+        context: { foo: "updated" },
       }));
 
-      expect(updated?.context).toEqual({ foo: 'updated' });
+      expect(updated?.context).toEqual({ foo: "updated" });
       expect(updated?.lastAccessed).toBeGreaterThan(session.lastAccessed);
     });
 
-    it('should return undefined when updating non-existent session', () => {
-      const result = storage.update('non-existent', (s) => s);
+    it("should return undefined when updating non-existent session", () => {
+      const result = storage.update("non-existent", (s) => s);
       expect(result).toBeUndefined();
     });
   });
 
-  describe('addMessage', () => {
-    it('should add a message to a session', () => {
-      const key = keyManager.generate('user123', 'discord');
+  describe("addMessage", () => {
+    it("should add a message to a session", () => {
+      const key = keyManager.generate("user123", "discord");
       const session: SessionData = {
         key,
         context: {},
         messages: [],
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       };
 
       storage.store(session);
-      const updated = storage.addMessage(key.id, 'user', 'Hello');
+      const updated = storage.addMessage(key.id, "user", "Hello");
 
       expect(updated?.messages).toHaveLength(1);
-      expect(updated?.messages[0].content).toBe('Hello');
-      expect(updated?.messages[0].role).toBe('user');
+      expect(updated?.messages[0].content).toBe("Hello");
+      expect(updated?.messages[0].role).toBe("user");
     });
   });
 
-  describe('updateContext', () => {
-    it('should update the context of a session', () => {
-      const key = keyManager.generate('user123', 'discord');
+  describe("updateContext", () => {
+    it("should update the context of a session", () => {
+      const key = keyManager.generate("user123", "discord");
       const session: SessionData = {
         key,
-        context: { foo: 'bar' },
+        context: { foo: "bar" },
         messages: [],
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       };
 
       storage.store(session);
-      const updated = storage.updateContext(key.id, { foo: 'updated', baz: 'new' });
+      const updated = storage.updateContext(key.id, { foo: "updated", baz: "new" });
 
-      expect(updated?.context).toEqual({ foo: 'updated', baz: 'new' });
+      expect(updated?.context).toEqual({ foo: "updated", baz: "new" });
     });
   });
 
-  describe('getAll and getCount', () => {
-    it('should return all sessions and count', () => {
-      const key1 = keyManager.generate('user123', 'discord');
-      const key2 = keyManager.generate('user456', 'slack');
+  describe("getAll and getCount", () => {
+    it("should return all sessions and count", () => {
+      const key1 = keyManager.generate("user123", "discord");
+      const key2 = keyManager.generate("user456", "slack");
 
       storage.store({
         key: key1,
         context: {},
         messages: [],
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       });
 
       storage.store({
@@ -168,7 +166,7 @@ describe('SessionStorage', () => {
         context: {},
         messages: [],
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       });
 
       expect(storage.getCount()).toBe(2);
@@ -176,17 +174,17 @@ describe('SessionStorage', () => {
     });
   });
 
-  describe('cleanupExpired', () => {
-    it('should remove expired sessions', () => {
-      const validKey = keyManager.generate('user123', 'discord', 3600000); // 1 hour
-      const expiredKey = keyManager.generate('user456', 'slack', -1000); // Expired
+  describe("cleanupExpired", () => {
+    it("should remove expired sessions", () => {
+      const validKey = keyManager.generate("user123", "discord", 3600000); // 1 hour
+      const expiredKey = keyManager.generate("user456", "slack", -1000); // Expired
 
       storage.store({
         key: validKey,
         context: {},
         messages: [],
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       });
 
       storage.store({
@@ -194,7 +192,7 @@ describe('SessionStorage', () => {
         context: {},
         messages: [],
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       });
 
       const deleted = storage.cleanupExpired();
@@ -205,17 +203,17 @@ describe('SessionStorage', () => {
     });
   });
 
-  describe('cleanupIdle', () => {
-    it('should remove idle sessions', () => {
-      const recentKey = keyManager.generate('user123', 'discord');
-      const idleKey = keyManager.generate('user456', 'slack');
+  describe("cleanupIdle", () => {
+    it("should remove idle sessions", () => {
+      const recentKey = keyManager.generate("user123", "discord");
+      const idleKey = keyManager.generate("user456", "slack");
 
       storage.store({
         key: recentKey,
         context: {},
         messages: [],
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       });
 
       storage.store({
@@ -223,7 +221,7 @@ describe('SessionStorage', () => {
         context: {},
         messages: [],
         metadata: {},
-        lastAccessed: Date.now() - 3600000 // 1 hour ago
+        lastAccessed: Date.now() - 3600000, // 1 hour ago
       });
 
       const deleted = storage.cleanupIdle(1800000); // 30 minutes

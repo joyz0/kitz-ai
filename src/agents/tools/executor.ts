@@ -1,5 +1,5 @@
-import { getChildLogger, type Logger } from '../../logger/logger.js';
-import { ToolRegistry, Tool } from './registry.js';
+import { getChildLogger, type Logger } from "../../logger/logger.js";
+import type { ToolRegistry, Tool } from "./registry.js";
 
 export interface ToolExecutionResult {
   success: boolean;
@@ -14,7 +14,7 @@ export class ToolExecutor {
   private registry: ToolRegistry;
 
   constructor(registry: ToolRegistry) {
-    this.logger = getChildLogger({ name: 'tool-executor' });
+    this.logger = getChildLogger({ name: "tool-executor" });
     this.registry = registry;
   }
 
@@ -23,7 +23,7 @@ export class ToolExecutor {
    */
   public async execute(
     toolName: string,
-    params: Record<string, any>,
+    params: Record<string, any>
   ): Promise<ToolExecutionResult> {
     const startTime = Date.now();
 
@@ -44,7 +44,7 @@ export class ToolExecutor {
       if (!validation.valid) {
         return {
           success: false,
-          error: validation.errors.join(', '),
+          error: validation.errors.join(", "),
           toolName,
           executionTime: Date.now() - startTime,
         };
@@ -62,8 +62,7 @@ export class ToolExecutor {
         executionTime: Date.now() - startTime,
       };
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error(`Error executing tool ${toolName}:`, error);
       return {
         success: false,
@@ -81,7 +80,7 @@ export class ToolExecutor {
     executions: Array<{
       toolName: string;
       params: Record<string, any>;
-    }>,
+    }>
   ): Promise<ToolExecutionResult[]> {
     const results: ToolExecutionResult[] = [];
 
@@ -99,7 +98,7 @@ export class ToolExecutor {
   public async executeWithTimeout(
     toolName: string,
     params: Record<string, any>,
-    timeoutMs: number = 30000,
+    timeoutMs: number = 30000
   ): Promise<ToolExecutionResult> {
     const startTime = Date.now();
 
@@ -110,14 +109,10 @@ export class ToolExecutor {
     });
 
     try {
-      const result = await Promise.race([
-        this.execute(toolName, params),
-        timeoutPromise,
-      ]);
+      const result = await Promise.race([this.execute(toolName, params), timeoutPromise]);
       return result;
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
       return {
         success: false,
         error: errorMessage,
@@ -130,7 +125,7 @@ export class ToolExecutor {
   /**
    * 获取工具信息
    */
-  public getToolInfo(toolName: string): Omit<Tool, 'execute'> | undefined {
+  public getToolInfo(toolName: string): Omit<Tool, "execute"> | undefined {
     const tool = this.registry.get(toolName);
     if (!tool) {
       return undefined;
@@ -143,7 +138,7 @@ export class ToolExecutor {
   /**
    * 获取所有工具信息
    */
-  public getAllToolInfo(): Array<Omit<Tool, 'execute'>> {
+  public getAllToolInfo(): Array<Omit<Tool, "execute">> {
     return this.registry.getAll().map(({ execute, ...info }) => info);
   }
 }

@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
-  FaultToleranceHandler,
+   type FaultToleranceHandler,
   createFaultToleranceHandler,
-  RetryOptions,
+   type RetryOptions,
   retry,
 } from '../fault-tolerance.js';
 import { getMockLogger, resetMockLogger } from '../../logger/mock-logger.js';

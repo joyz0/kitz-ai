@@ -1,5 +1,5 @@
 import { getChildLogger } from '../logger/logger.js';
-import { GatewayMessage } from './protocol.js';
+import  type { GatewayMessage } from './protocol.js';
 
 export class AuthManager {
   private logger = getChildLogger({ name: 'gateway-auth' });

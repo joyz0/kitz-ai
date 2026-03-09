@@ -1,6 +1,6 @@
-import { getChildLogger, type Logger } from '../../logger/logger.js';
-import { Provider } from './registry.js';
-import type { ModelResponse } from './compat.js';
+import { getChildLogger, type Logger } from "../../logger/logger.js";
+import type { Provider } from "./registry.js";
+import type { ModelResponse } from "./compat.js";
 
 export interface OpenAIConfig {
   apiKey: string;
@@ -9,16 +9,16 @@ export interface OpenAIConfig {
 }
 
 export class OpenAIProvider implements Provider {
-  id: string = 'openai';
-  name: string = 'OpenAI';
-  models: string[] = ['gpt-3.5-turbo', 'gpt-4', 'text-embedding-ada-002'];
+  id: string = "openai";
+  name: string = "OpenAI";
+  models: string[] = ["gpt-3.5-turbo", "gpt-4", "text-embedding-ada-002"];
   private logger: Logger;
   private config: OpenAIConfig;
 
   constructor(config: OpenAIConfig) {
-    this.logger = getChildLogger({ name: 'openai-provider' });
+    this.logger = getChildLogger({ name: "openai-provider" });
     this.config = {
-      baseURL: 'https://api.openai.com/v1',
+      baseURL: "https://api.openai.com/v1",
       timeout: 30000,
       ...config,
     };
@@ -28,7 +28,7 @@ export class OpenAIProvider implements Provider {
    * 获取提供商名称
    */
   public getName(): string {
-    return 'openai';
+    return "openai";
   }
 
   /**
@@ -39,14 +39,14 @@ export class OpenAIProvider implements Provider {
 
     try {
       const response = await fetch(`${this.config.baseURL}/chat/completions`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${this.config.apiKey}`,
         },
         body: JSON.stringify({
-          model: options.model || 'gpt-3.5-turbo',
-          messages: [{ role: 'user', content: prompt }],
+          model: options.model || "gpt-3.5-turbo",
+          messages: [{ role: "user", content: prompt }],
           temperature: options.temperature || 0.7,
           max_tokens: options.maxTokens || 1000,
           ...options,
@@ -56,13 +56,11 @@ export class OpenAIProvider implements Provider {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.error?.message || `OpenAI API error: ${response.status}`,
-        );
+        throw new Error(errorData.error?.message || `OpenAI API error: ${response.status}`);
       }
 
       const data = await response.json();
-      const text = data.choices[0]?.message?.content || '';
+      const text = data.choices[0]?.message?.content || "";
 
       return {
         success: true,
@@ -75,7 +73,7 @@ export class OpenAIProvider implements Provider {
         },
       };
     } catch (error) {
-      this.logger.error('Error generating text with OpenAI', error);
+      this.logger.error("Error generating text with OpenAI", error);
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
@@ -94,13 +92,13 @@ export class OpenAIProvider implements Provider {
 
     try {
       const response = await fetch(`${this.config.baseURL}/embeddings`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${this.config.apiKey}`,
         },
         body: JSON.stringify({
-          model: options.model || 'text-embedding-ada-002',
+          model: options.model || "text-embedding-ada-002",
           input: text,
           ...options,
         }),
@@ -109,9 +107,7 @@ export class OpenAIProvider implements Provider {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.error?.message || `OpenAI API error: ${response.status}`,
-        );
+        throw new Error(errorData.error?.message || `OpenAI API error: ${response.status}`);
       }
 
       const data = await response.json();
@@ -127,7 +123,7 @@ export class OpenAIProvider implements Provider {
         },
       };
     } catch (error) {
-      this.logger.error('Error embedding text with OpenAI', error);
+      this.logger.error("Error embedding text with OpenAI", error);
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
@@ -157,7 +153,7 @@ export class OpenAIProvider implements Provider {
       const data = await response.json();
       return data.data.map((model: any) => model.id);
     } catch (error) {
-      this.logger.error('Error getting OpenAI models', error);
+      this.logger.error("Error getting OpenAI models", error);
       return [];
     }
   }
@@ -170,7 +166,7 @@ export class OpenAIProvider implements Provider {
       const models = await this.getModels();
       return models.length > 0;
     } catch (error) {
-      this.logger.warn('OpenAI provider not available', error);
+      this.logger.warn("OpenAI provider not available", error);
       return false;
     }
   }

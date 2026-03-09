@@ -1,11 +1,11 @@
-import { getChildLogger, type Logger } from '../../logger/logger.js';
-import { SessionKey } from './key.js';
+import { getChildLogger, type Logger } from "../../logger/logger.js";
+import type { SessionKey } from "./key.js";
 
 export interface SessionData {
   key: SessionKey;
   context: any;
   messages: Array<{
-    role: 'user' | 'assistant' | 'system';
+    role: "user" | "assistant" | "system";
     content: string;
     timestamp: number;
   }>;
@@ -19,7 +19,7 @@ export class SessionStorage {
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(private cleanupIntervalMs: number = 3600000) {
-    this.logger = getChildLogger({ name: 'session-storage' });
+    this.logger = getChildLogger({ name: "session-storage" });
     this.sessions = new Map<string, SessionData>();
     this.startCleanupInterval();
   }
@@ -60,7 +60,7 @@ export class SessionStorage {
    */
   public update(
     sessionId: string,
-    updater: (session: SessionData) => SessionData,
+    updater: (session: SessionData) => SessionData
   ): SessionData | undefined {
     try {
       const session = this.sessions.get(sessionId);
@@ -73,7 +73,7 @@ export class SessionStorage {
       }
       return undefined;
     } catch (error) {
-      this.logger.error('Error updating session', error);
+      this.logger.error("Error updating session", error);
       return undefined;
     }
   }
@@ -83,8 +83,8 @@ export class SessionStorage {
    */
   public addMessage(
     sessionId: string,
-    role: 'user' | 'assistant' | 'system',
-    content: string,
+    role: "user" | "assistant" | "system",
+    content: string
   ): SessionData | undefined {
     return this.update(sessionId, (session) => ({
       ...session,
@@ -102,10 +102,7 @@ export class SessionStorage {
   /**
    * 更新会话上下文
    */
-  public updateContext(
-    sessionId: string,
-    context: any,
-  ): SessionData | undefined {
+  public updateContext(sessionId: string, context: any): SessionData | undefined {
     return this.update(sessionId, (session) => ({
       ...session,
       context,

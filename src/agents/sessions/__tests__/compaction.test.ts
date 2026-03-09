@@ -1,14 +1,14 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from "vitest";
 // 导入 mock-logger 以确保 logger 模块被正确模拟
-import { getMockLogger } from '../../../logger/mock-logger.js';
-import { SessionCompaction } from '../compaction.js';
-import { SessionData } from '../storage.js';
-import { SessionKeyManager } from '../key.js';
+import { getMockLogger } from "../../../logger/mock-logger.js";
+import { SessionCompaction } from "../compaction.js";
+import { type SessionData } from "../storage.js";
+import { SessionKeyManager } from "../key.js";
 
 // 获取 mock logger 实例（确保 mock 生效）
 const mockLogger = getMockLogger();
 
-describe('SessionCompaction', () => {
+describe("SessionCompaction", () => {
   let compaction: SessionCompaction;
   let keyManager: SessionKeyManager;
 
@@ -17,13 +17,13 @@ describe('SessionCompaction', () => {
     keyManager = new SessionKeyManager();
   });
 
-  describe('compact', () => {
-    it('should compact a session with too many messages', () => {
-      const key = keyManager.generate('user123', 'discord');
+  describe("compact", () => {
+    it("should compact a session with too many messages", () => {
+      const key = keyManager.generate("user123", "discord");
       const messages = Array.from({ length: 100 }, (_, i) => ({
-        role: 'user' as const,
+        role: "user" as const,
         content: `Message ${i}`,
-        timestamp: Date.now() - i * 1000
+        timestamp: Date.now() - i * 1000,
       }));
 
       const session: SessionData = {
@@ -31,7 +31,7 @@ describe('SessionCompaction', () => {
         context: {},
         messages,
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       };
 
       const compacted = compaction.compact(session, { maxMessages: 50 });
@@ -41,15 +41,15 @@ describe('SessionCompaction', () => {
       expect(compacted.metadata.compactedMessageCount).toBe(50);
     });
 
-    it('should preserve system messages during compaction', () => {
-      const key = keyManager.generate('user123', 'discord');
+    it("should preserve system messages during compaction", () => {
+      const key = keyManager.generate("user123", "discord");
       const messages = [
-        { role: 'system' as const, content: 'System message 1', timestamp: Date.now() - 10000 },
+        { role: "system" as const, content: "System message 1", timestamp: Date.now() - 10000 },
         ...Array.from({ length: 60 }, (_, i) => ({
-          role: 'user' as const,
+          role: "user" as const,
           content: `User message ${i}`,
-          timestamp: Date.now() - i * 1000
-        }))
+          timestamp: Date.now() - i * 1000,
+        })),
       ];
 
       const session: SessionData = {
@@ -57,21 +57,24 @@ describe('SessionCompaction', () => {
         context: {},
         messages,
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       };
 
-      const compacted = compaction.compact(session, { maxMessages: 50, preserveSystemMessages: true });
+      const compacted = compaction.compact(session, {
+        maxMessages: 50,
+        preserveSystemMessages: true,
+      });
       // Should have 1 system message + 50 user messages = 51 messages
       expect(compacted.messages).toHaveLength(51);
-      expect(compacted.messages[0].role).toBe('system');
+      expect(compacted.messages[0].role).toBe("system");
     });
 
-    it('should not compact sessions with fewer messages than the limit', () => {
-      const key = keyManager.generate('user123', 'discord');
+    it("should not compact sessions with fewer messages than the limit", () => {
+      const key = keyManager.generate("user123", "discord");
       const messages = Array.from({ length: 30 }, (_, i) => ({
-        role: 'user' as const,
+        role: "user" as const,
         content: `Message ${i}`,
-        timestamp: Date.now() - i * 1000
+        timestamp: Date.now() - i * 1000,
       }));
 
       const session: SessionData = {
@@ -79,7 +82,7 @@ describe('SessionCompaction', () => {
         context: {},
         messages,
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       };
 
       const compacted = compaction.compact(session, { maxMessages: 50 });
@@ -88,15 +91,15 @@ describe('SessionCompaction', () => {
     });
   });
 
-  describe('smartCompact', () => {
-    it('should compact old sessions more aggressively', () => {
-      const key = keyManager.generate('user123', 'discord');
+  describe("smartCompact", () => {
+    it("should compact old sessions more aggressively", () => {
+      const key = keyManager.generate("user123", "discord");
       // Create a session that's 8 days old
       const oldKey = { ...key, createdAt: Date.now() - 8 * 24 * 60 * 60 * 1000 };
       const messages = Array.from({ length: 100 }, (_, i) => ({
-        role: 'user' as const,
+        role: "user" as const,
         content: `Message ${i}`,
-        timestamp: Date.now() - i * 1000
+        timestamp: Date.now() - i * 1000,
       }));
 
       const session: SessionData = {
@@ -104,7 +107,7 @@ describe('SessionCompaction', () => {
         context: {},
         messages,
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       };
 
       const compacted = compaction.smartCompact(session);
@@ -112,12 +115,12 @@ describe('SessionCompaction', () => {
       expect(compacted.messages).toHaveLength(20);
     });
 
-    it('should compact sessions with very many messages more aggressively', () => {
-      const key = keyManager.generate('user123', 'discord');
+    it("should compact sessions with very many messages more aggressively", () => {
+      const key = keyManager.generate("user123", "discord");
       const messages = Array.from({ length: 600 }, (_, i) => ({
-        role: 'user' as const,
+        role: "user" as const,
         content: `Message ${i}`,
-        timestamp: Date.now() - i * 1000
+        timestamp: Date.now() - i * 1000,
       }));
 
       const session: SessionData = {
@@ -125,7 +128,7 @@ describe('SessionCompaction', () => {
         context: {},
         messages,
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       };
 
       const compacted = compaction.smartCompact(session);
@@ -134,15 +137,15 @@ describe('SessionCompaction', () => {
     });
   });
 
-  describe('calculateSize', () => {
-    it('should calculate the size of a session', () => {
-      const key = keyManager.generate('user123', 'discord');
+  describe("calculateSize", () => {
+    it("should calculate the size of a session", () => {
+      const key = keyManager.generate("user123", "discord");
       const session: SessionData = {
         key,
         context: {},
-        messages: [{ role: 'user', content: 'Hello', timestamp: Date.now() }],
+        messages: [{ role: "user", content: "Hello", timestamp: Date.now() }],
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       };
 
       const size = compaction.calculateSize(session);
@@ -150,13 +153,13 @@ describe('SessionCompaction', () => {
     });
   });
 
-  describe('needsCompaction', () => {
-    it('should return true for sessions that need compaction', () => {
-      const key = keyManager.generate('user123', 'discord');
+  describe("needsCompaction", () => {
+    it("should return true for sessions that need compaction", () => {
+      const key = keyManager.generate("user123", "discord");
       const messages = Array.from({ length: 150 }, (_, i) => ({
-        role: 'user' as const,
+        role: "user" as const,
         content: `Message ${i}`,
-        timestamp: Date.now() - i * 1000
+        timestamp: Date.now() - i * 1000,
       }));
 
       const session: SessionData = {
@@ -164,18 +167,18 @@ describe('SessionCompaction', () => {
         context: {},
         messages,
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       };
 
       expect(compaction.needsCompaction(session)).toBe(true);
     });
 
-    it('should return false for sessions that do not need compaction', () => {
-      const key = keyManager.generate('user123', 'discord');
+    it("should return false for sessions that do not need compaction", () => {
+      const key = keyManager.generate("user123", "discord");
       const messages = Array.from({ length: 50 }, (_, i) => ({
-        role: 'user' as const,
+        role: "user" as const,
         content: `Message ${i}`,
-        timestamp: Date.now() - i * 1000
+        timestamp: Date.now() - i * 1000,
       }));
 
       const session: SessionData = {
@@ -183,40 +186,40 @@ describe('SessionCompaction', () => {
         context: {},
         messages,
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       };
 
       expect(compaction.needsCompaction(session)).toBe(false);
     });
   });
 
-  describe('compactBatch', () => {
-    it('should compact multiple sessions', () => {
-      const key1 = keyManager.generate('user123', 'discord');
-      const key2 = keyManager.generate('user456', 'slack');
+  describe("compactBatch", () => {
+    it("should compact multiple sessions", () => {
+      const key1 = keyManager.generate("user123", "discord");
+      const key2 = keyManager.generate("user456", "slack");
 
       const session1: SessionData = {
         key: key1,
         context: {},
         messages: Array.from({ length: 150 }, (_, i) => ({
-          role: 'user' as const,
+          role: "user" as const,
           content: `Message ${i}`,
-          timestamp: Date.now() - i * 1000
+          timestamp: Date.now() - i * 1000,
         })),
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       };
 
       const session2: SessionData = {
         key: key2,
         context: {},
         messages: Array.from({ length: 30 }, (_, i) => ({
-          role: 'user' as const,
+          role: "user" as const,
           content: `Message ${i}`,
-          timestamp: Date.now() - i * 1000
+          timestamp: Date.now() - i * 1000,
         })),
         metadata: {},
-        lastAccessed: Date.now()
+        lastAccessed: Date.now(),
       };
 
       const compactedSessions = compaction.compactBatch([session1, session2]);

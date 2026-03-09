@@ -1,19 +1,25 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { BackoffStrategy, createBackoffStrategy, ExponentialBackoff, FixedBackoff, LinearBackoff } from '../backoff.js';
+import { describe, it, expect, beforeEach } from "vitest";
+import {
+  type BackoffStrategy,
+  createBackoffStrategy,
+  ExponentialBackoff,
+  FixedBackoff,
+  LinearBackoff,
+} from "../backoff.js";
 
-describe('Backoff Strategies', () => {
-  describe('ExponentialBackoff', () => {
+describe("Backoff Strategies", () => {
+  describe("ExponentialBackoff", () => {
     let backoff: BackoffStrategy;
 
     beforeEach(() => {
       backoff = new ExponentialBackoff({ baseDelay: 100, maxDelay: 1000, jitter: 0 });
     });
 
-    it('should create exponential backoff instance', () => {
+    it("should create exponential backoff instance", () => {
       expect(backoff).toBeInstanceOf(ExponentialBackoff);
     });
 
-    it('should return exponentially increasing delays', () => {
+    it("should return exponentially increasing delays", () => {
       const delays = [];
       for (let i = 0; i < 5; i++) {
         delays.push(backoff.next());
@@ -26,14 +32,14 @@ describe('Backoff Strategies', () => {
       expect(delays[4]).toBe(1000); // 达到最大延迟
     });
 
-    it('should respect max delay', () => {
+    it("should respect max delay", () => {
       for (let i = 0; i < 10; i++) {
         const delay = backoff.next();
         expect(delay).toBeLessThanOrEqual(1000);
       }
     });
 
-    it('should reset attempts', () => {
+    it("should reset attempts", () => {
       backoff.next();
       backoff.next();
       expect(backoff.getAttempts()).toBe(2);
@@ -43,7 +49,7 @@ describe('Backoff Strategies', () => {
       expect(delay).toBe(100); // 重置后应该从基础延迟开始
     });
 
-    it('should apply jitter', () => {
+    it("should apply jitter", () => {
       const jitterBackoff = new ExponentialBackoff({ baseDelay: 100, jitter: 0.1 });
       const delays = [];
       for (let i = 0; i < 5; i++) {
@@ -58,32 +64,32 @@ describe('Backoff Strategies', () => {
     });
   });
 
-  describe('FixedBackoff', () => {
+  describe("FixedBackoff", () => {
     let backoff: BackoffStrategy;
 
     beforeEach(() => {
       backoff = new FixedBackoff(500);
     });
 
-    it('should create fixed backoff instance', () => {
+    it("should create fixed backoff instance", () => {
       expect(backoff).toBeInstanceOf(FixedBackoff);
     });
 
-    it('should return fixed delay', () => {
+    it("should return fixed delay", () => {
       for (let i = 0; i < 5; i++) {
         const delay = backoff.next();
         expect(delay).toBe(500);
       }
     });
 
-    it('should track attempts', () => {
+    it("should track attempts", () => {
       for (let i = 0; i < 3; i++) {
         backoff.next();
       }
       expect(backoff.getAttempts()).toBe(3);
     });
 
-    it('should reset attempts', () => {
+    it("should reset attempts", () => {
       backoff.next();
       backoff.next();
       expect(backoff.getAttempts()).toBe(2);
@@ -91,25 +97,25 @@ describe('Backoff Strategies', () => {
       expect(backoff.getAttempts()).toBe(0);
     });
 
-    it('should use default delay when not specified', () => {
+    it("should use default delay when not specified", () => {
       const defaultBackoff = new FixedBackoff();
       const delay = defaultBackoff.next();
       expect(delay).toBe(1000);
     });
   });
 
-  describe('LinearBackoff', () => {
+  describe("LinearBackoff", () => {
     let backoff: BackoffStrategy;
 
     beforeEach(() => {
       backoff = new LinearBackoff({ baseDelay: 100, maxDelay: 500 });
     });
 
-    it('should create linear backoff instance', () => {
+    it("should create linear backoff instance", () => {
       expect(backoff).toBeInstanceOf(LinearBackoff);
     });
 
-    it('should return linearly increasing delays', () => {
+    it("should return linearly increasing delays", () => {
       const delays = [];
       for (let i = 0; i < 5; i++) {
         delays.push(backoff.next());
@@ -122,14 +128,14 @@ describe('Backoff Strategies', () => {
       expect(delays[4]).toBe(500); // 达到最大延迟
     });
 
-    it('should respect max delay', () => {
+    it("should respect max delay", () => {
       for (let i = 0; i < 10; i++) {
         const delay = backoff.next();
         expect(delay).toBeLessThanOrEqual(500);
       }
     });
 
-    it('should reset attempts', () => {
+    it("should reset attempts", () => {
       backoff.next();
       backoff.next();
       expect(backoff.getAttempts()).toBe(2);
@@ -139,31 +145,31 @@ describe('Backoff Strategies', () => {
       expect(delay).toBe(100); // 重置后应该从基础延迟开始
     });
 
-    it('should use default values when not specified', () => {
+    it("should use default values when not specified", () => {
       const defaultBackoff = new LinearBackoff();
       const delay = defaultBackoff.next();
       expect(delay).toBe(1000);
     });
   });
 
-  describe('createBackoffStrategy', () => {
-    it('should create exponential backoff', () => {
-      const backoff = createBackoffStrategy('exponential');
+  describe("createBackoffStrategy", () => {
+    it("should create exponential backoff", () => {
+      const backoff = createBackoffStrategy("exponential");
       expect(backoff).toBeInstanceOf(ExponentialBackoff);
     });
 
-    it('should create fixed backoff', () => {
-      const backoff = createBackoffStrategy('fixed', { delay: 500 });
+    it("should create fixed backoff", () => {
+      const backoff = createBackoffStrategy("fixed", { delay: 500 });
       expect(backoff).toBeInstanceOf(FixedBackoff);
     });
 
-    it('should create linear backoff', () => {
-      const backoff = createBackoffStrategy('linear');
+    it("should create linear backoff", () => {
+      const backoff = createBackoffStrategy("linear");
       expect(backoff).toBeInstanceOf(LinearBackoff);
     });
 
-    it('should create exponential backoff by default', () => {
-      const backoff = createBackoffStrategy('unknown' as any);
+    it("should create exponential backoff by default", () => {
+      const backoff = createBackoffStrategy("unknown" as any);
       expect(backoff).toBeInstanceOf(ExponentialBackoff);
     });
   });
