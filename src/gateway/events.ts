@@ -30,8 +30,11 @@ export class EventManager {
    */
   public registerHandler(eventType: string, handler: EventHandler): void {
     try {
+      const isExisting = this.eventHandlers.has(eventType);
       this.eventHandlers.set(eventType, handler);
-      this.logger.info(`Registered handler for event type: ${eventType}`);
+      if (!isExisting) {
+        this.logger.info(`Registered handler for event type: ${eventType}`);
+      }
     } catch (error) {
       this.logger.error('Error registering event handler', error);
     }

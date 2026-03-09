@@ -115,7 +115,6 @@ export class GeminiProvider implements Provider {
             content: {
               parts: [{ text }],
             },
-            ...options,
           }),
           signal: AbortSignal.timeout(this.config.timeout!),
         },

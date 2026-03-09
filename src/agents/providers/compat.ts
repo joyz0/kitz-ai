@@ -63,6 +63,8 @@ export class ProviderCompat {
     // Gemini 兼容性层
     this.registerCompatibilityLayer('gemini', {
       normalizeRequest: (prompt, options) => {
+        // 从 options 中移除 temperature，因为它已经在 generationConfig 中
+        const { temperature, ...restOptions } = options;
         return {
           contents: [
             {
@@ -70,11 +72,11 @@ export class ProviderCompat {
             },
           ],
           generationConfig: {
-            temperature: options.temperature || 0.7,
+            temperature: temperature || 0.7,
             maxOutputTokens: options.maxTokens || 1000,
             ...options.generationConfig,
           },
-          ...options,
+          ...restOptions,
         };
       },
       normalizeResponse: (response) => {
@@ -165,16 +167,13 @@ export class ProviderCompat {
   ): Promise<ModelResponse> {
     for (const provider of providers) {
       try {
-        this.logger.debug(`Trying provider: ${provider.name}`);
-        // 这里需要根据实际的提供商实现来调用generate方法
-        // 暂时返回一个模拟响应
-        return {
-          success: true,
-          text: 'Mock response',
-          metadata: { provider: provider.name },
-        };
+        this.logger.debug(`Trying provider: ${provider.getName()}`);
+        const result = await provider.generate(prompt, options);
+        if (result.success) {
+          return result;
+        }
       } catch (error) {
-        this.logger.warn(`Error with provider ${provider.name}:`, error);
+        this.logger.warn(`Error with provider ${provider.getName()}:`, error);
       }
     }
 
@@ -194,12 +193,13 @@ export class ProviderCompat {
 
     for (const provider of providers) {
       try {
-        // 这里需要根据实际的提供商实现来检查可用性
-        // 暂时假设所有提供商都可用
-        available.push(provider);
+        const isAvailable = await provider.isAvailable();
+        if (isAvailable) {
+          available.push(provider);
+        }
       } catch (error) {
         this.logger.warn(
-          `Error checking availability for ${provider.name}:`,
+          `Error checking availability for ${provider.getName()}:`,
           error,
         );
       }

@@ -124,7 +124,7 @@ export class CLIProgram {
       this.logger.error('Error running CLI program', error);
       // 为了与测试兼容，使用与测试期望一致的错误消息格式
       this.tui.error(
-        'Error:',
+        'An error occurred:',
         error instanceof Error ? error.message : String(error),
       );
       this.helpSystem.showHelp();
@@ -162,7 +162,10 @@ export class CLIProgram {
       }
 
       try {
-        await this.run(args);
+        // 直接调用命令管理器执行命令，而不是通过 run 方法，以使用正确的错误消息格式
+        const command = args[0];
+        const commandArgs = args.slice(1);
+        await this.commandManager.executeCommand(command, commandArgs, {});
       } catch (error) {
         this.tui.error(
           'Error:',
