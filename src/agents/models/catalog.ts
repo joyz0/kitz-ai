@@ -1,106 +1,279 @@
-// 定义模型接口
-export interface Model {
+// 参考 openclaw 的 model-catalog.ts 实现
+// 增强模型目录管理
+
+import { getChildLogger } from '../../logger/logger.js';
+import type { OpenClawConfig } from '../../config/index.js';
+import { loadConfig } from '../../config/index.js';
+import { resolveOpenClawAgentDir } from '../agent-paths.js';
+import { ensureOpenClawModelsJson } from '../models-config.js';
+
+const log = getChildLogger({ name: 'model-catalog' });
+
+export type ModelInputType = "text" | "image" | "document";
+
+export type ModelCatalogEntry = {
   id: string;
   name: string;
   provider: string;
-  type: 'chat' | 'completion' | 'embedding' | 'image' | 'audio';
-  capabilities: string[];
-  default: boolean;
-  // 其他模型属性
+  contextWindow?: number;
+  reasoning?: boolean;
+  input?: ModelInputType[];
+};
+
+type DiscoveredModel = {
+  id: string;
+  name?: string;
+  provider: string;
+  contextWindow?: number;
+  reasoning?: boolean;
+  input?: ModelInputType[];
+};
+
+type PiSdkModule = typeof import('../pi-model-discovery.js');
+
+let modelCatalogPromise: Promise<ModelCatalogEntry[]> | null = null;
+let hasLoggedModelCatalogError = false;
+const defaultImportPiSdk = () => import('../pi-model-discovery.js');
+let importPiSdk = defaultImportPiSdk;
+
+const CODEX_PROVIDER = "openai-codex";
+const OPENAI_CODEX_GPT53_MODEL_ID = "gpt-5.3-codex";
+const OPENAI_CODEX_GPT53_SPARK_MODEL_ID = "gpt-5.3-codex-spark";
+const NON_PI_NATIVE_MODEL_PROVIDERS = new Set(["kilocode"]);
+
+function applyOpenAICodexSparkFallback(models: ModelCatalogEntry[]): void {
+  const hasSpark = models.some(
+    (entry) =>
+      entry.provider === CODEX_PROVIDER &&
+      entry.id.toLowerCase() === OPENAI_CODEX_GPT53_SPARK_MODEL_ID,
+  );
+  if (hasSpark) {
+    return;
+  }
+
+  const baseModel = models.find(
+    (entry) =>
+      entry.provider === CODEX_PROVIDER && entry.id.toLowerCase() === OPENAI_CODEX_GPT53_MODEL_ID,
+  );
+  if (!baseModel) {
+    return;
+  }
+
+  models.push({
+    ...baseModel,
+    id: OPENAI_CODEX_GPT53_SPARK_MODEL_ID,
+    name: OPENAI_CODEX_GPT53_SPARK_MODEL_ID,
+  });
 }
 
-// 定义模型目录接口
-export interface ModelCatalog {
-  getModel(id: string): Model | undefined;
-  getModels(): Model[];
-  getModelsByType(type: Model['type']): Model[];
-  getModelsByProvider(provider: string): Model[];
-  getDefaultModel(type: Model['type']): Model | undefined;
-  addModel(model: Model): void;
-  removeModel(id: string): void;
-  updateModel(model: Model): void;
+function normalizeConfiguredModelInput(input: unknown): ModelInputType[] | undefined {
+  if (!Array.isArray(input)) {
+    return undefined;
+  }
+  const normalized = input.filter(
+    (item): item is ModelInputType => item === "text" || item === "image" || item === "document",
+  );
+  return normalized.length > 0 ? normalized : undefined;
 }
 
-// 模型目录实现
-export class DefaultModelCatalog implements ModelCatalog {
-  private models: Map<string, Model> = new Map();
-
-  constructor(initialModels: Model[] = []) {
-    initialModels.forEach(model => {
-      this.models.set(model.id, model);
-    });
+function readConfiguredOptInProviderModels(config: OpenClawConfig): ModelCatalogEntry[] {
+  const providers = config.models?.providers;
+  if (!providers || typeof providers !== "object") {
+    return [];
   }
 
-  // 根据ID获取模型
-  getModel(id: string): Model | undefined {
-    return this.models.get(id);
+  const out: ModelCatalogEntry[] = [];
+  for (const [providerRaw, providerValue] of Object.entries(providers)) {
+    const provider = providerRaw.toLowerCase().trim();
+    if (!NON_PI_NATIVE_MODEL_PROVIDERS.has(provider)) {
+      continue;
+    }
+    if (!providerValue || typeof providerValue !== "object") {
+      continue;
+    }
+
+    const configuredModels = (providerValue as { models?: unknown }).models;
+    if (!Array.isArray(configuredModels)) {
+      continue;
+    }
+
+    for (const configuredModel of configuredModels) {
+      if (!configuredModel || typeof configuredModel !== "object") {
+        continue;
+      }
+      const idRaw = (configuredModel as { id?: unknown }).id;
+      if (typeof idRaw !== "string") {
+        continue;
+      }
+      const id = idRaw.trim();
+      if (!id) {
+        continue;
+      }
+      const rawName = (configuredModel as { name?: unknown }).name;
+      const name = (typeof rawName === "string" ? rawName : id).trim() || id;
+      const contextWindowRaw = (configuredModel as { contextWindow?: unknown }).contextWindow;
+      const contextWindow =
+        typeof contextWindowRaw === "number" && contextWindowRaw > 0 ? contextWindowRaw : undefined;
+      const reasoningRaw = (configuredModel as { reasoning?: unknown }).reasoning;
+      const reasoning = typeof reasoningRaw === "boolean" ? reasoningRaw : undefined;
+      const input = normalizeConfiguredModelInput((configuredModel as { input?: unknown }).input);
+      out.push({ id, name, provider, contextWindow, reasoning, input });
+    }
   }
 
-  // 获取所有模型
-  getModels(): Model[] {
-    return Array.from(this.models.values());
+  return out;
+}
+
+function mergeConfiguredOptInProviderModels(params: {
+  config: OpenClawConfig;
+  models: ModelCatalogEntry[];
+}): void {
+  const configured = readConfiguredOptInProviderModels(params.config);
+  if (configured.length === 0) {
+    return;
   }
 
-  // 根据类型获取模型
-  getModelsByType(type: Model['type']): Model[] {
-    return Array.from(this.models.values()).filter(model => model.type === type);
-  }
+  const seen = new Set(
+    params.models.map(
+      (entry) => `${entry.provider.toLowerCase().trim()}::${entry.id.toLowerCase().trim()}`,
+    ),
+  );
 
-  // 根据提供商获取模型
-  getModelsByProvider(provider: string): Model[] {
-    return Array.from(this.models.values()).filter(model => model.provider === provider);
-  }
-
-  // 获取默认模型
-  getDefaultModel(type: Model['type']): Model | undefined {
-    return Array.from(this.models.values()).find(model => model.type === type && model.default);
-  }
-
-  // 添加模型
-  addModel(model: Model): void {
-    this.models.set(model.id, model);
-  }
-
-  // 移除模型
-  removeModel(id: string): void {
-    this.models.delete(id);
-  }
-
-  // 更新模型
-  updateModel(model: Model): void {
-    this.models.set(model.id, model);
+  for (const entry of configured) {
+    const key = `${entry.provider.toLowerCase().trim()}::${entry.id.toLowerCase().trim()}`;
+    if (seen.has(key)) {
+      continue;
+    }
+    params.models.push(entry);
+    seen.add(key);
   }
 }
 
-// 创建默认模型
-const defaultModels: Model[] = [
-  {
-    id: 'openai-gpt-4',
-    name: 'GPT-4',
-    provider: 'openai',
-    type: 'chat',
-    capabilities: ['chat', 'vision'],
-    default: true,
-  },
-  {
-    id: 'openai-gpt-3.5-turbo',
-    name: 'GPT-3.5 Turbo',
-    provider: 'openai',
-    type: 'chat',
-    capabilities: ['chat'],
-    default: false,
-  },
-  {
-    id: 'google-gemini-pro',
-    name: 'Gemini Pro',
-    provider: 'google',
-    type: 'chat',
-    capabilities: ['chat', 'vision'],
-    default: false,
-  },
-];
+export function resetModelCatalogCacheForTest() {
+  modelCatalogPromise = null;
+  hasLoggedModelCatalogError = false;
+  importPiSdk = defaultImportPiSdk;
+}
 
-// 创建模型目录实例
-export function createModelCatalog(models: Model[] = defaultModels): ModelCatalog {
-  return new DefaultModelCatalog(models);
+// Test-only escape hatch: allow mocking the dynamic import to simulate transient failures.
+export function __setModelCatalogImportForTest(loader?: () => Promise<PiSdkModule>) {
+  importPiSdk = loader ?? defaultImportPiSdk;
+}
+
+export async function loadModelCatalog(params?: {
+  config?: OpenClawConfig;
+  useCache?: boolean;
+}): Promise<ModelCatalogEntry[]> {
+  if (params?.useCache === false) {
+    modelCatalogPromise = null;
+  }
+  if (modelCatalogPromise) {
+    return modelCatalogPromise;
+  }
+
+  modelCatalogPromise = (async () => {
+    const models: ModelCatalogEntry[] = [];
+    const sortModels = (entries: ModelCatalogEntry[]) =>
+      entries.sort((a, b) => {
+        const p = a.provider.localeCompare(b.provider);
+        if (p !== 0) {
+          return p;
+        }
+        return a.name.localeCompare(b.name);
+      });
+    try {
+      const cfg = params?.config ?? loadConfig();
+      await ensureOpenClawModelsJson(cfg);
+      // IMPORTANT: keep the dynamic import *inside* the try/catch.
+      // If this fails once (e.g. during a pnpm install that temporarily swaps node_modules),
+      // we must not poison the cache with a rejected promise (otherwise all channel handlers
+      // will keep failing until restart).
+      const piSdk = await importPiSdk();
+      const agentDir = resolveOpenClawAgentDir();
+      const { join } = await import("node:path");
+      const authStorage = piSdk.discoverAuthStorage(agentDir);
+      const registry = new (piSdk.ModelRegistry as unknown as {
+        new (
+          authStorage: unknown,
+          modelsFile: string,
+        ):
+          | Array<DiscoveredModel>
+          | {
+              getAll: () => Array<DiscoveredModel>;
+            };
+      })(authStorage, join(agentDir, "models.json"));
+      const entries = Array.isArray(registry) ? registry : registry.getAll();
+      for (const entry of entries) {
+        const id = String(entry?.id ?? "").trim();
+        if (!id) {
+          continue;
+        }
+        const provider = String(entry?.provider ?? "").trim();
+        if (!provider) {
+          continue;
+        }
+        const name = String(entry?.name ?? id).trim() || id;
+        const contextWindow =
+          typeof entry?.contextWindow === "number" && entry.contextWindow > 0
+            ? entry.contextWindow
+            : undefined;
+        const reasoning = typeof entry?.reasoning === "boolean" ? entry.reasoning : undefined;
+        const input = Array.isArray(entry?.input) ? entry.input : undefined;
+        models.push({ id, name, provider, contextWindow, reasoning, input });
+      }
+      mergeConfiguredOptInProviderModels({ config: cfg, models });
+      applyOpenAICodexSparkFallback(models);
+
+      if (models.length === 0) {
+        // If we found nothing, don't cache this result so we can try again.
+        modelCatalogPromise = null;
+      }
+
+      return sortModels(models);
+    } catch (error) {
+      if (!hasLoggedModelCatalogError) {
+        hasLoggedModelCatalogError = true;
+        log.warn(`Failed to load model catalog: ${String(error)}`);
+      }
+      // Don't poison the cache on transient dependency/filesystem issues.
+      modelCatalogPromise = null;
+      if (models.length > 0) {
+        return sortModels(models);
+      }
+      return [];
+    }
+  })();
+
+  return modelCatalogPromise;
+}
+
+/**
+ * Check if a model supports image input based on its catalog entry.
+ */
+export function modelSupportsVision(entry: ModelCatalogEntry | undefined): boolean {
+  return entry?.input?.includes("image") ?? false;
+}
+
+/**
+ * Check if a model supports native document/PDF input based on its catalog entry.
+ */
+export function modelSupportsDocument(entry: ModelCatalogEntry | undefined): boolean {
+  return entry?.input?.includes("document") ?? false;
+}
+
+/**
+ * Find a model in the catalog by provider and model ID.
+ */
+export function findModelInCatalog(
+  catalog: ModelCatalogEntry[],
+  provider: string,
+  modelId: string,
+): ModelCatalogEntry | undefined {
+  const normalizedProvider = provider.toLowerCase().trim();
+  const normalizedModelId = modelId.toLowerCase().trim();
+  return catalog.find(
+    (entry) =>
+      entry.provider.toLowerCase() === normalizedProvider &&
+      entry.id.toLowerCase() === normalizedModelId,
+  );
 }

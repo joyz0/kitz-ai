@@ -1,1 +1,2 @@
-Refer to local OpenClaw project "/Users/pl/Codes/kitz/kitz-openclaw" or "/Users/zhuzy/zhuzy/kitz-openclaw" for more details.
+实现模块功能时，必须参考 "/Users/pl/Codes/kitz/kitz-openclaw" or
+"/Users/zhuzy/zhuzy/kitz-openclaw" 项目的同模块逻辑，本项目的目的就是复刻openclaw项目。

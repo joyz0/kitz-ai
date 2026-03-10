@@ -1,94 +1,107 @@
-import type { ModelResponse } from './compat.js';
+// 参考 openclaw 的 models-config.providers.ts 实现
+// 实现更复杂的提供商注册和管理逻辑
 
-// 定义提供商接口
-export interface Provider {
-  id: string;
-  name: string;
-  models: string[];
-  // 其他提供商属性
-  getName(): string;
-  generate(prompt: string, options: any): Promise<ModelResponse>;
-  isAvailable(): Promise<boolean>;
+import { getChildLogger } from '../../logger/logger.js';
+import type { OpenClawConfig } from '../../config/index.js';
+
+const log = getChildLogger({ name: 'provider-registry' });
+
+export type ProviderConfig = {
+  apiKey?: string;
+  baseUrl?: string;
+  models?: Array<{
+    id: string;
+    name?: string;
+    contextWindow?: number;
+    maxTokens?: number;
+    reasoning?: boolean;
+    input?: Array<'text' | 'image' | 'document'>;
+  }>;
+  auth?: 'api-key' | 'aws-sdk' | 'oauth' | 'token';
+};
+
+export type ProviderRegistry = {
+  providers: Record<string, ProviderConfig>;
+  normalizeProviders: (params: { providers: Record<string, ProviderConfig>; agentDir: string }) => Record<string, ProviderConfig>;
+  resolveImplicitProviders: (params: { agentDir: string; explicitProviders: Record<string, ProviderConfig> }) => Promise<Record<string, ProviderConfig>>;
+  resolveImplicitBedrockProvider: (params: { agentDir: string; config: OpenClawConfig }) => Promise<ProviderConfig | undefined>;
+  resolveImplicitCopilotProvider: (params: { agentDir: string }) => Promise<ProviderConfig | undefined>;
+};
+
+export function normalizeProviderId(provider: string): string {
+  const normalized = provider.toLowerCase().trim();
+  const aliases: Record<string, string> = {
+    'openai-codex': 'openai-codex',
+    'google': 'google',
+    'anthropic': 'anthropic',
+    'bedrock': 'amazon-bedrock',
+    'amazon-bedrock': 'amazon-bedrock',
+    'github-copilot': 'github-copilot',
+    'copilot': 'github-copilot',
+    'zai': 'zai',
+    'z-ai': 'zai',
+    'openrouter': 'openrouter',
+    'litellm': 'litellm',
+    'vercel-ai-gateway': 'vercel-ai-gateway',
+    'cloudflare-ai-gateway': 'cloudflare-ai-gateway',
+    'huggingface': 'huggingface',
+    'hf': 'huggingface',
+    'mistral': 'mistral',
+    'moonshot': 'moonshot',
+    'minimax': 'minimax',
+    'nvidia': 'nvidia',
+    'together': 'together',
+    'qianfan': 'qianfan',
+    'ollama': 'ollama',
+    'vllm': 'vllm',
+    'kilocode': 'kilocode',
+  };
+  return aliases[normalized] || normalized;
 }
 
-// 定义提供商注册表接口
-export interface ProviderRegistry {
-  getProvider(id: string): Provider | undefined;
-  getProviders(): Provider[];
-  registerProvider(provider: Provider): void;
-  unregisterProvider(id: string): void;
-  updateProvider(provider: Provider): void;
+export function normalizeProviders(params: { providers: Record<string, ProviderConfig>; agentDir: string }): Record<string, ProviderConfig> {
+  const { providers, agentDir } = params;
+  const normalized: Record<string, ProviderConfig> = {};
+  
+  for (const [key, config] of Object.entries(providers)) {
+    const normalizedKey = normalizeProviderId(key);
+    normalized[normalizedKey] = {
+      ...config,
+      models: config.models?.map(model => ({
+        ...model,
+        id: model.id.trim(),
+        name: model.name?.trim() || model.id.trim(),
+      }))
+    };
+  }
+  
+  return normalized;
 }
 
-// 提供商注册表实现
-export class DefaultProviderRegistry implements ProviderRegistry {
-  private providers: Map<string, Provider> = new Map();
-
-  constructor(initialProviders: Provider[] = []) {
-    initialProviders.forEach(provider => {
-      this.providers.set(provider.id, provider);
-    });
-  }
-
-  // 根据ID获取提供商
-  getProvider(id: string): Provider | undefined {
-    return this.providers.get(id);
-  }
-
-  // 获取所有提供商
-  getProviders(): Provider[] {
-    return Array.from(this.providers.values());
-  }
-
-  // 注册提供商
-  registerProvider(provider: Provider): void {
-    this.providers.set(provider.id, provider);
-  }
-
-  // 注销提供商
-  unregisterProvider(id: string): void {
-    this.providers.delete(id);
-  }
-
-  // 更新提供商
-  updateProvider(provider: Provider): void {
-    this.providers.set(provider.id, provider);
-  }
+export async function resolveImplicitProviders(params: { agentDir: string; explicitProviders: Record<string, ProviderConfig> }): Promise<Record<string, ProviderConfig>> {
+  // 这里实现从环境变量、默认配置等获取隐式提供商的逻辑
+  // 暂时返回空对象，后续可以根据 openclaw 的实现进行扩展
+  return {};
 }
 
-// 创建默认提供商
-const defaultProviders: Provider[] = [
-  {
-    id: 'openai',
-    name: 'OpenAI',
-    models: ['openai-gpt-4', 'openai-gpt-3.5-turbo'],
-    getName() {
-      return this.name;
-    },
-    async generate(prompt: string, options: any) {
-      return { text: '', success: true };
-    },
-    async isAvailable() {
-      return true;
-    },
-  },
-  {
-    id: 'google',
-    name: 'Google',
-    models: ['google-gemini-pro'],
-    getName() {
-      return this.name;
-    },
-    async generate(prompt: string, options: any) {
-      return { text: '', success: true };
-    },
-    async isAvailable() {
-      return true;
-    },
-  },
-];
+export async function resolveImplicitBedrockProvider(params: { agentDir: string; config: OpenClawConfig }): Promise<ProviderConfig | undefined> {
+  // 这里实现解析 Amazon Bedrock 提供商的逻辑
+  // 暂时返回 undefined，后续可以根据 openclaw 的实现进行扩展
+  return undefined;
+}
 
-// 创建提供商注册表实例
-export function createProviderRegistry(providers: Provider[] = defaultProviders): ProviderRegistry {
-  return new DefaultProviderRegistry(providers);
+export async function resolveImplicitCopilotProvider(params: { agentDir: string }): Promise<ProviderConfig | undefined> {
+  // 这里实现解析 GitHub Copilot 提供商的逻辑
+  // 暂时返回 undefined，后续可以根据 openclaw 的实现进行扩展
+  return undefined;
+}
+
+export function createProviderRegistry(): ProviderRegistry {
+  return {
+    providers: {},
+    normalizeProviders,
+    resolveImplicitProviders,
+    resolveImplicitBedrockProvider,
+    resolveImplicitCopilotProvider,
+  };
 }

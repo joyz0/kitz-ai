@@ -1,5 +1,8 @@
+// 参考 openclaw 的 model-compat.ts 实现
+// 实现更完善的提供商兼容性处理
+
 import { getChildLogger, type Logger } from "../../logger/logger.js";
-import type { Provider } from "./registry.js";
+import type { ProviderConfig } from "./registry.js";
 
 export interface ModelResponse {
   success: boolean;
@@ -13,6 +16,7 @@ export interface ProviderCompatibilityLayer {
   normalizeRequest(prompt: string, options: any): any;
   normalizeResponse(response: any): ModelResponse;
   getModelMapping(model: string): string;
+  getProviderSpecificOptions(options: any): any;
 }
 
 export class ProviderCompat {
@@ -32,11 +36,18 @@ export class ProviderCompat {
     // OpenAI 兼容性层
     this.registerCompatibilityLayer("openai", {
       normalizeRequest: (prompt, options) => {
+        const messages = Array.isArray(options.messages) 
+          ? options.messages 
+          : [{ role: "user", content: prompt }];
+        
         return {
           model: options.model || "gpt-3.5-turbo",
-          messages: [{ role: "user", content: prompt }],
+          messages,
           temperature: options.temperature || 0.7,
           max_tokens: options.maxTokens || 1000,
+          top_p: options.topP || 1.0,
+          frequency_penalty: options.frequencyPenalty || 0.0,
+          presence_penalty: options.presencePenalty || 0.0,
           ...options,
         };
       },
@@ -55,28 +66,63 @@ export class ProviderCompat {
         const mappings: Record<string, string> = {
           "gpt-3.5": "gpt-3.5-turbo",
           "gpt-4": "gpt-4",
+          "gpt-4-vision": "gpt-4-vision-preview",
+          "gpt-5": "gpt-5-turbo",
         };
         return mappings[model] || model;
+      },
+      getProviderSpecificOptions: (options) => {
+        return {
+          temperature: options.temperature,
+          max_tokens: options.maxTokens,
+          top_p: options.topP,
+          frequency_penalty: options.frequencyPenalty,
+          presence_penalty: options.presencePenalty,
+          ...options,
+        };
       },
     });
 
     // Gemini 兼容性层
     this.registerCompatibilityLayer("gemini", {
       normalizeRequest: (prompt, options) => {
-        // 从 options 中移除 temperature，因为它已经在 generationConfig 中
-        const { temperature, ...restOptions } = options;
-        return {
-          contents: [
+        let contents = options.contents;
+        if (!contents) {
+          contents = [
             {
               parts: [{ text: prompt }],
             },
-          ],
+          ];
+        }
+        
+        return {
+          contents,
           generationConfig: {
-            temperature: temperature || 0.7,
+            temperature: options.temperature || 0.7,
             maxOutputTokens: options.maxTokens || 1000,
+            topP: options.topP || 1.0,
+            topK: options.topK || 40,
             ...options.generationConfig,
           },
-          ...restOptions,
+          safetySettings: options.safetySettings || [
+            {
+              category: 'HARM_CATEGORY_HARASSMENT',
+              threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+            },
+            {
+              category: 'HARM_CATEGORY_HATE_SPEECH',
+              threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+            },
+            {
+              category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+              threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+            },
+            {
+              category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+              threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+            },
+          ],
+          ...options,
         };
       },
       normalizeResponse: (response) => {
@@ -93,9 +139,64 @@ export class ProviderCompat {
       getModelMapping: (model) => {
         const mappings: Record<string, string> = {
           gemini: "gemini-pro",
+          "gemini-vision": "gemini-pro-vision",
           "gemini-embedding": "embedding-001",
+          "gemini-1.5": "gemini-1.5-pro",
         };
         return mappings[model] || model;
+      },
+      getProviderSpecificOptions: (options) => {
+        return {
+          generationConfig: options.generationConfig,
+          safetySettings: options.safetySettings,
+          ...options,
+        };
+      },
+    });
+
+    // Anthropic 兼容性层
+    this.registerCompatibilityLayer("anthropic", {
+      normalizeRequest: (prompt, options) => {
+        const messages = Array.isArray(options.messages) 
+          ? options.messages 
+          : [{ role: "user", content: prompt }];
+        
+        return {
+          model: options.model || "claude-3-opus-20240229",
+          messages,
+          temperature: options.temperature || 0.7,
+          max_tokens: options.maxTokens || 1000,
+          top_p: options.topP || 1.0,
+          ...options,
+        };
+      },
+      normalizeResponse: (response) => {
+        return {
+          success: true,
+          text: response.content[0]?.text || "",
+          metadata: {
+            model: response.model,
+            usage: response.usage,
+            finishReason: response.stop_reason,
+          },
+        };
+      },
+      getModelMapping: (model) => {
+        const mappings: Record<string, string> = {
+          claude: "claude-3-opus-20240229",
+          "claude-3": "claude-3-opus-20240229",
+          "claude-3-sonnet": "claude-3-sonnet-20240229",
+          "claude-3-haiku": "claude-3-haiku-20240229",
+        };
+        return mappings[model] || model;
+      },
+      getProviderSpecificOptions: (options) => {
+        return {
+          temperature: options.temperature,
+          max_tokens: options.maxTokens,
+          top_p: options.topP,
+          ...options,
+        };
       },
     });
   }
@@ -136,7 +237,7 @@ export class ProviderCompat {
     }
     return {
       success: true,
-      text: response.text || "",
+      text: response.text || response.content || "",
       metadata: response.metadata || {},
     };
   }
@@ -153,48 +254,89 @@ export class ProviderCompat {
   }
 
   /**
-   * 跨提供商调用
+   * 获取提供商特定选项
    */
-  public async crossProviderCall(
-    providers: Provider[],
-    prompt: string,
-    options: any
-  ): Promise<ModelResponse> {
-    for (const provider of providers) {
-      try {
-        this.logger.debug(`Trying provider: ${provider.getName()}`);
-        const result = await provider.generate(prompt, options);
-        if (result.success) {
-          return result;
-        }
-      } catch (error) {
-        this.logger.warn(`Error with provider ${provider.getName()}:`, error);
-      }
+  public getProviderSpecificOptions(provider: string, options: any): any {
+    const layer = this.getCompatibilityLayer(provider);
+    if (layer) {
+      return layer.getProviderSpecificOptions(options);
     }
-
-    return {
-      success: false,
-      error: "All providers failed",
-    };
+    return options;
   }
 
   /**
-   * 获取可用的提供商
+   * 检测提供商类型
    */
-  public async getAvailableProviders(providers: Provider[]): Promise<Provider[]> {
-    const available: Provider[] = [];
+  public detectProviderType(modelId: string): string | undefined {
+    const providerPrefixes: Record<string, string> = {
+      gpt: "openai",
+      gemini: "gemini",
+      claude: "anthropic",
+      llama: "ollama",
+      mistral: "mistral",
+      mixtral: "mistral",
+      moonshot: "moonshot",
+      qwen: "qianfan",
+      minimax: "minimax",
+      nvidia: "nvidia",
+      together: "together",
+      huggingface: "huggingface",
+      hf: "huggingface",
+    };
 
-    for (const provider of providers) {
-      try {
-        const isAvailable = await provider.isAvailable();
-        if (isAvailable) {
-          available.push(provider);
-        }
-      } catch (error) {
-        this.logger.warn(`Error checking availability for ${provider.getName()}:`, error);
+    for (const [prefix, provider] of Object.entries(providerPrefixes)) {
+      if (modelId.toLowerCase().startsWith(prefix)) {
+        return provider;
       }
     }
 
-    return available;
+    return undefined;
+  }
+
+  /**
+   * 验证提供商配置
+   */
+  public validateProviderConfig(provider: string, config: ProviderConfig): { valid: boolean; errors: string[] } {
+    const errors: string[] = [];
+
+    switch (provider) {
+      case "openai":
+      case "gemini":
+      case "anthropic":
+      case "mistral":
+      case "moonshot":
+      case "qianfan":
+      case "minimax":
+      case "nvidia":
+      case "together":
+      case "huggingface":
+        if (!config.apiKey) {
+          errors.push(`API key is required for ${provider} provider`);
+        }
+        break;
+      case "ollama":
+        // Ollama 不需要 API key
+        break;
+      default:
+        errors.push(`Unknown provider: ${provider}`);
+    }
+
+    return {
+      valid: errors.length === 0,
+      errors,
+    };
   }
 }
+
+/**
+ * 创建提供商兼容性实例
+ */
+export function createProviderCompat(): ProviderCompat {
+  return new ProviderCompat();
+}
+
+/**
+ * 全局提供商兼容性实例
+ */
+export const providerCompat = createProviderCompat();
+
