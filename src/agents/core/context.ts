@@ -1,11 +1,11 @@
 // 参考 openclaw 的 context.ts 实现
 // 实现模型上下文窗口缓存和解析逻辑
 
-import { loadConfig } from '../../config/index.js';
-import type { OpenClawConfig } from '../../config/index.js';
-import { computeBackoff, type BackoffPolicy } from '../../infra/backoff.js';
-import { resolveOpenClawAgentDir } from '../agent-paths.js';
-import { ensureOpenClawModelsJson } from '../models-config.js';
+import { loadConfig } from "../../config/index.js";
+import type { OpenClawConfig } from "../../config/index.js";
+import { computeBackoff, type BackoffPolicy } from "../../infra/backoff.js";
+import { resolveOpenClawAgentDir } from "../agent-paths.js";
+import { ensureOpenClawModelsJson } from "../models-config.js";
 
 type ModelEntry = { id: string; contextWindow?: number };
 type ModelRegistryLike = {
@@ -34,7 +34,8 @@ export function applyDiscoveredContextWindows(params: {
     if (!model?.id) {
       continue;
     }
-    const contextWindow = typeof model.contextWindow === "number" ? Math.trunc(model.contextWindow) : undefined;
+    const contextWindow =
+      typeof model.contextWindow === "number" ? Math.trunc(model.contextWindow) : undefined;
     if (!contextWindow || contextWindow <= 0) {
       continue;
     }
@@ -61,7 +62,8 @@ export function applyConfiguredContextWindows(params: {
     }
     for (const model of provider.models) {
       const modelId = typeof model?.id === "string" ? model.id : undefined;
-      const contextWindow = typeof model?.contextWindow === "number" ? model.contextWindow : undefined;
+      const contextWindow =
+        typeof model?.contextWindow === "number" ? model.contextWindow : undefined;
       if (!modelId || !contextWindow || contextWindow <= 0) {
         continue;
       }
@@ -120,11 +122,14 @@ function ensureContextWindowCacheLoaded(): Promise<void> {
     }
 
     try {
-      const { discoverAuthStorage, discoverModels } = await import('../pi-model-discovery.js');
+      const { discoverAuthStorage, discoverModels } = await import("../pi-model-discovery.js");
       const agentDir = resolveOpenClawAgentDir();
       const authStorage = discoverAuthStorage(agentDir);
       const modelRegistry = discoverModels(authStorage, agentDir) as unknown as ModelRegistryLike;
-      const models = typeof modelRegistry.getAvailable === "function" ? modelRegistry.getAvailable() : modelRegistry.getAll();
+      const models =
+        typeof modelRegistry.getAvailable === "function"
+          ? modelRegistry.getAvailable()
+          : modelRegistry.getAll();
       applyDiscoveredContextWindows({
         cache: MODEL_CACHE,
         models,
@@ -159,7 +164,7 @@ void ensureContextWindowCacheLoaded();
 function resolveConfiguredModelParams(
   cfg: OpenClawConfig | undefined,
   provider: string,
-  model: string,
+  model: string
 ): Record<string, unknown> | undefined {
   const models = cfg?.agents?.defaults?.models;
   if (!models) {
@@ -204,7 +209,9 @@ function isAnthropic1MModel(provider: string, model: string): boolean {
     return false;
   }
   const normalized = model.trim().toLowerCase();
-  const modelId = normalized.includes("/") ? (normalized.split("/").at(-1) ?? normalized) : normalized;
+  const modelId = normalized.includes("/")
+    ? (normalized.split("/").at(-1) ?? normalized)
+    : normalized;
   return ANTHROPIC_1M_MODEL_PREFIXES.some((prefix) => modelId.startsWith(prefix));
 }
 
