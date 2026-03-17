@@ -1,18 +1,22 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   getLogger,
   getChildLogger,
   registerLogTransport,
   resetLogger,
-} from '../logger.js';
-import { pruneOldRollingLogs } from '../logger.js';
-import fs from 'node:fs';
-import fsPromises from 'node:fs/promises';
-import path from 'node:path';
+  toPinoLikeLogger,
+  getResolvedLoggerSettings,
+  setLoggerOverride,
+  isFileLogLevelEnabled,
+} from "../logger.js";
+import { pruneOldRollingLogs } from "../logger.js";
+import fs from "node:fs";
+import fsPromises from "node:fs/promises";
+import path from "node:path";
 
-describe('Logger', () => {
-  const testDir = path.join(process.cwd(), 'test-temp-logs');
-  const testLogFile = path.join(testDir, 'test.log');
+describe("Logger", () => {
+  const testDir = path.join(process.cwd(), "test-temp-logs");
+  const testLogFile = path.join(testDir, "test.log");
 
   beforeEach(() => {
     if (!fs.existsSync(testDir)) {
@@ -29,46 +33,43 @@ describe('Logger', () => {
     resetLogger();
   });
 
-  describe('getLogger', () => {
-    it('should return a logger instance', () => {
+  describe("getLogger", () => {
+    it("should return a logger instance", () => {
       const logger = getLogger();
       expect(logger).toBeDefined();
-      expect(typeof logger.info).toBe('function');
-      expect(typeof logger.warn).toBe('function');
-      expect(typeof logger.error).toBe('function');
+      expect(typeof logger.info).toBe("function");
+      expect(typeof logger.warn).toBe("function");
+      expect(typeof logger.error).toBe("function");
     });
 
-    it('should return the same logger instance on subsequent calls', () => {
+    it("should return the same logger instance on subsequent calls", () => {
       const logger1 = getLogger();
       const logger2 = getLogger();
       expect(logger1).toBe(logger2);
     });
   });
 
-  describe('getChildLogger', () => {
-    it('should return a child logger instance', () => {
+  describe("getChildLogger", () => {
+    it("should return a child logger instance", () => {
       const parentLogger = getLogger();
-      const childLogger = getChildLogger({ component: 'test' });
+      const childLogger = getChildLogger({ component: "test" });
       expect(childLogger).toBeDefined();
-      expect(typeof childLogger.info).toBe('function');
+      expect(typeof childLogger.info).toBe("function");
     });
 
-    it('should allow setting a custom log level', () => {
-      const childLogger = getChildLogger(
-        { component: 'test' },
-        { level: 'warn' },
-      );
+    it("should allow setting a custom log level", () => {
+      const childLogger = getChildLogger({ component: "test" }, { level: "warn" });
       expect(childLogger).toBeDefined();
     });
   });
 
-  describe('registerLogTransport', () => {
-    it('should register an external transport', () => {
+  describe("registerLogTransport", () => {
+    it("should register an external transport", () => {
       const transport = vi.fn();
       const unregister = registerLogTransport(transport);
 
       const logger = getLogger();
-      logger.info('test message');
+      logger.info("test message");
 
       // The transport should be called
       expect(transport).toHaveBeenCalled();
@@ -78,8 +79,8 @@ describe('Logger', () => {
     });
   });
 
-  describe('resetLogger', () => {
-    it('should reset the logger instance', () => {
+  describe("resetLogger", () => {
+    it("should reset the logger instance", () => {
       const logger1 = getLogger();
       resetLogger();
       const logger2 = getLogger();
@@ -87,8 +88,8 @@ describe('Logger', () => {
     });
   });
 
-  describe('log buffering', () => {
-    it('should buffer logs and write asynchronously', async () => {
+  describe("log buffering", () => {
+    it("should buffer logs and write asynchronously", async () => {
       const logger = getLogger();
       const logCount = 100;
 
@@ -101,36 +102,36 @@ describe('Logger', () => {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Check if logs were written to default location
-      const logsDir = path.join(process.cwd(), 'logs');
+      const logsDir = path.join(process.cwd(), "logs");
       expect(fs.existsSync(logsDir)).toBe(true);
     });
   });
 
-  describe('error handling', () => {
-    it('should not throw errors when logging', async () => {
+  describe("error handling", () => {
+    it("should not throw errors when logging", async () => {
       const logger = getLogger();
 
       // This should not throw an error
       expect(() => {
-        logger.info('Test log that should not throw');
+        logger.info("Test log that should not throw");
       }).not.toThrow();
     });
   });
 
-  describe('log redaction', () => {
-    it('should redact sensitive information in logs', async () => {
+  describe("log redaction", () => {
+    it("should redact sensitive information in logs", async () => {
       const transport = vi.fn();
       registerLogTransport(transport);
 
       const logger = getLogger();
       const sensitiveData = {
-        apiKey: 'sk-1234567890abcdef1234567890abcdef',
-        token: 'ghp_1234567890abcdef1234567890abcdef',
-        password: 'mysecretpassword',
-        message: 'Test message with apiKey=sk-1234567890abcdef1234567890abcdef',
+        apiKey: "sk-1234567890abcdef1234567890abcdef",
+        token: "ghp_1234567890abcdef1234567890abcdef",
+        password: "mysecretpassword",
+        message: "Test message with apiKey=sk-1234567890abcdef1234567890abcdef",
       };
 
-      logger.info('Test log with sensitive data', sensitiveData);
+      logger.info("Test log with sensitive data", sensitiveData);
 
       // Wait for log to be processed
       await new Promise((resolve) => setTimeout(resolve, 100));
@@ -143,22 +144,22 @@ describe('Logger', () => {
       expect(logObj).toBeDefined();
     });
 
-    it('should redact nested sensitive information', async () => {
+    it("should redact nested sensitive information", async () => {
       const transport = vi.fn();
       registerLogTransport(transport);
 
       const logger = getLogger();
       const nestedData = {
         user: {
-          name: 'John Doe',
+          name: "John Doe",
           credentials: {
-            password: 'secret123',
-            token: 'Bearer abcdef123456',
+            password: "secret123",
+            token: "Bearer abcdef123456",
           },
         },
       };
 
-      logger.info('Test log with nested sensitive data', nestedData);
+      logger.info("Test log with nested sensitive data", nestedData);
 
       // Wait for log to be processed
       await new Promise((resolve) => setTimeout(resolve, 100));
@@ -172,18 +173,18 @@ describe('Logger', () => {
     });
   });
 
-  describe('different log levels', () => {
-    it('should log at different levels', async () => {
+  describe("different log levels", () => {
+    it("should log at different levels", async () => {
       const transport = vi.fn();
       registerLogTransport(transport);
 
       const logger = getLogger();
 
       // Log at different levels
-      logger.debug('Debug message');
-      logger.info('Info message');
-      logger.warn('Warn message');
-      logger.error('Error message');
+      logger.debug("Debug message");
+      logger.info("Info message");
+      logger.warn("Warn message");
+      logger.error("Error message");
 
       // Wait for logs to be processed
       await new Promise((resolve) => setTimeout(resolve, 100));
@@ -193,12 +194,12 @@ describe('Logger', () => {
     });
   });
 
-  describe('silent mode', () => {
-    it('should not write to file in silent mode', async () => {
+  describe("silent mode", () => {
+    it("should not write to file in silent mode", async () => {
       // Mock the config to return silent mode
-      vi.mock('../config.js', () => ({
+      vi.mock("../config.js", () => ({
         resolveLoggingConfig: vi.fn(() => ({
-          level: 'silent',
+          level: "silent",
         })),
       }));
 
@@ -206,22 +207,22 @@ describe('Logger', () => {
       resetLogger();
 
       const logger = getLogger();
-      logger.info('This should not be written to file');
+      logger.info("This should not be written to file");
 
       // Wait for any potential file operations
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // The log file should not be created in silent mode
-      const logsDir = path.join(process.cwd(), 'logs');
-      const logFile = path.join(logsDir, 'app.log');
+      const logsDir = path.join(process.cwd(), "logs");
+      const logFile = path.join(logsDir, "app.log");
       expect(fs.existsSync(logFile)).toBe(false);
     });
   });
 
-  describe('log file size limit', () => {
-    it('should handle log file size limit', async () => {
+  describe("log file size limit", () => {
+    it("should handle log file size limit", async () => {
       // Mock the config to return a small maxFileBytes
-      vi.mock('../config.js', () => ({
+      vi.mock("../config.js", () => ({
         resolveLoggingConfig: vi.fn(() => ({
           maxFileBytes: 100, // Very small limit for testing
         })),
@@ -242,13 +243,13 @@ describe('Logger', () => {
 
       // The logger should not throw an error
       expect(() => {
-        logger.info('Additional log after limit');
+        logger.info("Additional log after limit");
       }).not.toThrow();
     });
   });
 
-  describe('log settings change detection', () => {
-    it('should detect and apply new settings', async () => {
+  describe("log settings change detection", () => {
+    it("should detect and apply new settings", async () => {
       const initialTransport = vi.fn();
       registerLogTransport(initialTransport);
 
@@ -256,9 +257,9 @@ describe('Logger', () => {
       const logger1 = getLogger();
 
       // Mock the config to return different settings
-      vi.mock('../config.js', () => ({
+      vi.mock("../config.js", () => ({
         resolveLoggingConfig: vi.fn(() => ({
-          level: 'debug',
+          level: "debug",
         })),
       }));
 
@@ -273,10 +274,10 @@ describe('Logger', () => {
     });
   });
 
-  describe('rolling log files', () => {
-    it('should use rolling log files with date suffix', async () => {
+  describe("rolling log files", () => {
+    it("should use rolling log files with date suffix", async () => {
       // Mock the config to use default settings (which should use rolling logs)
-      vi.mock('../config.js', () => ({
+      vi.mock("../config.js", () => ({
         resolveLoggingConfig: vi.fn(() => ({})),
       }));
 
@@ -284,27 +285,25 @@ describe('Logger', () => {
       resetLogger();
 
       const logger = getLogger();
-      logger.info('Test log for rolling file');
+      logger.info("Test log for rolling file");
 
       // Wait for log to be processed
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Check if log file was created with date suffix
-      const logsDir = path.join(process.cwd(), 'logs');
+      const logsDir = path.join(process.cwd(), "logs");
       expect(fs.existsSync(logsDir)).toBe(true);
 
       const files = fs.readdirSync(logsDir);
-      const logFiles = files.filter(
-        (file) => file.startsWith('app-') && file.endsWith('.log'),
-      );
+      const logFiles = files.filter((file) => file.startsWith("app-") && file.endsWith(".log"));
       expect(logFiles.length).toBeGreaterThan(0);
     });
   });
 
-  describe('old log cleanup', () => {
-    it('should clean up old log files', async () => {
+  describe("old log cleanup", () => {
+    it("should clean up old log files", async () => {
       // Create a test log directory
-      const testLogDir = path.join(process.cwd(), 'test-old-logs');
+      const testLogDir = path.join(process.cwd(), "test-old-logs");
       if (!fs.existsSync(testLogDir)) {
         fs.mkdirSync(testLogDir, { recursive: true });
       }
@@ -312,17 +311,17 @@ describe('Logger', () => {
       // Create old log files with dates in the past
       const oldDate = new Date();
       oldDate.setDate(oldDate.getDate() - 2); // 2 days ago
-      const oldDateStr = oldDate.toISOString().split('T')[0];
+      const oldDateStr = oldDate.toISOString().split("T")[0];
       const oldLogFile = path.join(testLogDir, `app-${oldDateStr}.log`);
-      fs.writeFileSync(oldLogFile, 'Old log content');
+      fs.writeFileSync(oldLogFile, "Old log content");
       // Set the file's mtime to 2 days ago
       fs.utimesSync(oldLogFile, oldDate, oldDate);
 
       // Create a recent log file
       const recentDate = new Date();
-      const recentDateStr = recentDate.toISOString().split('T')[0];
+      const recentDateStr = recentDate.toISOString().split("T")[0];
       const recentLogFile = path.join(testLogDir, `app-${recentDateStr}.log`);
-      fs.writeFileSync(recentLogFile, 'Recent log content');
+      fs.writeFileSync(recentLogFile, "Recent log content");
 
       // Directly call the cleanup function
       await pruneOldRollingLogs(testLogDir);
@@ -339,12 +338,12 @@ describe('Logger', () => {
     });
   });
 
-  describe('different console styles', () => {
-    it('should support different console styles', async () => {
+  describe("different console styles", () => {
+    it("should support different console styles", async () => {
       // Mock the config to use JSON console style
-      vi.mock('../config.js', () => ({
+      vi.mock("../config.js", () => ({
         resolveLoggingConfig: vi.fn(() => ({
-          consoleStyle: 'json',
+          consoleStyle: "json",
         })),
       }));
 
@@ -355,13 +354,13 @@ describe('Logger', () => {
 
       // This should not throw an error
       expect(() => {
-        logger.info('Test log with JSON style');
+        logger.info("Test log with JSON style");
       }).not.toThrow();
 
       // Mock the config to use compact console style
-      vi.mock('../config.js', () => ({
+      vi.mock("../config.js", () => ({
         resolveLoggingConfig: vi.fn(() => ({
-          consoleStyle: 'compact',
+          consoleStyle: "compact",
         })),
       }));
 
@@ -372,8 +371,107 @@ describe('Logger', () => {
 
       // This should not throw an error
       expect(() => {
-        logger2.info('Test log with compact style');
+        logger2.info("Test log with compact style");
       }).not.toThrow();
+    });
+  });
+
+  describe("toPinoLikeLogger", () => {
+    it("should return a pino-like logger", () => {
+      const logger = getLogger();
+      const pinoLogger = toPinoLikeLogger(logger, "info");
+
+      expect(pinoLogger).toBeDefined();
+      expect(pinoLogger.level).toBe("info");
+      expect(typeof pinoLogger.child).toBe("function");
+      expect(typeof pinoLogger.trace).toBe("function");
+      expect(typeof pinoLogger.debug).toBe("function");
+      expect(typeof pinoLogger.info).toBe("function");
+      expect(typeof pinoLogger.warn).toBe("function");
+      expect(typeof pinoLogger.error).toBe("function");
+      expect(typeof pinoLogger.fatal).toBe("function");
+    });
+
+    it("should create child loggers that are also pino-like", () => {
+      const logger = getLogger();
+      const pinoLogger = toPinoLikeLogger(logger, "info");
+      const childLogger = pinoLogger.child({ component: "test" });
+
+      expect(childLogger).toBeDefined();
+      expect(typeof childLogger.info).toBe("function");
+      expect(typeof childLogger.child).toBe("function");
+    });
+  });
+
+  describe("getResolvedLoggerSettings", () => {
+    it("should return resolved logger settings", () => {
+      const settings = getResolvedLoggerSettings();
+
+      expect(settings).toBeDefined();
+      expect(settings.level).toBeDefined();
+      expect(settings.file).toBeDefined();
+      expect(settings.maxFileBytes).toBeDefined();
+      expect(settings.consoleLevel).toBeDefined();
+      expect(settings.consoleStyle).toBeDefined();
+    });
+  });
+
+  describe("setLoggerOverride", () => {
+    it("should override logger settings", () => {
+      // Set override
+      setLoggerOverride({ level: "debug" });
+      resetLogger();
+
+      const settings = getResolvedLoggerSettings();
+      expect(settings.level).toBe("debug");
+
+      // Reset override
+      setLoggerOverride(null);
+      resetLogger();
+    });
+  });
+
+  describe("isFileLogLevelEnabled", () => {
+    it("should return true for enabled log levels", () => {
+      // Set override to info level
+      setLoggerOverride({ level: "info" });
+      resetLogger();
+
+      expect(isFileLogLevelEnabled("info")).toBe(true);
+      expect(isFileLogLevelEnabled("warn")).toBe(true);
+      expect(isFileLogLevelEnabled("error")).toBe(true);
+
+      // Reset override
+      setLoggerOverride(null);
+      resetLogger();
+    });
+
+    it("should return false for disabled log levels", () => {
+      // Set override to warn level
+      setLoggerOverride({ level: "warn" });
+      resetLogger();
+
+      expect(isFileLogLevelEnabled("debug")).toBe(false);
+      expect(isFileLogLevelEnabled("info")).toBe(false);
+
+      // Reset override
+      setLoggerOverride(null);
+      resetLogger();
+    });
+
+    it("should return false in silent mode", () => {
+      // Set override to silent level
+      setLoggerOverride({ level: "silent" });
+      resetLogger();
+
+      expect(isFileLogLevelEnabled("debug")).toBe(false);
+      expect(isFileLogLevelEnabled("info")).toBe(false);
+      expect(isFileLogLevelEnabled("warn")).toBe(false);
+      expect(isFileLogLevelEnabled("error")).toBe(false);
+
+      // Reset override
+      setLoggerOverride(null);
+      resetLogger();
     });
   });
 });

@@ -1,7 +1,7 @@
-import type { LogLevel } from './levels.js';
-import type { RedactSensitiveMode } from './redact.js';
-import type { LoggingConfig } from '../config/zod-schema.js';
-import { loadConfig } from '../config/index.js';
+import type { LogLevel } from "./levels.js";
+import type { RedactSensitiveMode } from "./redact.js";
+import type { LoggingConfig } from "../config/zod-schema.js";
+import { loadConfig } from "../config/io.js";
 
 export type LoggerSettings = LoggingConfig;
 
@@ -13,10 +13,10 @@ export function resolveLoggingConfig(): LoggerSettings | undefined {
   } catch {
     // Config module not available, use defaults
     return {
-      level: 'info',
-      consoleLevel: 'info',
-      consoleStyle: 'pretty',
-      redactSensitive: 'tools',
+      level: "info",
+      consoleLevel: "info",
+      consoleStyle: "pretty",
+      redactSensitive: "tools",
     };
   }
 }

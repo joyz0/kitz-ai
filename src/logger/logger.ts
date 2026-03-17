@@ -1,37 +1,63 @@
-import fs from 'node:fs';
-import fsPromises from 'node:fs/promises';
-import path from 'node:path';
-import { Logger as TsLogger } from 'tslog';
-import type { LoggerSettings } from './config.js';
-import { resolveLoggingConfig } from './config.js';
-import type { LogLevel } from './levels.js';
-import { levelToMinLevel, normalizeLogLevel } from './levels.js';
-import { redactSensitiveText } from './redact.js';
+import fs from "node:fs";
+import fsPromises from "node:fs/promises";
+import path from "node:path";
+import { Logger as TsLogger } from "tslog";
+import type { LoggerSettings } from "./config.js";
+import { resolveLoggingConfig } from "./config.js";
+import type { LogLevel } from "./levels.js";
+import { levelToMinLevel, normalizeLogLevel } from "./levels.js";
+import { redactSensitiveText } from "./redact.js";
 
 export type Logger = TsLogger<LogObj>;
 
-const DEFAULT_LOG_DIR = path.join(process.cwd(), 'logs');
-const DEFAULT_LOG_FILE = path.join(DEFAULT_LOG_DIR, 'app.log');
-const LOG_PREFIX = 'app';
-const LOG_SUFFIX = '.log';
+const DEFAULT_LOG_DIR = path.join(process.cwd(), "logs");
+const DEFAULT_LOG_FILE = path.join(DEFAULT_LOG_DIR, "app.log");
+const LOG_PREFIX = "app";
+const LOG_SUFFIX = ".log";
 const MAX_LOG_AGE_MS = 24 * 60 * 60 * 1000; // 24h
 const DEFAULT_MAX_LOG_FILE_BYTES = 500 * 1024 * 1024; // 500 MB
 const LOG_BUFFER_SIZE = 100; // 日志缓冲大小
 const LOG_FLUSH_INTERVAL = 1000; // 日志刷新间隔（毫秒）
 
-type LogObj = { date?: Date } & Record<string, unknown>;
+export type LogObj = { date?: Date } & Record<string, unknown>;
 
 type ResolvedSettings = {
   level: LogLevel;
   file: string;
   maxFileBytes: number;
   consoleLevel: LogLevel;
-  consoleStyle: 'pretty' | 'compact' | 'json';
+  consoleStyle: "pretty" | "compact" | "json";
 };
 
 export type LogTransport = (logObj: Record<string, unknown>) => void;
+export type LogTransportRecord = Record<string, unknown>;
+export type LoggerResolvedSettings = ResolvedSettings;
+
+export type PinoLikeLogger = {
+  level: string;
+  child: (bindings?: Record<string, unknown>) => PinoLikeLogger;
+  trace: (...args: unknown[]) => void;
+  debug: (...args: unknown[]) => void;
+  info: (...args: unknown[]) => void;
+  warn: (...args: unknown[]) => void;
+  error: (...args: unknown[]) => void;
+  fatal: (...args: unknown[]) => void;
+};
 
 const externalTransports = new Set<LogTransport>();
+
+// 全局日志状态
+interface LoggingState {
+  cachedLogger: TsLogger<LogObj> | null;
+  cachedSettings: ResolvedSettings | null;
+  overrideSettings: LoggerSettings | null;
+}
+
+const loggingState: LoggingState = {
+  cachedLogger: null,
+  cachedSettings: null,
+  overrideSettings: null,
+};
 
 // 日志缓冲队列
 class LogBuffer {
@@ -41,7 +67,7 @@ class LogBuffer {
 
   constructor(
     private file: string,
-    private maxSize: number,
+    private maxSize: number
   ) {
     // 定期刷新缓冲
     setInterval(() => this.flushIfNeeded(), LOG_FLUSH_INTERVAL);
@@ -64,8 +90,8 @@ class LogBuffer {
     this.buffer = [];
 
     try {
-      await fsPromises.appendFile(this.file, lines.join(''), {
-        encoding: 'utf8',
+      await fsPromises.appendFile(this.file, lines.join(""), {
+        encoding: "utf8",
       });
     } catch {
       // 忽略写入错误
@@ -77,10 +103,7 @@ class LogBuffer {
 
   private flushIfNeeded(): void {
     const now = Date.now();
-    if (
-      now - this.lastFlushTime >= LOG_FLUSH_INTERVAL &&
-      this.buffer.length > 0
-    ) {
+    if (now - this.lastFlushTime >= LOG_FLUSH_INTERVAL && this.buffer.length > 0) {
       this.flush();
     }
   }
@@ -89,9 +112,9 @@ class LogBuffer {
 // 创建控制台日志记录器
 function createConsoleLogger(settings: ResolvedSettings): TsLogger<LogObj> {
   return new TsLogger<LogObj>({
-    name: 'app',
+    name: "app",
     minLevel: levelToMinLevel(settings.consoleLevel),
-    type: settings.consoleStyle === 'json' ? 'json' : 'pretty',
+    type: settings.consoleStyle === "json" ? "json" : "pretty",
   });
 }
 
@@ -109,20 +132,20 @@ function handleLogSizeLimit(
   settings: ResolvedSettings,
   currentFileBytes: number,
   payloadBytes: number,
-  warnedAboutSizeCap: boolean,
+  warnedAboutSizeCap: boolean
 ): { shouldWrite: boolean; newWarnedState: boolean } {
   const nextBytes = currentFileBytes + payloadBytes;
   if (nextBytes > settings.maxFileBytes) {
     if (!warnedAboutSizeCap) {
       const warningLine = JSON.stringify({
         time: new Date().toISOString(),
-        level: 'warn',
-        subsystem: 'logging',
+        level: "warn",
+        subsystem: "logging",
         message: `log file size cap reached; suppressing writes file=${settings.file} maxFileBytes=${settings.maxFileBytes}`,
       });
       appendLogLineSync(settings.file, `${warningLine}\n`);
       process.stderr.write(
-        `[app] log file size cap reached; suppressing writes file=${settings.file} maxFileBytes=${settings.maxFileBytes}\n`,
+        `[app] log file size cap reached; suppressing writes file=${settings.file} maxFileBytes=${settings.maxFileBytes}\n`
       );
       return { shouldWrite: false, newWarnedState: true };
     }
@@ -134,7 +157,7 @@ function handleLogSizeLimit(
 // 同步追加日志行（用于警告信息）
 function appendLogLineSync(file: string, line: string): boolean {
   try {
-    fs.appendFileSync(file, line, { encoding: 'utf8' });
+    fs.appendFileSync(file, line, { encoding: "utf8" });
     return true;
   } catch {
     return false;
@@ -162,10 +185,7 @@ export async function pruneOldRollingLogs(dir: string): Promise<void> {
         continue;
       }
 
-      if (
-        !entry.name.startsWith(`${LOG_PREFIX}-`) ||
-        !entry.name.endsWith(LOG_SUFFIX)
-      ) {
+      if (!entry.name.startsWith(`${LOG_PREFIX}-`) || !entry.name.endsWith(LOG_SUFFIX)) {
         continue;
       }
 
@@ -185,10 +205,7 @@ export async function pruneOldRollingLogs(dir: string): Promise<void> {
 }
 
 // 创建文件日志记录器
-function createFileLogger(
-  logger: TsLogger<LogObj>,
-  settings: ResolvedSettings,
-): void {
+function createFileLogger(logger: TsLogger<LogObj>, settings: ResolvedSettings): void {
   let logBuffer: LogBuffer | null = null;
   let currentFileBytes = 0;
   let warnedAboutSizeCap = false;
@@ -212,14 +229,14 @@ function createFileLogger(
       const redactedLogObj = redactLogObject(logObj);
       const line = JSON.stringify({ ...redactedLogObj, time });
       const payload = `${line}\n`;
-      const payloadBytes = Buffer.byteLength(payload, 'utf8');
+      const payloadBytes = Buffer.byteLength(payload, "utf8");
 
       // 检查文件大小限制
       const { shouldWrite, newWarnedState } = handleLogSizeLimit(
         settings,
         currentFileBytes,
         payloadBytes,
-        warnedAboutSizeCap,
+        warnedAboutSizeCap
       );
 
       warnedAboutSizeCap = newWarnedState;
@@ -235,10 +252,7 @@ function createFileLogger(
 }
 
 // 附加外部传输器
-function attachExternalTransport(
-  logger: TsLogger<LogObj>,
-  transport: LogTransport,
-): void {
+function attachExternalTransport(logger: TsLogger<LogObj>, transport: LogTransport): void {
   logger.attachTransport((logObj: LogObj) => {
     if (!externalTransports.has(transport)) {
       return;
@@ -255,9 +269,9 @@ function attachExternalTransport(
 function redactLogObject(logObj: LogObj): LogObj {
   const redacted: LogObj = {};
   for (const [key, value] of Object.entries(logObj)) {
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       redacted[key] = redactSensitiveText(value);
-    } else if (typeof value === 'object' && value !== null) {
+    } else if (typeof value === "object" && value !== null) {
       redacted[key] = redactLogObject(value as LogObj);
     } else {
       redacted[key] = value;
@@ -269,8 +283,8 @@ function redactLogObject(logObj: LogObj): LogObj {
 // 格式化本地日期
 function formatLocalDate(date: Date): string {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
 
@@ -295,7 +309,7 @@ function buildLogger(settings: ResolvedSettings): TsLogger<LogObj> {
   const logger = createConsoleLogger(settings);
 
   // 静默模式不写入文件
-  if (settings.level !== 'silent') {
+  if (settings.level !== "silent") {
     createFileLogger(logger, settings);
   }
 
@@ -307,27 +321,21 @@ function buildLogger(settings: ResolvedSettings): TsLogger<LogObj> {
   return logger;
 }
 
-let cachedLogger: TsLogger<LogObj> | null = null;
-let cachedSettings: ResolvedSettings | null = null;
-
 // 解析日志设置
 function resolveSettings(): ResolvedSettings {
-  const config = resolveLoggingConfig();
-  const defaultLevel = 'info';
+  let config = loggingState.overrideSettings ?? resolveLoggingConfig();
+  const defaultLevel = "info";
   const fromConfig = normalizeLogLevel(config?.level, defaultLevel);
   const level = fromConfig;
   const file = config?.file ?? defaultRollingPathForToday();
   const maxFileBytes = config?.maxFileBytes ?? DEFAULT_MAX_LOG_FILE_BYTES;
   const consoleLevel = normalizeLogLevel(config?.consoleLevel, defaultLevel);
-  const consoleStyle = config?.consoleStyle ?? 'pretty';
+  const consoleStyle = config?.consoleStyle ?? "pretty";
   return { level, file, maxFileBytes, consoleLevel, consoleStyle };
 }
 
 // 检查设置是否变更
-function settingsChanged(
-  a: ResolvedSettings | null,
-  b: ResolvedSettings,
-): boolean {
+function settingsChanged(a: ResolvedSettings | null, b: ResolvedSettings): boolean {
   if (!a) {
     return true;
   }
@@ -342,16 +350,16 @@ function settingsChanged(
 
 export function getLogger(): TsLogger<LogObj> {
   const settings = resolveSettings();
-  if (!cachedLogger || settingsChanged(cachedSettings, settings)) {
-    cachedLogger = buildLogger(settings);
-    cachedSettings = settings;
+  if (!loggingState.cachedLogger || settingsChanged(loggingState.cachedSettings, settings)) {
+    loggingState.cachedLogger = buildLogger(settings);
+    loggingState.cachedSettings = settings;
   }
-  return cachedLogger;
+  return loggingState.cachedLogger;
 }
 
 export function getChildLogger(
   bindings?: Record<string, unknown>,
-  opts?: { level?: LogLevel },
+  opts?: { level?: LogLevel }
 ): TsLogger<LogObj> {
   const base = getLogger();
   const minLevel = opts?.level ? levelToMinLevel(opts.level) : undefined;
@@ -359,14 +367,14 @@ export function getChildLogger(
   return base.getSubLogger({
     name,
     minLevel,
-    prefix: bindings ? [name ?? ''] : [],
+    prefix: bindings ? [name ?? ""] : [],
   });
 }
 
 export function registerLogTransport(transport: LogTransport): () => void {
   externalTransports.add(transport);
-  if (cachedLogger) {
-    attachExternalTransport(cachedLogger, transport);
+  if (loggingState.cachedLogger) {
+    attachExternalTransport(loggingState.cachedLogger, transport);
   }
   return () => {
     externalTransports.delete(transport);
@@ -374,6 +382,50 @@ export function registerLogTransport(transport: LogTransport): () => void {
 }
 
 export function resetLogger() {
-  cachedLogger = null;
-  cachedSettings = null;
+  loggingState.cachedLogger = null;
+  loggingState.cachedSettings = null;
+}
+
+// Baileys expects a pino-like logger shape. Provide a lightweight adapter.
+export function toPinoLikeLogger(logger: TsLogger<LogObj>, level: LogLevel): PinoLikeLogger {
+  const buildChild = (bindings?: Record<string, unknown>) =>
+    toPinoLikeLogger(
+      logger.getSubLogger({
+        name: bindings ? JSON.stringify(bindings) : undefined,
+      }),
+      level
+    );
+
+  return {
+    level,
+    child: buildChild,
+    trace: (...args: unknown[]) => logger.trace(...args),
+    debug: (...args: unknown[]) => logger.debug(...args),
+    info: (...args: unknown[]) => logger.info(...args),
+    warn: (...args: unknown[]) => logger.warn(...args),
+    error: (...args: unknown[]) => logger.error(...args),
+    fatal: (...args: unknown[]) => logger.fatal(...args),
+  };
+}
+
+export function getResolvedLoggerSettings(): LoggerResolvedSettings {
+  return resolveSettings();
+}
+
+// Test helpers
+export function setLoggerOverride(settings: LoggerSettings | null) {
+  loggingState.overrideSettings = settings;
+  loggingState.cachedLogger = null;
+  loggingState.cachedSettings = null;
+}
+
+export function isFileLogLevelEnabled(level: LogLevel): boolean {
+  const settings = loggingState.cachedSettings ?? resolveSettings();
+  if (!loggingState.cachedSettings) {
+    loggingState.cachedSettings = settings;
+  }
+  if (settings.level === "silent") {
+    return false;
+  }
+  return levelToMinLevel(level) <= levelToMinLevel(settings.level);
 }
