@@ -1,7 +1,7 @@
 import { getChildLogger, type Logger } from "../../logger/logger.js";
 import type { SessionKey } from "./key.js";
-import fs from "node:fs/promises";
-import path from "node:path";
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
 
 export interface SessionData {
   key: SessionKey;
@@ -31,7 +31,7 @@ export class SessionStorage {
   ) {
     this.logger = getChildLogger({ name: "session-storage" });
     this.sessions = new Map<string, SessionData>();
-    
+
     if (storageDir) {
       this.storageDir = storageDir;
       this.persistenceEnabled = true;
@@ -39,7 +39,7 @@ export class SessionStorage {
       this.loadSessions();
       this.startSaveInterval();
     }
-    
+
     this.startCleanupInterval();
   }
 
@@ -48,7 +48,7 @@ export class SessionStorage {
    */
   private async ensureStorageDir(): Promise<void> {
     if (!this.storageDir) return;
-    
+
     try {
       await fs.mkdir(this.storageDir, { recursive: true });
     } catch (error) {
@@ -62,11 +62,11 @@ export class SessionStorage {
    */
   private async loadSessions(): Promise<void> {
     if (!this.storageDir || !this.persistenceEnabled) return;
-    
+
     try {
       const files = await fs.readdir(this.storageDir);
-      const sessionFiles = files.filter(file => file.endsWith(".json"));
-      
+      const sessionFiles = files.filter((file) => file.endsWith(".json"));
+
       for (const file of sessionFiles) {
         try {
           const filePath = path.join(this.storageDir, file);
@@ -77,7 +77,7 @@ export class SessionStorage {
           this.logger.error(`Error loading session file ${file}`, error);
         }
       }
-      
+
       this.logger.info(`Loaded ${this.sessions.size} sessions from disk`);
     } catch (error) {
       this.logger.error("Error loading sessions", error);
@@ -89,7 +89,7 @@ export class SessionStorage {
    */
   private async saveSession(session: SessionData): Promise<void> {
     if (!this.storageDir || !this.persistenceEnabled) return;
-    
+
     try {
       const filePath = path.join(this.storageDir, `${session.key.id}.json`);
       const content = JSON.stringify(session, null, 2);
@@ -104,12 +104,12 @@ export class SessionStorage {
    */
   private async saveAllSessions(): Promise<void> {
     if (!this.persistenceEnabled) return;
-    
+
     const sessions = Array.from(this.sessions.values());
     for (const session of sessions) {
       await this.saveSession(session);
     }
-    
+
     this.logger.debug(`Saved ${sessions.length} sessions to disk`);
   }
 
@@ -118,9 +118,12 @@ export class SessionStorage {
    */
   private startSaveInterval(): void {
     // 每 5 分钟保存一次所有会话
-    this.saveInterval = setInterval(() => {
-      this.saveAllSessions();
-    }, 5 * 60 * 1000);
+    this.saveInterval = setInterval(
+      () => {
+        this.saveAllSessions();
+      },
+      5 * 60 * 1000
+    );
   }
 
   /**
@@ -139,7 +142,7 @@ export class SessionStorage {
   public async store(session: SessionData): Promise<void> {
     this.sessions.set(session.key.id, session);
     this.logger.debug(`Stored session: ${session.key.id}`);
-    
+
     if (this.persistenceEnabled) {
       await this.saveSession(session);
     }
@@ -153,7 +156,7 @@ export class SessionStorage {
     if (session) {
       session.lastAccessed = Date.now();
       this.sessions.set(sessionId, session);
-      
+
       // 异步保存更新后的会话
       if (this.persistenceEnabled) {
         this.saveSession(session);
@@ -165,18 +168,16 @@ export class SessionStorage {
   /**
    * 删除会话
    */
-  public async delete(sessionId: string): Promise<boolean> {
+  public delete(sessionId: string): boolean {
     const result = this.sessions.delete(sessionId);
     if (result) {
       this.logger.debug(`Deleted session: ${sessionId}`);
-      
+
       if (this.persistenceEnabled && this.storageDir) {
-        try {
-          const filePath = path.join(this.storageDir, `${sessionId}.json`);
-          await fs.unlink(filePath);
-        } catch (error) {
+        // 异步删除文件，不等待
+        fs.unlink(path.join(this.storageDir, `${sessionId}.json`)).catch((error) => {
           this.logger.error(`Error deleting session file ${sessionId}`, error);
-        }
+        });
       }
     }
     return result;
@@ -185,10 +186,10 @@ export class SessionStorage {
   /**
    * 更新会话
    */
-  public async update(
+  public update(
     sessionId: string,
     updater: (session: SessionData) => SessionData
-  ): Promise<SessionData | undefined> {
+  ): SessionData | undefined {
     try {
       const session = this.sessions.get(sessionId);
       if (session) {
@@ -196,11 +197,14 @@ export class SessionStorage {
         // 确保lastAccessed时间比原来的大
         updatedSession.lastAccessed = Date.now() + 1;
         this.sessions.set(sessionId, updatedSession);
-        
+
         if (this.persistenceEnabled) {
-          await this.saveSession(updatedSession);
+          // 异步保存，不等待
+          this.saveSession(updatedSession).catch((error) => {
+            this.logger.error(`Error saving session ${updatedSession.key.id}`, error);
+          });
         }
-        
+
         return updatedSession;
       }
       return undefined;
@@ -213,13 +217,13 @@ export class SessionStorage {
   /**
    * 添加消息到会话
    */
-  public async addMessage(
+  public addMessage(
     sessionId: string,
     role: "user" | "assistant" | "system",
     content: string,
     tool_use_id?: string,
     tool_result_id?: string
-  ): Promise<SessionData | undefined> {
+  ): SessionData | undefined {
     return this.update(sessionId, (session) => ({
       ...session,
       messages: [
@@ -238,7 +242,7 @@ export class SessionStorage {
   /**
    * 更新会话上下文
    */
-  public async updateContext(sessionId: string, context: any): Promise<SessionData | undefined> {
+  public updateContext(sessionId: string, context: any): SessionData | undefined {
     return this.update(sessionId, (session) => ({
       ...session,
       context,
@@ -326,11 +330,11 @@ export class SessionStorage {
   public async close(): Promise<void> {
     this.stopCleanupInterval();
     this.stopSaveInterval();
-    
+
     if (this.persistenceEnabled) {
       await this.saveAllSessions();
     }
-    
+
     this.sessions.clear();
   }
 
@@ -340,21 +344,22 @@ export class SessionStorage {
   public async compactSessions(): Promise<number> {
     const sessions = this.getAll();
     let compacted = 0;
-    
+
     for (const session of sessions) {
       // 这里可以集成 SessionCompaction 类的压缩逻辑
       // 暂时只做简单的大小检查
-      const sessionSize = Buffer.byteLength(JSON.stringify(session), 'utf8');
-      if (sessionSize > 1024 * 1024) { // 1MB
+      const sessionSize = Buffer.byteLength(JSON.stringify(session), "utf8");
+      if (sessionSize > 1024 * 1024) {
+        // 1MB
         // 这里可以调用 SessionCompaction 进行压缩
         compacted++;
       }
     }
-    
+
     if (compacted > 0) {
       this.logger.info(`Compacted ${compacted} sessions`);
     }
-    
+
     return compacted;
   }
 
@@ -366,7 +371,7 @@ export class SessionStorage {
     await this.cleanupIdle(24 * 60 * 60 * 1000); // 24小时闲置
     await this.compactSessions();
     await this.saveAllSessions();
-    
+
     this.logger.info("Session maintenance completed");
   }
 }

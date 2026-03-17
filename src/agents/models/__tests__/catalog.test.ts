@@ -1,149 +1,117 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { type ModelCatalog, createModelCatalog, type Model } from "../catalog.js";
+// 测试 Model Catalog 模块的功能
 
-// 测试模型数据
-const testModels: Model[] = [
-  {
-    id: "openai-gpt-4",
-    name: "GPT-4",
-    provider: "openai",
-    type: "chat",
-    capabilities: ["chat", "vision"],
-    default: true,
-  },
-  {
-    id: "openai-gpt-3.5-turbo",
-    name: "GPT-3.5 Turbo",
-    provider: "openai",
-    type: "chat",
-    capabilities: ["chat"],
-    default: false,
-  },
-  {
-    id: "google-gemini-pro",
-    name: "Gemini Pro",
-    provider: "google",
-    type: "chat",
-    capabilities: ["chat", "vision"],
-    default: false,
-  },
-  {
-    id: "openai-text-embedding-3-small",
-    name: "Text Embedding 3 Small",
-    provider: "openai",
-    type: "embedding",
-    capabilities: ["embedding"],
-    default: true,
-  },
-];
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { loadModelCatalog, modelSupportsVision, modelSupportsDocument, findModelInCatalog, resetModelCatalogCacheForTest } from '../catalog.js';
 
-describe("ModelCatalog", () => {
-  let catalog: ModelCatalog;
-
+describe('Model Catalog 模块测试', () => {
   beforeEach(() => {
-    catalog = createModelCatalog(testModels);
+    resetModelCatalogCacheForTest();
   });
 
-  it("should create model catalog with initial models", () => {
-    expect(catalog).toBeDefined();
-    expect(catalog.getModels()).toHaveLength(testModels.length);
+  afterEach(() => {
+    resetModelCatalogCacheForTest();
   });
 
-  it("should get model by id", () => {
-    const model = catalog.getModel("openai-gpt-4");
-    expect(model).toBeDefined();
-    expect(model?.id).toBe("openai-gpt-4");
-    expect(model?.name).toBe("GPT-4");
+  describe('loadModelCatalog', () => {
+    it('应该返回模型目录数组', async () => {
+      const catalog = await loadModelCatalog({ useCache: false });
+      expect(Array.isArray(catalog)).toBe(true);
+    });
+
+    it('应该使用缓存', async () => {
+      const catalog1 = await loadModelCatalog();
+      const catalog2 = await loadModelCatalog();
+      expect(catalog1).toBe(catalog2);
+    });
   });
 
-  it("should return undefined for non-existent model", () => {
-    const model = catalog.getModel("non-existent-model");
-    expect(model).toBeUndefined();
+  describe('modelSupportsVision', () => {
+    it('应该返回 true（如果模型支持视觉）', () => {
+      const entry = {
+        id: 'test-model',
+        name: 'Test Model',
+        provider: 'test-provider',
+        input: ['text', 'image'],
+      };
+      const result = modelSupportsVision(entry);
+      expect(result).toBe(true);
+    });
+
+    it('应该返回 false（如果模型不支持视觉）', () => {
+      const entry = {
+        id: 'test-model',
+        name: 'Test Model',
+        provider: 'test-provider',
+        input: ['text'],
+      };
+      const result = modelSupportsVision(entry);
+      expect(result).toBe(false);
+    });
+
+    it('应该返回 false（如果 entry 为 undefined）', () => {
+      const result = modelSupportsVision(undefined);
+      expect(result).toBe(false);
+    });
   });
 
-  it("should get models by type", () => {
-    const chatModels = catalog.getModelsByType("chat");
-    expect(chatModels).toHaveLength(3);
-    expect(chatModels.every((model) => model.type === "chat")).toBe(true);
+  describe('modelSupportsDocument', () => {
+    it('应该返回 true（如果模型支持文档）', () => {
+      const entry = {
+        id: 'test-model',
+        name: 'Test Model',
+        provider: 'test-provider',
+        input: ['text', 'document'],
+      };
+      const result = modelSupportsDocument(entry);
+      expect(result).toBe(true);
+    });
 
-    const embeddingModels = catalog.getModelsByType("embedding");
-    expect(embeddingModels).toHaveLength(1);
-    expect(embeddingModels.every((model) => model.type === "embedding")).toBe(true);
+    it('应该返回 false（如果模型不支持文档）', () => {
+      const entry = {
+        id: 'test-model',
+        name: 'Test Model',
+        provider: 'test-provider',
+        input: ['text'],
+      };
+      const result = modelSupportsDocument(entry);
+      expect(result).toBe(false);
+    });
+
+    it('应该返回 false（如果 entry 为 undefined）', () => {
+      const result = modelSupportsDocument(undefined);
+      expect(result).toBe(false);
+    });
   });
 
-  it("should get models by provider", () => {
-    const openaiModels = catalog.getModelsByProvider("openai");
-    expect(openaiModels).toHaveLength(3);
-    expect(openaiModels.every((model) => model.provider === "openai")).toBe(true);
+  describe('findModelInCatalog', () => {
+    it('应该返回找到的模型（如果存在）', () => {
+      const catalog = [
+        {
+          id: 'test-model',
+          name: 'Test Model',
+          provider: 'test-provider',
+        },
+        {
+          id: 'another-model',
+          name: 'Another Model',
+          provider: 'another-provider',
+        },
+      ];
+      const result = findModelInCatalog(catalog, 'test-provider', 'test-model');
+      expect(result).toBeDefined();
+      expect(result?.id).toBe('test-model');
+    });
 
-    const googleModels = catalog.getModelsByProvider("google");
-    expect(googleModels).toHaveLength(1);
-    expect(googleModels.every((model) => model.provider === "google")).toBe(true);
-  });
-
-  it("should get default model by type", () => {
-    const defaultChatModel = catalog.getDefaultModel("chat");
-    expect(defaultChatModel).toBeDefined();
-    expect(defaultChatModel?.id).toBe("openai-gpt-4");
-    expect(defaultChatModel?.default).toBe(true);
-
-    const defaultEmbeddingModel = catalog.getDefaultModel("embedding");
-    expect(defaultEmbeddingModel).toBeDefined();
-    expect(defaultEmbeddingModel?.id).toBe("openai-text-embedding-3-small");
-    expect(defaultEmbeddingModel?.default).toBe(true);
-  });
-
-  it("should return undefined for default model if none exists", () => {
-    // 创建一个没有默认模型的目录
-    const noDefaultModels = testModels.map((model) => ({ ...model, default: false }));
-    const noDefaultCatalog = createModelCatalog(noDefaultModels);
-    const defaultModel = noDefaultCatalog.getDefaultModel("chat");
-    expect(defaultModel).toBeUndefined();
-  });
-
-  it("should add model to catalog", () => {
-    const newModel: Model = {
-      id: "anthropic-claude-3-opus",
-      name: "Claude 3 Opus",
-      provider: "anthropic",
-      type: "chat",
-      capabilities: ["chat", "vision"],
-      default: false,
-    };
-
-    catalog.addModel(newModel);
-    expect(catalog.getModels()).toHaveLength(testModels.length + 1);
-    const addedModel = catalog.getModel("anthropic-claude-3-opus");
-    expect(addedModel).toEqual(newModel);
-  });
-
-  it("should update existing model", () => {
-    const updatedModel: Model = {
-      id: "openai-gpt-4",
-      name: "GPT-4 (Updated)",
-      provider: "openai",
-      type: "chat",
-      capabilities: ["chat", "vision", "audio"],
-      default: true,
-    };
-
-    catalog.updateModel(updatedModel);
-    const model = catalog.getModel("openai-gpt-4");
-    expect(model).toEqual(updatedModel);
-  });
-
-  it("should remove model from catalog", () => {
-    catalog.removeModel("openai-gpt-4");
-    expect(catalog.getModels()).toHaveLength(testModels.length - 1);
-    expect(catalog.getModel("openai-gpt-4")).toBeUndefined();
-  });
-
-  it("should handle empty catalog", () => {
-    const emptyCatalog = createModelCatalog([]);
-    expect(emptyCatalog.getModels()).toHaveLength(0);
-    expect(emptyCatalog.getModel("any-model")).toBeUndefined();
-    expect(emptyCatalog.getModelsByType("chat")).toHaveLength(0);
-    expect(emptyCatalog.getModelsByProvider("openai")).toHaveLength(0);
-    expect(emptyCatalog.getDefaultModel("chat")).toBeUndefined();
+    it('应该返回 undefined（如果不存在）', () => {
+      const catalog = [
+        {
+          id: 'test-model',
+          name: 'Test Model',
+          provider: 'test-provider',
+        },
+      ];
+      const result = findModelInCatalog(catalog, 'test-provider', 'non-existent-model');
+      expect(result).toBeUndefined();
+    });
   });
 });

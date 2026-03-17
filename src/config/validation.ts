@@ -53,7 +53,7 @@ export function validateConfigObjectWithPlugins(raw: unknown):
     } {
   const base = validateConfigObjectRaw(raw);
   if (!base.ok) {
-    return { ok: false, issues: base.issues, warnings: [] };
+    return { ok: false, issues: (base as any).issues || [], warnings: [] };
   }
 
   const config = base.config;
@@ -81,7 +81,7 @@ export function validateConfigObjectWithPlugins(raw: unknown):
 
   // 验证智能体配置
   if (config.agents?.list) {
-    for (const [index, agent] of config.agents.list.entries()) {
+    for (const [index, agent] of Array.from(config.agents.list.entries())) {
       // 验证头像
       if (
         agent.identity?.avatar &&

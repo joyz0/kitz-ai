@@ -6,7 +6,10 @@ import type { OpenClawConfig } from "./zod-schema.js";
  */
 export class ConfigRuntimeRefreshError extends Error {
   constructor(message: string, options?: { cause?: unknown }) {
-    super(message, options);
+    super(message);
+    if (options?.cause) {
+      (this as any).cause = options.cause;
+    }
     this.name = "ConfigRuntimeRefreshError";
   }
 }
@@ -82,7 +85,7 @@ function isCompatibleTopLevelRuntimeProjectionShape(params: {
   const runtime = params.runtimeSnapshot as Record<string, unknown>;
   const candidate = params.candidate as Record<string, unknown>;
   for (const key of Object.keys(runtime)) {
-    if (!Object.hasOwn(candidate, key)) {
+    if (!Object.prototype.hasOwnProperty.call(candidate, key)) {
       return false;
     }
     const runtimeValue = runtime[key];
@@ -154,7 +157,7 @@ function createMergePatch(base: unknown, target: unknown): unknown {
 
   const patch: Record<string, unknown> = {};
   const keys = new Set([...Object.keys(base), ...Object.keys(target)]);
-  for (const key of keys) {
+  for (const key of Array.from(keys)) {
     const hasBase = key in base;
     const hasTarget = key in target;
     if (!hasTarget) {

@@ -1,6 +1,6 @@
-import fs from "node:fs";
-import fsPromises from "node:fs/promises";
-import path from "node:path";
+import * as fs from "node:fs";
+import * as fsPromises from "node:fs/promises";
+import * as path from "node:path";
 import { Logger as TsLogger } from "tslog";
 import type { LoggerSettings } from "./config.js";
 import { resolveLoggingConfig } from "./config.js";

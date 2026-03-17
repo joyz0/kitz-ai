@@ -18,7 +18,7 @@ describe("SessionCompaction", () => {
   });
 
   describe("compact", () => {
-    it("should compact a session with too many messages", () => {
+    it("should compact a session with too many messages", async () => {
       const key = keyManager.generate("user123", "discord");
       const messages = Array.from({ length: 100 }, (_, i) => ({
         role: "user" as const,
@@ -34,14 +34,14 @@ describe("SessionCompaction", () => {
         lastAccessed: Date.now(),
       };
 
-      const compacted = compaction.compact(session, { maxMessages: 50 });
+      const compacted = await compaction.compact(session, { maxMessages: 50 });
       expect(compacted.messages).toHaveLength(50);
       expect(compacted.metadata.compacted).toBe(true);
       expect(compacted.metadata.originalMessageCount).toBe(100);
       expect(compacted.metadata.compactedMessageCount).toBe(50);
     });
 
-    it("should preserve system messages during compaction", () => {
+    it("should preserve system messages during compaction", async () => {
       const key = keyManager.generate("user123", "discord");
       const messages = [
         { role: "system" as const, content: "System message 1", timestamp: Date.now() - 10000 },
@@ -60,7 +60,7 @@ describe("SessionCompaction", () => {
         lastAccessed: Date.now(),
       };
 
-      const compacted = compaction.compact(session, {
+      const compacted = await compaction.compact(session, {
         maxMessages: 50,
         preserveSystemMessages: true,
       });
@@ -69,7 +69,7 @@ describe("SessionCompaction", () => {
       expect(compacted.messages[0].role).toBe("system");
     });
 
-    it("should not compact sessions with fewer messages than the limit", () => {
+    it("should not compact sessions with fewer messages than the limit", async () => {
       const key = keyManager.generate("user123", "discord");
       const messages = Array.from({ length: 30 }, (_, i) => ({
         role: "user" as const,
@@ -85,14 +85,14 @@ describe("SessionCompaction", () => {
         lastAccessed: Date.now(),
       };
 
-      const compacted = compaction.compact(session, { maxMessages: 50 });
+      const compacted = await compaction.compact(session, { maxMessages: 50 });
       expect(compacted.messages).toHaveLength(30);
       expect(compacted.metadata.compacted).toBeUndefined();
     });
   });
 
   describe("smartCompact", () => {
-    it("should compact old sessions more aggressively", () => {
+    it("should compact old sessions more aggressively", async () => {
       const key = keyManager.generate("user123", "discord");
       // Create a session that's 8 days old
       const oldKey = { ...key, createdAt: Date.now() - 8 * 24 * 60 * 60 * 1000 };
@@ -110,12 +110,12 @@ describe("SessionCompaction", () => {
         lastAccessed: Date.now(),
       };
 
-      const compacted = compaction.smartCompact(session);
+      const compacted = await compaction.smartCompact(session);
       // Should be compacted to 20 messages for old sessions
       expect(compacted.messages).toHaveLength(20);
     });
 
-    it("should compact sessions with very many messages more aggressively", () => {
+    it("should compact sessions with very many messages more aggressively", async () => {
       const key = keyManager.generate("user123", "discord");
       const messages = Array.from({ length: 600 }, (_, i) => ({
         role: "user" as const,
@@ -131,7 +131,7 @@ describe("SessionCompaction", () => {
         lastAccessed: Date.now(),
       };
 
-      const compacted = compaction.smartCompact(session);
+      const compacted = await compaction.smartCompact(session);
       // Should be compacted to fewer messages for very large sessions
       expect(compacted.messages.length).toBeLessThan(50);
     });
@@ -194,7 +194,7 @@ describe("SessionCompaction", () => {
   });
 
   describe("compactBatch", () => {
-    it("should compact multiple sessions", () => {
+    it("should compact multiple sessions", async () => {
       const key1 = keyManager.generate("user123", "discord");
       const key2 = keyManager.generate("user456", "slack");
 
@@ -222,7 +222,7 @@ describe("SessionCompaction", () => {
         lastAccessed: Date.now(),
       };
 
-      const compactedSessions = compaction.compactBatch([session1, session2]);
+      const compactedSessions = await compaction.compactBatch([session1, session2]);
       expect(compactedSessions[0].messages).toHaveLength(50);
       expect(compactedSessions[1].messages).toHaveLength(30); // Should not be compacted
     });

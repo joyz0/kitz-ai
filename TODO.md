@@ -44,9 +44,9 @@
 
 ### 3. 重试和容错机制
 
-- [x] 实现retry/backoff.ts - 退避策略
-- [x] 实现retry/fault-tolerance.ts - 容错处理
-- [ ] 实现retry/error-handling.ts - 错误处理
+- [x] 实现infra/backoff.ts - 退避策略
+- [x] 实现infra/fault-tolerance.ts - 容错处理
+- [ ] 实现infra/error-handling.ts - 错误处理
 
 ### 4. 多渠道集成
 
@@ -194,7 +194,6 @@ src/
 │   ├── server.ts        # Web服务器
 │   ├── routes.ts        # 路由定义
 │   └── api.ts           # API接口
-├── retry/               # 重试和容错机制
 ├── memory/              # 内存管理实现
 ├── security/            # 安全模块
 ├── monitoring/          # 监控与日志
@@ -222,8 +221,8 @@ src/
    - 理由：构建核心基础，为其他模块提供支持
 
 2. **重试和容错模块**
-   - 实现 retry/backoff.ts - 退避策略
-   - 实现 retry/fault-tolerance.ts - 容错处理
+   - 实现 infra/backoff.ts - 退避策略
+   - 实现 infra/fault-tolerance.ts - 容错处理
    - 理由：提供可靠性保障，可独立开发
 
 3. **安全基础**
@@ -329,4 +328,5 @@ src/
 4. **版本控制**：使用Git进行版本控制，遵循提交规范
 5. **代码审查**：实施代码审查流程，确保代码质量
 
-通过以上规划和实施，Kitz AI项目将逐步实现OpenClaw的核心功能，成为一个功能完整、可靠的多渠道AI网关系统。
+通过以上规划和实施，Kitz
+AI项目将逐步实现OpenClaw的核心功能，成为一个功能完整、可靠的多渠道AI网关系统。

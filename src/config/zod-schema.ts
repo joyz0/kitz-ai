@@ -3,14 +3,10 @@ import { z } from "zod";
 // 日志配置 Schema
 export const LoggingSchema = z
   .object({
-    level: z
-      .enum(["silent", "fatal", "error", "warn", "info", "debug", "trace"])
-      .optional(),
+    level: z.enum(["silent", "fatal", "error", "warn", "info", "debug", "trace"]).optional(),
     file: z.string().optional(),
     maxFileBytes: z.number().int().positive().optional(),
-    consoleLevel: z
-      .enum(["silent", "fatal", "error", "warn", "info", "debug", "trace"])
-      .optional(),
+    consoleLevel: z.enum(["silent", "fatal", "error", "warn", "info", "debug", "trace"]).optional(),
     consoleStyle: z.enum(["pretty", "compact", "json"]).optional(),
     redactSensitive: z.enum(["off", "tools"]).optional(),
     redactPatterns: z.array(z.string()).optional(),
@@ -132,6 +128,41 @@ export const AgentsSchema = z
   })
   .strict();
 
+// Secrets配置 Schema
+export const SecretRefSchema = z.object({
+  type: z.literal("env"),
+  key: z.string(),
+});
+
+export type SecretRefType = z.infer<typeof SecretRefSchema>;
+
+export const SecretsDefaultsSchema = z.object({
+  ref: SecretRefSchema.optional(),
+});
+
+export type SecretsDefaultsType = z.infer<typeof SecretsDefaultsSchema>;
+
+export const SecretsSchema = z.object({
+  defaults: SecretsDefaultsSchema.optional(),
+});
+
+export type SecretsConfig = z.infer<typeof SecretsSchema>;
+
+// 认证配置 Schema
+export const AuthProfileSchema = z
+  .object({
+    provider: z.string().optional(),
+    mode: z.enum(["api_key", "token", "oauth"]).optional(),
+  })
+  .strict();
+
+export const AuthSchema = z
+  .object({
+    profiles: z.record(z.string(), AuthProfileSchema).optional(),
+    order: z.record(z.string(), z.array(z.string())).optional(),
+  })
+  .strict();
+
 // 插件配置 Schema
 export const PluginEntrySchema = z
   .object({
@@ -160,6 +191,8 @@ export const OpenClawConfigSchema = z
     models: ModelsSchema.optional(),
     agents: AgentsSchema.optional(),
     channels: ChannelsSchema.optional(),
+    auth: AuthSchema.optional(),
+    secrets: SecretsSchema.optional(),
     plugins: PluginsSchema.optional(),
   })
   .strict();
@@ -176,6 +209,8 @@ export type AgentDefaults = z.infer<typeof AgentDefaultsSchema>;
 export type Agent = z.infer<typeof AgentSchema>;
 export type ChannelsConfig = z.infer<typeof ChannelsSchema>;
 export type AgentsConfig = z.infer<typeof AgentsSchema>;
+export type AuthProfileConfig = z.infer<typeof AuthProfileSchema>;
+export type AuthConfig = z.infer<typeof AuthSchema>;
 export type PluginEntry = z.infer<typeof PluginEntrySchema>;
 export type PluginsConfig = z.infer<typeof PluginsSchema>;
 export type OpenClawConfig = z.infer<typeof OpenClawConfigSchema>;

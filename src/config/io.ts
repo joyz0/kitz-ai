@@ -1,9 +1,9 @@
 // 配置文件 IO 操作
-import crypto from "node:crypto";
-import fs from "node:fs";
-import os from "node:os";
-import path from "node:path";
-import JSON5 from "json5";
+import * as crypto from "node:crypto";
+import * as fs from "node:fs";
+import * as os from "node:os";
+import * as path from "node:path";
+import * as JSON5 from "json5";
 import { VERSION } from "../version.js";
 import { applyAllDefaults } from "./default-values.js";
 import { applyConfigEnvVars, resolveConfigEnvVars } from "./env-substitution.js";
@@ -200,7 +200,9 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
 
       const validated = validateConfigObjectWithPlugins(resolvedConfig);
       if (!validated.ok) {
-        const details = validated.issues.map((iss) => `- ${iss.path}: ${iss.message}`).join("\n");
+        const details = (validated as any).issues
+          ?.map((iss: any) => `- ${iss.path}: ${iss.message}`)
+          .join("\n");
         deps.logger.error(`Invalid config at ${configPath}:\n${details}`);
         return applyAllDefaults({});
       }
@@ -254,7 +256,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
           valid: false,
           config: {},
           hash,
-          issues: [{ path: "", message: `JSON5 parse failed: ${parsedRes.error}` }],
+          issues: [{ path: "", message: `JSON5 parse failed: ${(parsedRes as any).error}` }],
           warnings: [],
           legacyIssues: [],
         };
@@ -278,8 +280,8 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
           valid: false,
           config: resolvedConfig as OpenClawConfig,
           hash,
-          issues: validated.issues,
-          warnings: validated.warnings,
+          issues: (validated as any).issues || [],
+          warnings: (validated as any).warnings || [],
           legacyIssues,
         };
       }
@@ -348,7 +350,8 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
 
     const validated = validateConfigObjectWithPlugins(cfg);
     if (!validated.ok) {
-      const issue = validated.issues[0];
+      const issues = (validated as any).issues || [];
+      const issue = issues[0];
       const pathLabel = issue?.path || "<root>";
       const issueMessage = issue?.message || "invalid";
       throw new Error(`Config validation failed: ${pathLabel}: ${issueMessage}`);
